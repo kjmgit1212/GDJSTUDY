@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .a > table {
+            width: 400px;
+            border-collapse: collapse;
+            /* 가로 정렬 */ text-align: center;      /* table, td 모두 가능 */
+            /* 세로 정렬 */ vertical-align: middle;  /* table, td 모두 가능 */
+        }
+        .a > table td {
+            border-top: 1px solid red;
+            border-bottom: 1px solid red;
+        }
+        .a > table td:nth-of-type(1) { width: 100px; }
+        .a > table td:nth-of-type(2) { width: 100px; }
+        .a > table td:nth-of-type(3) { width: 100px; }
+        .a > table td:nth-of-type(4) { width: 100px; }
+        .a > table tr { 
+            height: 50px; 
+        }
+        .a > table tr:hover {
+            background-color: antiquewhite;
+        }
+       
+        .b > table {
+            border-collapse: collapse;
+        }
+        .b > table td {
+            width: 80px;
+            height: 80px;
+            border: 1px solid gray;
+            vertical-align: top;
+            padding: 10px;
+        }
+        .b > table td:hover {
+            background-color: antiquewhite;
+        }
+        .b > table > thead td {
+            height: 20px;
+            text-align: center;
+        }
+        .prev, .next {
+            color: silver;
+        }
+        .holiday {
+            color: red;
+        }
+        .sat {
+            color: blue;
+        }
+
+    </style>
+</head>
+<body>
+    
+    <div class="a">
+        <table>
+            <thead>
+                <tr>
+                    <td>제품번호</td>
+                    <td>제품명</td>
+                    <td>제품가격</td>
+                    <td>출시일</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>123456</td>
+                    <td>홈런볼</td>
+                    <td>1000</td>
+                    <td>2020-01-01</td>
+                </tr>
+                <tr>
+                    <td>234567</td>
+                    <td>에이스</td>
+                    <td>1500</td>
+                    <td>2021-01-01</td>
+                </tr>
+                <tr>
+                    <td>345678</td>
+                    <td>빅파이</td>
+                    <td>3000</td>
+                    <td>2022-01-01</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="b">
+        <table>
+            <caption>2022년 3월</caption>
+            <thead>
+                <tr>
+                    <td class="holiday">SUN</td>
+                    <td>MON</td>
+                    <td>TUE</td>
+                    <td>WED</td>
+                    <td>THU</td>
+                    <td>FRI</td>
+                    <td class="sat">SAT</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="prev">27</td>
+                    <td class="prev">28</td>
+                    <td class="holiday">1</td>
+                    <td>2</td>
+                    <td>3</td>
+                    <td>4</td>
+                    <td class="sat">5</td>
+                </tr>
+                <tr>
+                    <td class="holiday">6</td>
+                    <td>7</td>
+                    <td>8</td>
+                    <td class="holiday">9</td>
+                    <td>10</td>
+                    <td>11</td>
+                    <td class="sat">12</td>
+                </tr>
+                <tr>
+                    <td class="holiday">13</td>
+                    <td>14</td>
+                    <td>15</td>
+                    <td>16</td>
+                    <td>17</td>
+                    <td>18</td>
+                    <td class="sat">19</td>
+                </tr>
+                <tr>
+                    <td class="holiday">20</td>
+                    <td>21</td>
+                    <td>22</td>
+                    <td>23</td>
+                    <td>24</td>
+                    <td>25</td>
+                    <td class="sat">26</td>
+                </tr>
+                <tr>
+                    <td class="holiday">27</td>
+                    <td>28</td>
+                    <td>29</td>
+                    <td>30</td>
+                    <td>31</td>
+                    <td class="next">1</td>
+                    <td class="next">2</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

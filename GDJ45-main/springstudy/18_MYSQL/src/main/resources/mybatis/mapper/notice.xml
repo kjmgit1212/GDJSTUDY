@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.goodee.ex18.mapper.NoticeMapper">
+
+	<resultMap type="MemberDTO" id="MemberMap">
+		<result column="MEMBER_NO" property="memberNo" />
+		<result column="MEMBER_NAME" property="memberName" />
+	</resultMap>
+	<resultMap type="NoticeDTO" id="NoticeMap">
+		<result column="NOTICE_NO" property="noticeNo" />
+		<result column="TITLE" property="title" />
+		<result column="CONTENT" property="content" />
+		<result column="CREATED_DATE" property="createdDate" />
+		<result column="MODIFIED_DATE" property="modifiedDate" />
+		<collection resultMap="MemberMap" property="member" />
+	</resultMap>
+
+	<select id="selectNoticeCount" resultType="Integer">
+		SELECT COUNT(*)
+		  FROM NOTICE
+	</select>
+
+	<select id="selectNoticeList" parameterType="Map" resultMap="NoticeMap">
+		SELECT N.NOTICE_NO, N.TITLE, N.CONTENT, N.CREATED_DATE, N.MODIFIED_DATE, M.MEMBER_NAME
+		  FROM MEMBER M INNER JOIN NOTICE N
+		    ON M.MEMBER_NO = N.MEMBER_NO
+		 ORDER BY N.NOTICE_NO DESC
+		 LIMIT #{beginRecord}, #{recordPerPage}
+	</select>
+	
+	<select id="selectFindNoticeCount" parameterType="Map" resultType="Integer">
+		SELECT COUNT(*)
+		  FROM NOTICE
+		 WHERE ${column} LIKE CONCAT('%', CONCAT(IFNULL(#{query}, ''), '%'))
+	</select>
+
+	<select id="selectFindNoticeList" parameterType="Map" resultMap="NoticeMap">
+		SELECT N.NOTICE_NO, N.TITLE, N.CONTENT, N.CREATED_DATE, N.MODIFIED_DATE, M.MEMBER_NAME
+		  FROM MEMBER M INNER JOIN NOTICE N
+		    ON M.MEMBER_NO = N.MEMBER_NO
+		 WHERE ${column} LIKE CONCAT('%', CONCAT(IFNULL(#{query}, ''), '%'))
+		 ORDER BY N.NOTICE_NO DESC
+		 LIMIT #{beginRecord}, #{recordPerPage}
+	</select>
+
+	<select id="selectNoticeByNo" parameterType="Long" resultMap="NoticeMap">
+		SELECT N.NOTICE_NO, N.TITLE, N.CONTENT, N.CREATED_DATE, N.MODIFIED_DATE, M.MEMBER_NAME
+		  FROM MEMBER M INNER JOIN NOTICE N 
+		    ON M.MEMBER_NO = N.MEMBER_NO
+		 WHERE N.NOTICE_NO = #{noticeNo}
+	</select>
+
+	<insert id="insertNotice" parameterType="NoticeDTO">
+		INSERT INTO NOTICE
+			(MEMBER_NO, TITLE, CONTENT, CREATED_DATE, MODIFIED_DATE)
+		VALUES
+			(#{member.memberNo}, #{title}, #{content}, NOW(), NOW())
+	</insert>
+	
+	<update id="updateNotice" parameterType="NoticeDTO">
+		UPDATE NOTICE
+		   SET TITLE = #{title},
+		   	   CONTENT = #{content},
+		   	   MODIFIED_DATE = NOW()
+		 WHERE NOTICE_NO = #{noticeNo}
+	</update>
+	
+	<delete id="deleteNotice" parameterType="Long">
+		DELETE
+		  FROM NOTICE
+		 WHERE NOTICE_NO = #{noticeNo}
+	</delete>
+
+</mapper>

@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="jquery-3.6.0.js"></script>
+</head>
+<body>
+    
+    <div id="box1"></div>
+    <script>
+        $.ajax({
+            'type': 'get',              // 요청 메소드
+            'url': 'data.txt',          // 요청 서버 경로
+            'async': true,              // 비동기(true), 동기(false), 생략하면 비동기(true)로 동작함.
+            'dataType': 'text',         // 응답 타입(text, xml, json 등)
+            'success': function(data){  // 매개변수 data : 응답 데이터를 의미(xhr.responseText, xhr.responseXML)
+                $('#box1').html(data);
+            },
+            'error': function(jqXHR, textStatus, errorThrown){
+                console.log('jqXHR.status:', jqXHR.status);          // 응답코드(4xx, 5xx)
+                console.log('jqXHR.statusText:', jqXHR.statusText);  // 응답코드별 텍스트(응답코드 404인 경우 'Not Found')
+                console.log('jqXHR.responseText:', jqXHR.responseText);
+                $('#box1').html(jqXHR.responseText);
+                console.log('textStatus:', textStatus);
+                console.log('errorThrown:', errorThrown);
+            }
+        });
+    </script>
+
+    <div id="box2"></div>
+    <script>
+        $.ajax({
+            'type': 'get',
+            'url': 'data.xml',
+            'dataType': 'xml',
+            'success': function(data){
+                // ul 태그로 box2에 넣기
+                var box2 = $('#box2');
+                $.each( $(data).find('book') , function(i, book){
+                    var ul = $('<ul>');
+                    ul.append( $('<li>').text( $(book).find('title').text() ) );
+                    ul.append( $('<li>').text( $(book).find('author').text() ) );
+                    ul.append( $('<li>').text( $(book).find('price').text() ) );
+                    box2.append(ul);
+                });
+            },
+            'error': function(jqXHR){
+                $('#box2').append(jqXHR.status + '&nbsp;');
+                $('#box2').append(jqXHR.statusText);
+            }
+        });
+    </script>
+
+    <div id="box3"></div>
+    <script>
+        $.ajax({
+            'type': 'get',
+            'url': 'data2.xml',
+            'dataType': 'xml',
+            'success': function(data){
+                var box3 = $('#box3');
+                $.each( $(data).find('book') , function(i, book){
+                    var ul = $('<ul>');
+                    $('<li>').text( $(book).attr('title') ).appendTo(ul);
+                    $('<li>').text( $(book).attr('author') ).appendTo(ul);
+                    $('<li>').text( $(book).attr('price') ).appendTo(ul);
+                    ul.appendTo(box3);
+                });
+            },
+            'error': function(jqXHR){
+                $('#box3').append(jqXHR.status + '&nbsp;');
+                $('#box3').append(jqXHR.statusText);
+            }
+        });
+    </script>
+
+    <div id="box4">
+        <table border="1">
+            <thead>
+                <tr>
+                    <td>제목</td>
+                    <td>링크</td>
+                    <td>썸네일</td>
+                    <td>저자</td>
+                    <td>정상가</td>
+                    <td>할인가</td>
+                    <td>출판사</td>
+                    <td>출판일</td>
+                    <td>ISBN</td>
+                    <td>개요</td>
+                </tr>
+            </thead>
+            <tbody id="search_result"></tbody>
+        </table>
+    </div>
+    <script>
+        $.ajax({
+            type: 'get',
+            url: 'naver_search.xml',
+            dataType: 'xml',
+            success: function(data){
+                naverSearch(data);
+            },
+            error: function(jqXHR){
+                $('#box4').empty();
+                $('#box4').append(jqXHR.status + '&nbsp;');
+                $('#box4').append(jqXHR.statusText);
+            }
+        });
+        function naverSearch(data){
+            var searchResult = $('#search_result');
+            $.each( $(data).find('item') , function(i, item){
+                var tr = $('<tr>');
+                tr.append( $('<td>').html($(item).find('title').text()) );
+                tr.append( $('<td>').html($('<a>').attr('href', $(item).find('link').text()).text('클릭')) );
+                tr.append( $('<td>').html($('<img>').attr('src', $(item).find('image').text()).attr('width', '70px').attr('height', '100px')) );
+                tr.append( $('<td>').html($(item).find('author').text()) );
+                tr.append( $('<td>').html($('<strike>').text($(item).find('price').text())) );
+                tr.append( $('<td>').html($('<span>').text($(item).find('discount').text())).css('color', 'red') );
+                tr.append( $('<td>').html($(item).find('publisher').text()) );
+                tr.append( $('<td>').html($(item).find('pubdate').text().substring(0, 4) + '.' + $(item).find('pubdate').text().substring(4, 6) + '.' + $(item).find('pubdate').text().substring(6)) );
+                tr.append( $('<td>').html($(item).find('isbn').text()) );
+                tr.append( $('<td>').html($(item).find('description').text()) );
+                searchResult.append(tr);
+            });
+        }
+    </script>
+
+    <div id="box5">
+        <table border="1">
+            <thead>
+                <tr>
+                    <td>지역명</td>
+                    <td>날씨</td>
+                    <td>온도</td>
+                    <td></td>
+                </tr>
+            </thead>
+            <tbody id="weather"></tbody>
+        </table>
+    </div>
+    <style>
+        #weather .icon {
+            width: 115px;
+            height: 115px;
+            background-image: url(../images/weather.png);
+            background-size: 844px 1280px;
+            background-repeat: no-repeat;
+        }
+        .sunny {
+            background-position: 0 0;
+        }
+        .cloudy1 {
+            background-position: -145px 0;
+        }
+        .cloudy2 {
+            background-position: -290px 0;
+        }
+    </style>
+    <script>
+        $.ajax({
+            type: 'get',
+            url: 'sfc_web_map.xml',
+            dataType: 'xml',
+            success: function(data){
+                var weather = $('#weather');
+                $.each($(data).find('local'), function(i, local){
+                    var tr = $('<tr>');
+                    tr.append($('<td>').text($(local).text()));
+                    tr.append($('<td>').text($(local).attr('desc')));
+                    tr.append($('<td>').text($(local).attr('ta')));
+                    switch($(local).attr('icon')) {
+                    case '01': 
+                        tr.append($('<td>').html($('<div>').addClass('icon sunny')));
+                        break;
+                    case '02':
+                        tr.append($('<td>').html($('<div>').addClass('icon cloudy1')));
+                        break;
+                    case '03':
+                        tr.append($('<td>').html($('<div>').addClass('icon cloudy2')));
+                        break;
+                    }
+                    weather.append(tr);
+                });
+            },
+            error: function(jqXHR){
+                $('#box5').empty();
+                $('#box5').append(jqXHR.status + '&nbsp;');
+                $('#box5').append(jqXHR.statusText);
+            }
+        });
+    </script>
+
+    <div id="box6"></div>
+    <script>
+        $.ajax({
+            type: 'get',
+            url: 'data.json',
+            dataType: 'json',
+            success: function(data){  // JSON.parse() 할 필요 없음.
+                var box6 = $('#box6');
+                $.each(data, function(i, book){
+                    var ul = $('<ul>');
+                    ul.append( $('<li>').text(book.title) );
+                    ul.append( $('<li>').text(book.author) );
+                    ul.append( $('<li>').text(book.price) );
+                    box6.append(ul);
+                });
+            },
+            error: function(jqXHR){
+                $('#box6').append(jqXHR.status + '&nbsp;');
+                $('#box6').append(jqXHR.statusText);
+            }
+        });
+    </script>
+
+    <div id="box7"></div>
+    <script>
+        $.ajax({
+            type: 'get',
+            url: 'data2.json',
+            dataType: 'json',
+            success: function(data){
+                var box7 = $('#box7');
+                var ul = $('<ul>');
+                $('<li>').text('모델:' + data.model).appendTo(ul);
+                $('<li>').text('제조사:' + data.maker).appendTo(ul);
+                $('<li>').text('가격:' + data.price).appendTo(ul);
+                $.each(data.option, function(i, item){
+                    $('<li>').text('옵션' + (i + 1) + ':' + item).appendTo(ul);
+                });
+                $('<li>').text('연식:' + data.info.year).appendTo(ul);
+                $('<li>').text('할인:' + data.info.discount).appendTo(ul);
+                ul.appendTo(box7);
+            },
+            error: function(jqXHR){
+                $('#box7').append(jqXHR.status + '&nbsp;');
+                $('#box7').append(jqXHR.statusText);
+            }
+        });
+    </script>
+
+    <div id="box8">
+        <table border="1">
+            <thead>
+                <tr>
+                    <td>소재지지번주소</td>
+                    <td>소재지도로명주소</td>
+                    <td>설치년월</td>
+                    <td>보관일수</td>
+                    <td>카메라대수</td>
+                    <td>경도</td>
+                    <td>위도</td>
+                    <td>설치목적구분</td>
+                    <td>촬영방면정보</td>
+                    <td>카메라화소수</td>
+                </tr>
+            </thead>
+            <tbody id="cctv_info"></tbody>
+        </table>
+    </div>
+    <script>
+        $.ajax({
+            type: 'get',
+            url: 'cctv.json',
+            dataType: 'json',
+            success: function(data){
+                cctvFunc(data);
+            },
+            error: function(jqXHR){
+                $('#box8').empty();
+                $('#box8').append(jqXHR.status + '&nbsp;');
+                $('#box8').append(jqXHR.statusText);
+            }
+        });
+        function cctvFunc(data){
+            var cctvInfo = $('#cctv_info');
+            $.each(data, function(i, cctv){
+                var tr = $('<tr>');
+                tr.append( $('<td>').text(cctv.소재지지번주소) );
+                tr.append( $('<td>').text(cctv.소재지도로명주소) );
+                tr.append( $('<td>').text(cctv.설치년월) );
+                tr.append( $('<td>').text(cctv.보관일수) );
+                tr.append( $('<td>').text(cctv.카메라대수) );
+                tr.append( $('<td>').text(cctv.경도) );
+                tr.append( $('<td>').text(cctv.위도) );
+                tr.append( $('<td>').text(cctv.설치목적구분) );
+                tr.append( $('<td>').text(cctv.촬영방면정보) );
+                tr.append( $('<td>').text(cctv.카메라화소수) );
+                cctvInfo.append(tr);
+            });
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script src="../js/jquery-3.6.0.js"></script>
+<script>
+	// 각 버튼을 누르면 Quiz1 서블릿이 각 요청에 따른 응답을 표시하도록 구현하시오.
+	// 현재 날짜 클릭하면 "2022-04-08" 출력
+	// 현재 시간 클릭하면 "14:45:30" 출력
+	
+	$(document).ready(function(){
+		
+		$(':button').click(function(){
+			location.href='/SERVLET/Quiz1?command=' + $(this).data('command');
+		});
+		
+	});
+	
+</script>
+</head>
+<body>
+
+	<input type="button" value="현재 날짜" data-command="date">
+	<input type="button" value="현재 시간" data-command="time">
+
+</body>
+</html>

@@ -1,0 +1,17 @@
+업캐스팅의 문제점
+
+1. 부모 클래스 타입으로 저장하는 경우 부모 클래스가 가지고 있는 메소드만 호출할 수 있다.
+2. 부모 클래스에 호출해야 할 메소드를 정의해 두고, 자식 클래스는 해당 메소드를 오버라이드 해서 해결한다.
+3. 형식
+    class Parent {
+        void a() { }
+        void b() { }
+    }
+    class Child extends Parent {
+        @Override
+        void b() { }
+    }
+    
+    Parent instance = new Child();
+    instance.a();  // 가능
+    instance.b();  // 가능

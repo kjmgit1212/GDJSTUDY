@@ -1,0 +1,14 @@
+컬렉션 프레임워크
+
+1. 각종 자료구조를 구현해 놓은 구현체이다.
+2. Collection 인터페이스와 Map 인터페이스를 구현한 클래스이다.
+3. Collection 인터페이스 구현체
+    1) List 인터페이스
+        (1) ArrayList 클래스
+        (2) LinkedList 클래스
+    2) Set 인터페이스
+        (1) HashSet 클래스
+        (2) LinkedHashSet 클래스 (순서대로 유지)
+4. Map 인터페이스 구현체
+    1) HashMap 클래스
+    2) TreeMap 클래스

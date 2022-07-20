@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        /*
+            ajax
+
+            1. asynchronous javascript and xml
+            2. 자바스크립트와 XML의 비동기 통신
+            3. 통신으로 주고 받는 데이터 형식
+                1) 과거 : XML
+                2) 현재 : JSON
+            4. 동기 통신과 비동기 통신
+                1) 동기 통신
+                    (1) 순서대로 통신한다.
+                    (2) 송신(요청)하고 수신(응답)될 때까지 기다린다.
+                    (3) 느린 통신 방식이다.
+                2) 비동기 통신
+                    (1) 순서를 지키지 않고 통신한다.
+                    (2) 송신(요청)하고 수신(응답)을 기다리지 않는다. 다른 업무를 수행한다.
+                    (3) 수신(응답)되었는지 점검하는 이벤트가 필요하다.
+            5. 페이지 전체를 요청하지 않고, 페이지 일부만 요청해서 처리할 때 사용한다.
+            6. 자바스크립트에서는 XMLHttpRequest 객체를 이용해서 처리하고, 제이쿼리에서는 $.ajax() 메소드를 이용해서 처리한다.
+        */
+    </script>
+    
+    <!-- 1. 동기 통신 -->
+    <div id="box1"></div>
+    <script>
+        // 1. XMLHttpRequest 객체 생성
+        var xhr = new XMLHttpRequest();
+        // 2. open() : 요청 방식 생성
+        //    open(HTTP메소드, 요청서버경로, 동기:false/비동기:true)
+        xhr.open('get', 'data.txt', false);
+        // 3. send() : 요청 보내기
+        xhr.send();
+        // 4. 응답 처리
+        //    1) 텍스트 응답인 경우 : responseText
+        //    2) XML 응답인 경우    : responseXML
+        //    3) JSON 응답인 경우   : JSON.parse(responseText)
+        document.getElementById('box1').textContent = xhr.responseText;
+    </script>
+
+    <!-- 2. 비동기 통신(이걸 공부) -->
+    <div id="box2"></div>
+    <script>
+        // 1. XMLHttpRequest 객체 생성
+        var xhr = new XMLHttpRequest();
+        // 2. open() : 요청 방식 생성
+        //    open(HTTP메소드, 요청서버경로, 동기:false/비동기:true)
+        xhr.open('get', 'data.txt', true);
+        // 3. send() : 요청 보내기
+        xhr.send();
+        // 4. 응답 처리
+        //    응답이 오는지 점검하는 readystatechange 이벤트 처리
+        xhr.onreadystatechange = function(ev){
+            // 1) readyState : 통신 확인
+            //    0(OPENED), 1(UNSEND), 2(HEADERS_RECEIVE), 3(LOADING), 4(DONE)
+            // 2) status : 응답 확인
+            //    200(응답 성공), 4xx(요청 오류), 5xx(서버 오류)
+            if(xhr.readyState == xhr.DONE && xhr.status == 200) {
+                document.getElementById('box2').textContent = xhr.responseText;
+            }
+        }
+    </script>
+
+    <!-- jquery 라이브러리 포함하기 -->
+    <script src="jquery-3.6.0.js"></script>
+
+    <!-- 3. 응답 처리하기 : XML 태그 처리 -->
+    <div id="box3"></div>
+    <script>
+        var xhr = new XMLHttpRequest();
+        xhr.open('get', 'data.xml', true);
+        xhr.send();
+        xhr.onreadystatechange = function(ev){
+            if(xhr.readyState == 4 && xhr.status == 200) {
+                
+                // XML 받아오는 경우 responseXML
+                var data = xhr.responseXML;
+                
+                // 결과를 ul 태그로 작성
+                var res = '';
+
+                // <books> 태그 가져오기 (1개 가져옴)
+                var books = $(data).find('books');
+
+                // <book> 태그 가져오기 (3개 가져옴)
+                var book = books.find('book');
+
+                // book 배열 순회
+                $.each(book, function(i, b){
+                    res += '<ul>';
+                    res += '<li>' + $(b).find('title').text() + '</li>';
+                    res += '<li>' + $(b).find('author').text() + '</li>';
+                    res += '<li>' + $(b).find('price').text() + '</li>';
+                    res += '</ul>';
+                });
+
+                // res 정보 화면에 나타내기
+                $('#box3').html(res);
+                
+            }
+        }
+    </script>
+
+    <!-- 4. 응답 처리하기 : XML 속성 처리 -->
+    <div id="box4"></div>
+    <script>
+
+        var xhr = new XMLHttpRequest();
+        xhr.open('get', 'data2.xml', true);
+        xhr.send();
+        xhr.onreadystatechange = function(ev){
+            if(xhr.readyState == 4 && xhr.status == 200) {
+                var data = xhr.responseXML;
+                var res = '';
+                var books = $(data).find('books');
+                var book = books.find('book');
+                $.each(book, function(i, b){
+                    res += '<ul>';
+                    res += '<li>' + $(b).attr('title') + '</li>';
+                    res += '<li>' + $(b).attr('author') + '</li>';
+                    res += '<li>' + $(b).attr('price') + '</li>';
+                    res += '</ul>';
+                });
+                $('#box4').html(res);
+            }
+        }
+
+    </script>
+
+    <!-- 5. 응답 처리하기 : JSON 처리 -->
+    <div id="box5"></div>
+    <script>
+        var xhr = new XMLHttpRequest();
+        xhr.open('get', 'data.json', true);
+        xhr.send();
+        xhr.onreadystatechange = function(ev){
+            if(xhr.readyState == 4 && xhr.status == 200){
+                var books = JSON.parse(xhr.responseText);
+                var res = '';
+                $.each(books, function(i, book){
+                    res += '<ul>';
+                    res += '<li>' + book.title + '</li>';
+                    res += '<li>' + book.author + '</li>';
+                    res += '<li>' + book.price + '</li>';
+                    res += '</ul>';
+                });
+                $('#box5').html(res);
+            }
+        }
+    </script>
+
+    <!-- 6. 응답 처리하기 : JSON 처리 -->
+    <div id="box6"></div>
+    <script>
+        var xhr = new XMLHttpRequest();
+        xhr.open('get', 'data2.json', true);
+        xhr.send();
+        xhr.onreadystatechange = function(ev){
+            if(xhr.readyState == 4 && xhr.status == 200){
+                var car = JSON.parse(xhr.responseText);
+                var res = '<ul>';
+                res += '<li>' + car.model + '</li>';
+                res += '<li>' + car.maker + '</li>';
+                res += '<li>' + car.price + '</li>';
+                $.each(car.option, function(i, item){
+                    res += '<li>' + item + '</li>';
+                })
+                res += '<li>' + car.info.year + '</li>';
+                res += '<li>' + car.info.discount + '</li>';
+                $('#box6').html(res);
+            }
+        }
+    </script>
+
+    <!-- 연습. naver_search.xml 테이블로 표시하기 -->
+    <div id="ex1">
+        <table border="1">
+            <thead>
+                <tr>
+                    <td>제목</td>
+                    <td>링크</td>
+                    <td>썸네일</td>
+                    <td>저자</td>
+                    <td>정상가</td>
+                    <td>할인가</td>
+                    <td>출판사</td>
+                    <td>출판일</td>
+                    <td>ISBN</td>
+                    <td>개요</td>
+                </tr>
+            </thead>
+            <tbody id="search_result"></tbody>
+        </table>
+    </div>
+    <script>
+        var xhr = new XMLHttpRequest();
+        xhr.open('get', 'naver_search.xml', true);
+        xhr.send();
+        xhr.onreadystatechange = function(ev){
+            if(xhr.readyState == 4 && xhr.status == 200) {
+                var data = xhr.responseXML;
+                var res = '';
+                $.each($(data).find('item'), function(i, item){
+                    res += '<tr>';
+                    res += '<td>' + $(item).find('title').html() + '</td>';
+                    res += '<td><a href="' + $(item).find('link').text() + '">클릭</a></td>';
+                    res += '<td><img src="' + $(item).find('image').text() + '" width="120px" height="80px"></td>';
+                    res += '<td>' + $(item).find('author').html() + '</td>';
+                    res += '<td>' + $(item).find('price').text() + '</td>';
+                    res += '<td>' + $(item).find('discount').text() + '</td>';
+                    res += '<td>' + $(item).find('publisher').html() + '</td>';
+                    res += '<td>' + $(item).find('pubdate').text() + '</td>';
+                    res += '<td>' + $(item).find('isbn').text() + '</td>';
+                    res += '<td>' + $(item).find('description').html() + '</td>';
+                    res += '</tr>';
+                });
+                $('#search_result').html(res);
+            }
+        }
+    </script>
+
+    <!-- 연습. sfc_web_map.xml 테이블로 표시하기 -->
+    <div id="ex1">
+        <table border="1">
+            <thead>
+                <tr>
+                    <td>지역명</td>
+                    <td>날씨</td>
+                    <td>온도</td>
+                </tr>
+            </thead>
+            <tbody id="weather"></tbody>
+        </table>
+    </div>
+    <script>
+        var xhr = new XMLHttpRequest();
+        xhr.open('get', 'sfc_web_map.xml', true);
+        xhr.send();
+        xhr.onreadystatechange = function(ev){
+            if(xhr.readyState == 4 && xhr.status == 200){
+                var data = xhr.responseXML;
+                var res = '';
+                $.each( $(data).find('local'), function(i, local){
+                    res += '<tr>';
+                    res += '<td>' + $(local).text() + '</td>';
+                    res += '<td>' + $(local).attr('desc') + '</td>';
+                    res += '<td>' + $(local).attr('ta') + '</td>';
+                    res += '</tr>';
+                });
+                $('#weather').html(res);
+            }
+        }
+    </script>
+
+    <!-- 연습. cctv.json 테이블로 표시하기 -->
+    <div id="ex3">
+        <table border="1">
+            <thead>
+                <tr>
+                    <td>소재지지번주소</td>
+                    <td>소재지도로명주소</td>
+                    <td>설치년월</td>
+                    <td>보관일수</td>
+                    <td>카메라대수</td>
+                    <td>경도</td>
+                    <td>위도</td>
+                    <td>설치목적구분</td>
+                    <td>촬영방면정보</td>
+                    <td>카메라화소수</td>
+                </tr>
+            </thead>
+            <tbody id="cctv"></tbody>
+        </table>
+    </div>
+    <script>
+        var xhr = new XMLHttpRequest();
+        xhr.open('get', 'cctv.json', true);
+        xhr.send();
+        xhr.onreadystatechange = function(ev){
+            if(xhr.readyState == 4 && xhr.status == 200){
+                var cctvs = JSON.parse(xhr.responseText);
+                var res = '';
+                $.each(cctvs, function(i, cctv){
+                    res += '<tr>';
+                    res += '<td>' + cctv.소재지지번주소 + '</td>';
+                    res += '<td>' + cctv.소재지도로명주소 + '</td>';
+                    res += '<td>' + cctv.설치년월 + '</td>';
+                    res += '<td>' + cctv.보관일수 + '</td>';
+                    res += '<td>' + cctv.카메라대수 + '</td>';
+                    res += '<td>' + cctv.경도 + '</td>';
+                    res += '<td>' + cctv.위도 + '</td>';
+                    res += '<td>' + cctv.설치목적구분 + '</td>';
+                    res += '<td>' + cctv.촬영방면정보 + '</td>';
+                    res += '<td>' + cctv.카메라화소수 + '</td>';
+                    res += '</tr>';
+                });
+                $('#cctv').html(res);
+            }
+        }
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .box1 > img {
+            width: 200px;
+        }
+        .box1 > img:nth-of-type(2) {
+            visibility: hidden;
+            /*
+                visibility: visible;  보여줌 (디폴트)
+                visibility: hidden;   숨김 (투명인간: 안 보이지만 자리는 차지한다.)
+            */
+        }
+
+        /*
+            이미지가 hidden되면 hover 할 수 없기 때문에
+            이미지의 부모 div를 hover 하도록 구성한다.
+        */
+        .box2 > div {
+            width: 200px;
+        }
+        .box2 > div > img {
+            width: 200px;
+        }
+        .box2 > div:hover > img {
+            visibility: hidden;
+        }
+
+        .answer {
+            visibility: hidden;
+        }
+        .view_answer:hover + span {
+            visibility: visible;
+        }
+    </style>
+</head>
+<body>
+    <div class="box1">
+        <img src="../images/hedgehog.jpg">
+        <img src="../images/dog.jpg">
+        <img src="../images/frog.jpg">
+    </div>
+    <hr>
+    <div class="box2">
+        <div><img src="../images/hedgehog.jpg"></div>
+        <div><img src="../images/dog.jpg"></div>
+        <div><img src="../images/frog.jpg"></div>
+    </div>
+    <hr>
+    <div class="box3">
+        <h3>다음 중 블록레벨태그가 아닌 것은?</h3>
+        <ol>
+            <li>&lt;div&gt;</li>
+            <li>&lt;span&gt;</li>
+            <li>&lt;ul&gt;</li>
+            <li>&lt;p&gt;</li>
+        </ol>
+        <span class="view_answer">정답보기</span>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <span class="answer">2</span>
+    </div>
+</body>
+</html>

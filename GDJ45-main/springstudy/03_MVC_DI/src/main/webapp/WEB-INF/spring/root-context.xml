@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd">
+	
+	<!-- Root Context: defines shared resources visible to all other web components -->
+	
+	<!-- 여기에 bean을 만들어 둡니다. -->
+	
+	<!--
+		@Autowired는 class로 bean을 인식하기 때문에 
+		id="board1"과 id="board2"를 다른 bean으로 인식하지 못한다.
+		
+		board1과 board2의 구분을 위해서 <qualifier> 태그를 추가한다.
+	-->
+	
+	<bean class="com.goodee.ex03.domain.Board" id="board1">
+		<qualifier value="board1" />
+		<property name="title" value="공지사항" />
+		<property name="content" value="급하다 급해" />
+	</bean>
+
+	<bean class="com.goodee.ex03.domain.Board" id="board2">
+		<qualifier value="board2" />
+		<property name="title" value="필독" />
+		<property name="content" value="제발 읽고 물어봐라" />
+	</bean>
+	
+</beans>

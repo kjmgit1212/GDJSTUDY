@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+
+    <!-- 연습1. global navigation bar 만들기 -->
+    <div id="box1"></div>
+    <style>
+        #box1 * {
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+        }
+        #box1 a {
+            text-decoration: none;
+            color: black;
+        }
+        #box1 ul {
+            list-style: none;
+        }
+        #box1 .gnb {
+            display: flex;
+            width: 1000px;
+            height: 100px;
+            margin: 0 auto;
+            border-bottom: 1px solid gray;
+        }
+        #box1 .gnb li {
+            padding: 0 20px;
+        }
+        #box1 .gnb li a {
+            display: block;
+            height: 100%;
+            text-align: center;
+            line-height: 100px;
+        }
+        #box1 .gnb li a:hover {
+            border-bottom: 5px solid blue;
+        }
+    </style>
+    <script>
+        /*
+            아래 태그를 만들어서 box1에 넣기
+            <ul class="gnb">
+                <li><a href="#">Models</a></li>
+                <li><a href="#">Find & Buy</a></li>
+                <li><a href="#">Electromobility</a></li>
+                <li><a href="#">Services</a></li>
+                <li><a href="#">Discover</a></li>
+            </ul>
+        */
+        var menus = ['Models', 'Find & Buy', 'Electromobility', 'Services', 'Discover'];
+        
+    </script>
+
+    <hr>
+
+    <!-- 연습2. 0.5초마다 무지개색으로 변환되는 100x100 크기 box -->
+    <div id="box2"></div>
+    <script>
+        var colors = ['red', 'orange', 'yellow', 'green', 'blue', 'navy', 'purple'];
+
+    </script>
+
+    <hr>
+
+    <!-- 연습3. 테이블에 데이터 넣기 -->
+    <div id="box3">
+        <table border="1">
+            <thead>
+                <tr>
+                    <td>lastBuildDate</td>
+                    <td colspan="2" id="lastBuildDate"></td>
+                </tr>
+                <tr>
+                    <td>total</td>
+                    <td colspan="2" id="total"></td>
+                </tr>
+                <tr>
+                    <td>title</td>
+                    <td>link</td>
+                    <td>description</td>
+                </tr>
+            </thead>
+            <tbody id="items">
+                <!-- 제목, 링크, 개요 -->
+            </tbody>
+        </table>
+    </div>
+    <script>
+        var result = {
+            'lastBuildDate': '2022-01-01',
+            'total': 3,
+            'items': [
+                {
+                    'title': '명량',
+                    'link': 'https://www.명량.com',
+                    'description': '내 죽음을 적에게 알리지 마라.'
+                },
+                {
+                    'title': '극한직업',
+                    'link': 'https://www.극한직업.com',
+                    'description': '범인을 잡을 것인가, 닭을 잡을 것인가!'
+                },
+                {
+                    'title': '신과함께(죄와벌)',
+                    'link': 'https://www.신과함께.com',
+                    'description': '오늘 예정대로 무사히 사망하셨습니다.'
+                }
+            ]
+        };
+        
+    </script>
+
+    <hr>
+
+    <!-- 연습4. 목록 태그 만들기 -->
+    <div id="box4"></div>
+    <style>
+        #box4 .product_list {
+            padding: 0;
+            margin: 0;
+            list-style-type: none;
+            display: flex;
+            justify-content: center;
+        }
+        #box4 .product_list li {
+            width: 200px;
+            height: 200px;
+            margin: 10px;
+            background-color: rgb(201, 87, 110);
+            color: white;
+            text-align: center;
+            padding-top: 20px;
+        }
+    </style>
+    <script>
+        /*
+            아래 태그를 만들어서 box4에 넣기
+            <ul class="product_list">
+                <li>Product1<br>15,000<br>★★★★<br></li>
+                <li>Product2<br>25,000<br>★★★★★<br></li>
+                <li>Product3<br>35,000<br>★★★<br></li>
+            </ul>
+        */
+        var products = [
+            {
+                'name': 'Product1',
+                'price': '15,000',
+                'star': '★★★★'
+            },
+            {
+                'name': 'Product2',
+                'price': '25,000',
+                'star': '★★★★★'
+            },
+            {
+                'name': 'Product3',
+                'price': '35,000',
+                'star': '★★★'
+            }
+        ];
+        
+    </script>
+
+    <hr>
+
+    <!-- 연습5. Student 객체를 생성자 함수로 만들어 테이블에 넣기 -->
+    <!--
+        Student 속성
+        1) 값   : name, kor, eng, mat
+        2) 함수
+            (1) 평균 반환하는 getAverage
+            (2) 학점 반환하는 getGrade 
+    -->
+    <div id="box5">
+        <table border="1">
+            <thead>
+                <tr>
+                    <td>이름</td>
+                    <td>국어</td>
+                    <td>영어</td>
+                    <td>수학</td>
+                    <td>평균</td>
+                    <td>학점</td>
+                </tr>
+            </thead>
+            <tbody id="student_info">
+
+            </tbody>
+        </table>
+    </div>
+    <script>
+        // 임의의 Student 객체를 3개 생성해서 student_info에 표시할 것
+
+    </script>
+
+    <hr>
+
+    <!-- 연습6. D-Day 만들기 -->
+    <div id="box6"></div>
+    <script>
+        /*
+            2022-11-17을 Dday로 설정해서 아래와 같이 표시하시오.
+            1. 1일 이상 남았을 때 : D-DAY 30일 5시간 10분 15초
+            2. 1일 미만 남았을 때 : D-DAY 23시간 10분 15초
+            3. 지났을 때          : D-DAY 입니다.
+        */
+        
+    </script>
+
+    <hr>
+
+    <!-- 연습7. 정답 보이기/숨기기 -->
+    <div id="box7">
+        <h1>프론트엔드 과목이 아닌 것은?</h1>
+        <ol>
+            <li>JavaScript</li>
+            <li>Java</li>
+            <li>CSS</li>
+            <li>HTML</li>
+        </ol>
+        <input type="button" value="정답보기" id="btn_answer" data-state="hide">
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <span id="answer">2</span>
+    </div>
+    <style>
+        #answer {
+            display: none;
+        }
+    </style>
+    <script>
+        // 버튼을 클릭하면
+        // 버튼상태 : '정답보기' <-> '정답숨기기' 변환
+        // 정답     :  안보임    <->  보임        변환
+        
+    </script>
+
+    <hr>
+
+    <!-- 연습8. form 태그 없이 네이버 검색 구현하기 -->
+    <input type="text" id="query" placeholder="검색어를 입력해 주세요">
+    <input type="button" value="검색" id="btn_naver_search">
+    <script>
+        
+    </script>
+
+    <hr>
+
+    <!-- 연습9. 너비 640px, 높이 480px 크기의 빈 창을 화면의 정중앙에 오픈하기 -->
+    <input type="button" value="정중앙에 열기" id="btn_open_center">
+    <script>
+        
+    </script>
+
+</body>
+</html>

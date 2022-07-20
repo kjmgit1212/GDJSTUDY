@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script src="../js/jquery-3.6.0.js"></script>
+<script>
+	// form 태그 없이 Redirect1 서블릿으로 name, age 보내기
+	// name, age 입력이 없는 경우 보내지 않기
+	
+	$(document).ready(function(){
+		$('#btn').click(function(){
+			var name = $('#name');
+			if(name.val() == '') {
+				alert('이름은 필수입니다.');
+				name.focus();
+				return;  // 함수 종료
+			}
+			var age = $('#age');
+			if(age.val() == '') {
+				alert('나이는 필수입니다.');
+				age.focus();
+				return;
+			}
+			location.href='/SERVLET/Redirect1?name=' + name.val() + '&age=' + age.val();
+		});
+	});
+	
+</script>
+</head>
+<body>
+
+	<input type="text" name="name" id="name" placeholder="이름">
+	<input type="text" name="age" id="age" placeholder="나이">
+	<input type="button" value="전송" id="btn">
+	
+</body>
+</html>

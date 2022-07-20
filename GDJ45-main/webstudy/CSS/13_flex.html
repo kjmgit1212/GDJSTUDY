@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        /*
+            flex
+
+            1. display="flex"
+            2. block을 수평 배치할 때 사용한다.
+               동일한 line에 여러 block이 배치될 수 있다.
+            3. 부모요소에 display="flex"를 지정하면
+               자식요소들이 수평 배치된다.
+        */
+
+        div {
+            box-sizing: border-box;
+            padding: 0;
+            margin: 0;
+            border: 1px solid gray;
+        }
+        .container {
+            /* flex 관련 */
+            display: flex;        /* 자식요소인 area1,area2가 flexable하게 배치된다. */
+            flex-direction: row;  /* 수평(좌우) 배치, 디폴트 */
+            flex-wrap: nowrap;    /* 자식요소인 area1,area2가 한 줄로 배치, 디폴트 */
+            justify-content: space-between;  /* 자식요소 사이에 공백을 배치 */
+            /* 크기, 배치 관련 */
+            width: 1000px;
+            margin: 0 auto;
+        }
+        .area1 {
+            width: 30%;
+        }
+        .area2 {
+            width: 60%;
+        }
+
+    </style>
+</head>
+<body>
+    
+    <div class="container">
+        <div class="area1">구역1</div>
+        <div class="area2">구역2</div>
+    </div>
+
+</body>
+</html>

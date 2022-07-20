@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mybatis.mapper.board">
+
+	<select id="selectBoardList" resultType="domain.BoardDTO">
+		SELECT NO, WRITER, TITLE, CONTENT, CREATED
+		  FROM BOARD
+	</select>
+	
+	<select id="getBoardCount" resultType="Long">
+		SELECT COUNT(*)
+		  FROM BOARD
+	</select>
+	
+	<select id="selectBoardByNo" parameterType="Long" resultType="domain.BoardDTO">
+		SELECT NO, WRITER, TITLE, CONTENT, CREATED
+		  FROM BOARD
+		 WHERE NO = #{no}
+	</select>
+	
+	<insert id="insertBoard" parameterType="domain.BoardDTO">
+		INSERT INTO BOARD
+			(NO, WRITER, TITLE, CONTENT, CREATED)
+		VALUES
+			(BOARD_SEQ.NEXTVAL, #{writer}, #{title}, #{content}, SYSDATE)
+	</insert>
+	
+	<update id="updateBoard" parameterType="domain.BoardDTO">
+		UPDATE BOARD
+		   SET TITLE = #{title}
+		     , CONTENT = #{content}
+		 WHERE NO = #{no}
+	</update>
+	
+	<delete id="deleteBoard" parameterType="Long">
+		DELETE
+		  FROM BOARD
+		 WHERE NO = #{no}
+	</delete>
+	
+</mapper>

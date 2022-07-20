@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.goodee.gdlibrary.mapper.QaaMapper">
+
+	<!-- qaa 전체 레코드 갯수 -->
+	<select id="selectQaaCount" resultType="Integer">
+		SELECT COUNT(QAA_NO)
+		  FROM QAA
+	</select>
+	
+	<!-- 
+		qaa 목록 가져오기(오라클) 
+	<select id="selectQaaList" parameterType="Map" resultType="QaaDTO">
+		SELECT Q.ROW_NUM, Q.QAA_NO, Q.MEMBER_ID, Q.QAA_TITLE, Q.QAA_CONTENT, Q.QAA_CREATED, Q.QAA_MODIFIED, Q.QAA_DEPTH, Q.QAA_GROUP_NO, Q.QAA_GROUP_ORD
+		  FROM (SELECT ROW_NUMBER() OVER(ORDER BY QAA_GROUP_NO DESC, QAA_GROUP_ORD) AS ROW_NUM, QAA_NO, MEMBER_ID, QAA_TITLE, QAA_CONTENT, QAA_CREATED, QAA_MODIFIED, QAA_DEPTH, QAA_GROUP_NO, QAA_GROUP_ORD
+		          FROM QAA) Q
+		 WHERE Q.ROW_NUM BETWEEN #{beginRecord} AND #{endRecord}
+	</select>
+	-->
+	
+	<!-- qaa 목록 가져오기(MySQL) -->
+	<select id="selectQaaList" parameterType="Map" resultType="QaaDTO">
+		SELECT QAA_NO, MEMBER_ID, QAA_TITLE, QAA_CONTENT, QAA_CREATED, QAA_MODIFIED, QAA_DEPTH, QAA_GROUP_NO, QAA_GROUP_ORD
+		  FROM QAA
+		 ORDER BY QAA_GROUP_NO DESC, QAA_GROUP_ORD
+		 LIMIT #{beginRecord}, #{recordPerPage}
+	</select>
+
+	<!-- 
+		qaa 작성한 게시글 내용 넣기(원글 삽입)(오라클) 
+	<insert id="insertQaa" parameterType="QaaDTO">
+		INSERT INTO QAA
+			(QAA_NO, MEMBER_ID, QAA_TITLE, QAA_CONTENT, QAA_MODIFIED, QAA_DEPTH, QAA_GROUP_NO, QAA_GROUP_ORD)
+		VALUES
+			(QAA_SEQ.NEXTVAL, #{memberId}, #{qaaTitle}, #{qaaContent}, SYSDATE, 0, QAA_SEQ.CURRVAL, 0)
+	</insert>
+	-->
+	
+	<!-- 
+		qaa 작성한 게시글 내용 넣기(원글 삽입)(MySQL)(기존)
+	<insert id="insertQaa" parameterType="QaaDTO">
+		<selectKey keyProperty="qaaNo" order="BEFORE" resultType="Long">
+			SELECT LAST_INSERT_ID() + 1
+		</selectKey>
+		INSERT INTO QAA
+			(MEMBER_ID, QAA_TITLE, QAA_CONTENT, QAA_MODIFIED, QAA_DEPTH, QAA_GROUP_NO, QAA_GROUP_ORD)
+		VALUES
+			(#{memberId}, #{qaaTitle}, #{qaaContent}, NOW(), 0, #{qaaNo}, 0)
+	</insert>
+	-->
+	
+	<!-- qaa 작성한 게시글 내용 넣기(원글 삽입, QAA_GROUP_NO = NULL)(MySQL) -->
+	<insert id="insertQaa" parameterType="QaaDTO">
+		<selectKey keyProperty="qaaNo" order="AFTER" resultType="Long">
+			SELECT MAX(QAA_NO) FROM QAA
+		</selectKey>
+		INSERT INTO QAA
+			(MEMBER_ID, QAA_TITLE, QAA_CONTENT, QAA_MODIFIED, QAA_DEPTH, QAA_GROUP_NO, QAA_GROUP_ORD)
+		VALUES
+			(#{memberId}, #{qaaTitle}, #{qaaContent}, NOW(), 0, NULL, 0)
+	</insert>
+	
+	<!-- qaa 작성한 게시글 내용 넣기(QAA_GROUP_NO)(MySQL) -->
+	<update id="updateQaaGroupNo" parameterType="QaaDTO">
+		UPDATE QAA
+		   SET QAA_GROUP_NO = QAA_NO
+		 WHERE QAA_NO = #{qaaNo}
+	</update>
+	
+	<!-- 댓글 삽입 전에 처리 -->
+	<!-- 같은 그룹의 기존 댓글의 GROUP_ORD 값 증가시키기 -->
+	<!-- parameterType="QaaDTO" : 원글의 정보 -->
+	<update id="updatePreviousReply" parameterType="QaaDTO">
+		UPDATE QAA
+		   SET QAA_GROUP_ORD = QAA_GROUP_ORD + 1
+		 WHERE QAA_GROUP_NO = #{qaaGroupNo}    <!-- 원글과 같은 그룹이다 -->
+		   AND QAA_GROUP_ORD > #{qaaGroupOrd}  <!-- 다단 댓글용. 1단 댓글은 GROUP_ORD > 0 -->
+	</update>
+	
+	
+	<!-- 
+		댓글 삽입(오라클) 
+	<insert id="insertReply" parameterType="QaaDTO">
+		INSERT INTO QAA
+			(QAA_NO, MEMBER_ID, QAA_TITLE, QAA_CONTENT, QAA_MODIFIED, QAA_DEPTH, QAA_GROUP_NO, QAA_GROUP_ORD)
+		VALUES
+			(QAA_SEQ.NEXTVAL, #{memberId}, '댓글 작성', #{qaaContent}, SYSDATE, #{qaaDepth}, #{qaaGroupNo}, #{qaaGroupOrd})
+	</insert>
+	-->
+	
+	<!-- 댓글 삽입(MySQL) -->
+	<insert id="insertReply" parameterType="QaaDTO">
+		INSERT INTO QAA
+			(MEMBER_ID, QAA_TITLE, QAA_CONTENT, QAA_MODIFIED, QAA_DEPTH, QAA_GROUP_NO, QAA_GROUP_ORD)
+		VALUES
+			(#{memberId}, '댓글 작성', #{qaaContent}, NOW(), #{qaaDepth}, #{qaaGroupNo}, #{qaaGroupOrd})
+	</insert>
+	
+	<!-- 원글 상세보기 -->
+	<select id="selectQaa" parameterType="Long" resultType="QaaDTO">
+		SELECT QAA_NO, MEMBER_ID, QAA_TITLE, QAA_CONTENT, QAA_CREATED, QAA_MODIFIED, QAA_DEPTH, QAA_GROUP_NO, QAA_GROUP_ORD
+		  FROM QAA
+		 WHERE QAA_NO = #{qaaNo}
+	</select>
+	
+	<!-- 
+		원글 수정하기(오라클) 
+	<update id="updateQaa" parameterType="QaaDTO">
+		UPDATE QAA
+		   SET QAA_TITLE = #{qaaTitle}
+		     , QAA_CONTENT = #{qaaContent}
+		     , QAA_MODIFIED = SYSDATE
+		 WHERE QAA_NO = #{qaaNo}
+	</update>
+	-->
+	
+	<!-- 원글 수정하기(MySQL) -->
+	<update id="updateQaa" parameterType="QaaDTO">
+		UPDATE QAA
+		   SET QAA_TITLE = #{qaaTitle}
+		     , QAA_CONTENT = #{qaaContent}
+		     , QAA_MODIFIED = NOW()
+		 WHERE QAA_NO = #{qaaNo}
+	</update>
+	
+	<!-- 삭제하려는 원글의 게시글 + 원글에 달린 댓글의 갯수의 총합 구하기 -->
+	<select id="getCountByQaaNo" parameterType="Long" resultType="Integer">
+		SELECT COUNT(*)
+	      FROM QAA
+	     WHERE QAA_GROUP_NO = #{qaaNo}
+	</select>
+	
+	
+	<!-- 삭제하려는 게시글의 원본과 원본에 달린 댓글 전부 삭제하기 -->
+	<delete id="deleteQaaReply" parameterType="Long">
+		DELETE 
+		  FROM QAA
+		 WHERE QAA_GROUP_NO = #{qaaNo}
+	</delete>
+	
+	
+	<!-- 댓글 삭제하기 위한 과정 -->
+	
+	<!-- 1. 삭제하려는 댓글의 qaaDepth와 동일한 댓글의 갯수 알아내기 -->
+	<select id="getReplyCountByQaaDepth" parameterType="QaaDTO" resultType="Integer">
+		SELECT COUNT(*)
+		  FROM QAA
+		 WHERE QAA_GROUP_NO = #{qaaGroupNo}
+		   AND QAA_DEPTH = #{qaaDepth}
+	</select>
+	
+	
+	<!-- 
+		2-1. 삭제하려는 댓글의 qaaDepth와 동일한 댓글의 갯수가 1일 경우에
+		     삭제하려는 qaaDepth 보다 큰 qaaDepth를 -1 처리한다.
+	-->
+	<update id="updateReplyByQaaDepth" parameterType="QaaDTO">
+		UPDATE QAA
+		   SET QAA_DEPTH = QAA_DEPTH - 1
+		 WHERE QAA_GROUP_NO = #{qaaGroupNo}
+		   AND QAA_DEPTH <![CDATA[>]]> #{qaaDepth}
+	</update>
+	
+	
+	<!-- 2-2. 삭제하려는 댓글의 qaaGroupOrd 숫자보다 큰 qaaGroupOrd를 -1 처리하기 -->
+	<update id="updateReplyByQaaGroupOrd" parameterType="QaaDTO">
+		UPDATE QAA
+		   SET QAA_GROUP_ORD = QAA_GROUP_ORD - 1
+		 WHERE QAA_GROUP_NO = #{qaaGroupNo}
+		   AND QAA_GROUP_ORD <![CDATA[>]]> #{qaaGroupOrd}
+	</update>
+	
+	
+	<!-- 선택한 댓글 삭제 -->
+	<delete id="deleteReply" parameterType="Long">
+		DELETE 
+  		  FROM QAA
+  		 WHERE QAA_NO = #{qaaNo}
+	</delete>
+	
+
+	<!-- 검색된 레코드 갯수 -->
+	<select id="selectFindCount" parameterType="Map" resultType="Long">
+		SELECT COUNT(*)
+		  FROM QAA
+		 WHERE ${column} = TRIM(#{query})
+	</select>
+	
+	
+	<!-- 
+		검색(오라클) 
+	<select id="selectFindList" parameterType="Map" resultType="QaaDTO">
+		SELECT Q.ROW_NUM, Q.QAA_NO, Q.MEMBER_ID, Q.QAA_TITLE, Q.QAA_CONTENT, Q.QAA_CREATED, Q.QAA_MODIFIED, Q.QAA_DEPTH, Q.QAA_GROUP_NO, Q.QAA_GROUP_ORD
+		  FROM (SELECT ROW_NUMBER() OVER(ORDER BY QAA_GROUP_NO DESC, QAA_GROUP_ORD) AS ROW_NUM, QAA_NO, MEMBER_ID, QAA_TITLE, QAA_CONTENT, QAA_CREATED, QAA_MODIFIED, QAA_DEPTH, QAA_GROUP_NO, QAA_GROUP_ORD
+		          FROM QAA
+				 WHERE ${column} = TRIM(#{query})) Q
+		 WHERE Q.ROW_NUM BETWEEN #{beginRecord} AND #{endRecord}
+	</select>
+	-->
+	
+	<!-- 검색(MySQL) -->
+	<select id="selectFindList" parameterType="Map" resultType="QaaDTO">
+		SELECT QAA_NO, MEMBER_ID, QAA_TITLE, QAA_CONTENT, QAA_CREATED, QAA_MODIFIED, QAA_DEPTH, QAA_GROUP_NO, QAA_GROUP_ORD
+		  FROM QAA
+		 WHERE ${column} = TRIM(#{query})
+		 ORDER BY QAA_GROUP_NO DESC, QAA_GROUP_ORD
+		 LIMIT #{beginRecord}, #{recordPerPage}
+	</select>
+	
+	
+
+</mapper>

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        a {
+            color: #000000;
+            text-decoration: none;
+        }
+
+        .gnb1 {
+            border: 1px solid black;
+            /* 목록기호 없애기 */
+            list-style-type: none;
+            /* 좌측 padding 없애기 */
+            padding: 0;
+            /* 각 목록 수평(좌우) 배치하기 */
+            display: flex;
+        }
+        .gnb1 > li {
+            border: 1px solid silver;
+            /* 너비/높이 */
+            width: 80px;
+            height: 40px;
+            /* 텍스트정렬 */
+            text-align: center;
+            line-height: 40px;
+        }
+        .gnb1 > li > a {
+            background-color: bisque;
+            /* <a>태그 너비/높이 조정을 위해서 block level로 변경하기 */
+            display: block;
+            /* 너비/높이 */
+            width: 100%;  /* 부모요소 li의 너비와 같다. */
+            height: 100%; /* 부모요소 li의 높이와 같다. */
+        }
+        .gnb1 > li > a:hover {
+            background-color: burlywood;
+        }
+
+        .float_menu {
+            border-top: 1px solid silver;
+            border-bottom: 1px solid silver;
+        }
+        .gnb2 {
+            /* 목록기호 없애기 */
+            list-style-type: none;
+            /* 좌측 padding 없애기 */
+            padding: 0;
+            /* 상하 margin 없애기 */
+            margin: 0;
+            /* 부모요소 one true layout */
+            overflow: hidden;
+        }
+        .gnb2 > li {
+            /* 자식요소 one true layout */
+            float: left;
+        }
+        .gnb2 > li > a {
+            /* <a>태그 너비/높이 조정을 위해서 block level로 변경하기 */
+            display: block;
+            /* 텍스트정렬 및 너비/높이 키우기 */
+            padding: 10px 30px;
+        }
+        .gnb2 > li > a:hover {
+            border-bottom: 3px solid limegreen;
+        }
+    </style>
+</head>
+<body>
+    
+    <div class="flex_menu">
+        <ul class="gnb1">
+            <li><a href="javascript:exit(0)">메일</a></li>
+            <li><a href="javascript:exit(0)">카페</a></li>
+            <li><a href="javascript:exit(0)">블로그</a></li>
+            <li><a href="javascript:exit(0)">지식iN</a></li>
+            <li><a href="javascript:exit(0)">쇼핑</a></li>
+            <li><a href="javascript:exit(0)">Pay</a></li>
+            <li><a href="javascript:exit(0)">TV</a></li>
+        </ul>
+    </div>
+
+    <div class="float_menu">
+        <ul class="gnb2">
+            <li><a href="javascript:exit(0)">사전</a></li>
+            <li><a href="javascript:exit(0)">뉴스</a></li>
+            <li><a href="javascript:exit(0)">증권</a></li>
+            <li><a href="javascript:exit(0)">부동산</a></li>
+            <li><a href="javascript:exit(0)">지도</a></li>
+            <li><a href="javascript:exit(0)">VIBE</a></li>
+            <li><a href="javascript:exit(0)">책</a></li>
+            <li><a href="javascript:exit(0)">웹툰</a></li>
+        </ul>
+    </div>
+
+</body>
+</html>

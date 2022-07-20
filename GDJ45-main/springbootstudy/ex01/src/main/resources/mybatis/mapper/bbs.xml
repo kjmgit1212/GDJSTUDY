@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.goodee.ex01.mapper.BbsMapper">
+
+	<select id="selectBbses" resultType="BbsDTO">
+		SELECT BBS_NO, WRITER, TITLE, CONTENT, CREATED, MODIFIED
+		  FROM BBS
+	</select>
+	
+	<select id="selectBbsByNo" parameterType="Long" resultType="BbsDTO">
+		SELECT BBS_NO, WRITER, TITLE, CONTENT, CREATED, MODIFIED
+		  FROM BBS
+		 WHERE BBS_NO = #{bbsNo}
+	</select>
+	
+	<insert id="insertBbs" parameterType="BbsDTO">
+		INSERT INTO BBS
+			(BBS_NO, WRITER, TITLE, CONTENT, CREATED, MODIFIED)
+		VALUES
+			(BBS_SEQ.NEXTVAL, #{writer}, #{title}, #{content}, TO_CHAR(SYSDATE, 'YYYY-MM-DD HH24:MI:SS'), TO_CHAR(SYSDATE, 'YYYY-MM-DD HH24:MI:SS'))
+	</insert>
+	
+	<update id="updateBbs" parameterType="BbsDTO">
+		UPDATE BBS
+		   SET TITLE = #{title}
+		     , CONTENT = #{content}
+		     , MODIFIED = TO_CHAR(SYSDATE, 'YYYY-MM-DD HH24:MI:SS')
+		 WHERE BBS_NO = #{bbsNo}
+	</update>
+	
+	<delete id="deleteBbs" parameterType="Long">
+		DELETE
+		  FROM BBS
+		 WHERE BBS_NO = #{bbsNo}
+	</delete>
+
+</mapper>

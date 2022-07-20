@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Context>
+
+	<!-- Oracle DBCP -->
+	<Resource
+		auth="Container"
+		name="jdbc/oracle"
+		type="javax.sql.DataSource"
+		driverClassName="oracle.jdbc.OracleDriver"
+		url="jdbc:oracle:thin:@localhost:1521:xe"
+		username="scott"
+		password="1111"
+		maxTotal="20"
+    	maxIdle="2"
+    	maxWaitMillis="5000" />
+
+</Context>

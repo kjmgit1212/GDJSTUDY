@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .image_box1 {
+            /* box크기 = 배경image크기 */
+            width: 100px;
+            height: 76px;
+            background-image: url(../images/attach.png);
+            background-size: 100px 76px;
+        }
+        .image_box2 {
+            /* box크기 > 배경image크기 */
+            width: 200px;
+            height: 152px;
+            border: 1px solid black;
+            background-image: url(../images/attach.png);
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+        .image_box3 {
+            /* box크기 < 배경image크기 */
+            width: 100px;
+            height: 38px;
+            border: 1px solid black;
+            background-image: url(../images/attach.png);
+            background-size: contain;  /* contain : 너비/높이 중 작은 값에 맞춤 */
+            background-repeat: no-repeat;
+        }
+        .image_box4 {
+            /* box크기 < 배경image크기 */
+            width: 100px;
+            height: 38px;
+            border: 1px solid black;  /* cover : 너비/높이 중 큰 값에 맞춤 */
+            background-image: url(../images/attach.png);
+            background-size: cover;
+        }
+        .image_box5 {
+            width: 120px;
+            height: 110px;
+            background-image: url(../images/logos.png);
+            background-position: left -600px top -190px;
+        }
+        .image_box6 {
+            width: 960px;
+            height: 640px;
+            background-image: url(../images/wall.jpg);
+            background-size: 100% 100%;  /* 박스 기준 */
+            background-blend-mode: multiply;
+            background-color: yellow;
+        }
+        .image_box7 {
+            width: 1280px;
+            height: 972px;
+            background-image: url(../images/hooray.jpg);
+            background-size: 100% 100%;
+            border: 5px solid gray;
+            margin: 10px auto;
+
+            font-size: 72px;
+            font-weight: 900;
+            color: rgb(255, 255, 255);
+            text-align: center;  /* 가로 가운데 */
+            padding-top: 400px;
+            box-sizing: border-box;
+        }
+    </style>
+</head>
+<body>
+    <div class="image_box1"></div>
+    <div class="image_box2"></div>
+    <div class="image_box3"></div>
+    <div class="image_box4"></div>
+    <div class="image_box5"></div>
+    <div class="image_box6"></div>
+    <div class="image_box7">
+        가라는 회사는 안 가고<br>
+        이래도 되나 싶다.
+    </div>
+</body>
+</html>

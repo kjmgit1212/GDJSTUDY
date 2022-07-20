@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <!-- jquery 사용을 위해서 아래 2개 과정 중 한 가지를 수행해야 한다. -->
+
+    <!-- 1. 다운로드 받은 jquery 라이브러리(외부 자바스크립트 포함) -->
+    <script src="jquery-3.6.0.js"></script>
+
+    <!-- 2. CDN jquery 라이브러리 -->
+    <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+
+</head>
+<body>
+    
+    <script>
+        /*
+            jquery wrapper
+
+            1. DOM을 표현한다.
+            2. $() - 이걸 사용
+            3. jQuery() : $는 jQuery와 같다.
+            4. 주요 DOM 표현
+                1) $('#box')  document.getElementById('box')
+                2) $('.box')  document.getElementsByClassName('box')
+                3) $('div')   document.getElementsByTagName('div')
+            5. 일반 변수가 jquery 기능을 사용하려면 $()로 묶어야 한다.
+        */
+    </script>
+
+    <div id="box1">Hello jQuery</div>
+    <script>
+        // textContent
+        // text()
+        console.log(document.getElementById('box1').textContent);
+        console.log($('#box1').text());
+    </script>
+
+    <div id="box2"></div>
+    <script>
+        // textContent = '텍스트'
+        // text('텍스트')
+        document.getElementById('box2').textContent = '안녕하세요 제이쿼리';
+        $('#box2').text('안녕하세요 제이쿼리');
+    </script>
+
+    <div id="box3"><h1>반갑습니다</h1></div>
+    <script>
+        // innerHTML
+        // html()
+        console.log(document.getElementById('box3').innerHTML);
+        console.log($('#box3').html());
+    </script>
+
+    <div id="box4"><h1>반갑습니다</h1></div>
+    <script>
+        // innerHTML = 'HTML'
+        // html('HTML')
+        document.getElementById('box4').innerHTML = '<a href="https://www.naver.com">네이버</a>';
+        $('#box4').html('<a href="https://www.google.com">구글</a>');
+    </script>
+
+    <div id="box5">
+        <ul>
+            <li class="items">정수기</li>
+            <li class="items">전자렌지</li>
+            <li class="items">냉장고</li>
+            <li class="items">식기세척기</li>
+            <li class="items">세탁기</li>
+        </ul>
+    </div>
+    <script>
+        // 자바스크립트
+        var items = document.getElementsByClassName('items');
+        for(let i = 0; i < items.length; i++) {
+            console.log(items[i].textContent);
+        }
+        // 제이쿼리와 일반 for문
+        var items = $('.items');
+        for(let i = 0; i < items.length; i++) {
+            console.log($(items[i]).text());
+        }
+        // 제이쿼리의 each()
+        // $.each(배열, 함수(인덱스, 요소){});
+        var items = $('.items');
+        $.each(items, function(i, item){
+            console.log('인덱스', i, '요소', item, '텍스트', $(item).text());
+        });
+    </script>
+
+    <div id="box6">
+        <input type="checkbox" name="agree" value="yes">
+    </div>
+    <script>
+        // 자바스크립트
+        var checkbox = document.querySelector('#box6 input');
+        // <input type="checkbox" name="agree" value="yes"> 속성(attribute)
+        console.log(checkbox.getAttribute('type'));
+        console.log(checkbox.getAttribute('name'));
+        console.log(checkbox.getAttribute('value'));
+        console.log(checkbox.getAttribute('checked'));
+        // DOM 속성(property)
+        console.log(checkbox.type);
+        console.log(checkbox.name);
+        console.log(checkbox.value);
+        console.log(checkbox.checked);
+
+        // 제이쿼리
+        var checkbox = $('#box6 input');
+        // <input type="checkbox" name="agree" value="yes"> 속성(attribute)
+        console.log(checkbox.attr('type'));
+        console.log(checkbox.attr('name'));
+        console.log(checkbox.attr('value'));
+        console.log(checkbox.attr('checked'));
+        // DOM 속성(property)
+        console.log(checkbox.prop('type'));
+        console.log(checkbox.prop('name'));
+        console.log(checkbox.prop('value'));
+        console.log(checkbox.prop('checked'));
+    </script>
+
+    <div id="box7">
+        <input type="text" value="Hello">
+    </div>
+    <script>
+        // 자바스크립트
+        var text = document.querySelector('#box7 input');
+        // <input type="text" value="Hello"> 속성(attribute)
+        text.setAttribute('value', '안녕하세요');
+        text.setAttribute('readonly', 'readonly');
+        // DOM 속성(property)
+        text.value = '안녕하세요';
+        text.readOnly = true;
+
+        // 제이쿼리
+        var text = $('#box7 input');
+        // <input type="text" value="Hello"> 속성(attribute)
+        text.attr('value', '안녕하세요');
+        text.attr('readonly', 'readonly');
+        // DOM 속성(property)
+        text.prop('value', '안녕하세요');
+        text.prop('readOnly', true);
+        
+        // 제이쿼리 속성 추가/제거
+        text.attr('data', '데이터');
+        text.prop('data', '데이터');
+        text.removeAttr('data');
+        text.removeProp('data');
+        
+    </script>
+
+    <div id="box8">
+        <ul>
+            <li id="google"><a href="#">구글</a></li>
+            <li id="naver"><a href="#">네이버</a></li>
+            <li id="kakao"><a href="#">카카오</a></li>
+            <li id="nate"><a href="#">네이트</a></li>
+            <li id="daum"><a href="#">다음</a></li>
+        </ul>
+    </div>
+    <script>
+
+        console.log( $('#google').parent() );          // 부모
+        console.log( $('#google').parent().parent() ); // 부모의 부모
+        console.log( $('#google').parents() );         // 모든 부모
+        console.log( $('#google').parents()[0] );      // 모든 부모 중 첫 번째 부모
+        console.log( $('#google').closest('div') );    // 부모 중 가장 가까운 div
+
+        console.log( $('#box8').children() );          // 자식
+        console.log( $('#box8').find('a') );           // 자식 중 <a> 태그
+
+        console.log( $('#kakao').prev() );             // 이전 형제
+        console.log( $('#kakao').prevAll() );          // 이전 모든 형제
+        console.log( $('#kakao').next() );             // 다음 형제
+        console.log( $('#kakao').nextAll() );          // 다음 모든 형제
+        console.log( $('#kakao').siblings() );         // 모든 형제
+
+    </script>
+
+    <div id="box9">
+        <ul>
+            <li>왓챠</li>
+            <li>티빙</li>
+            <li>넷플릭스</li>
+            <li>디즈니플러스</li>
+            <li>애플티비</li>
+        </ul>
+    </div>
+    <script>
+        console.log( $('#box9 li:first').text() );  // 첫 번째
+        console.log( $('#box9 li:last').text() );   // 마지막
+        console.log( $('#box9 li:eq(2)').text() );  // 인덱스 2
+        console.log( $('#box9 li:lt(2)').text() );  // 인덱스 2 미만(less than) : 인덱스 0, 1을 의미함
+        console.log( $('#box9 li:gt(2)').text() );  // 인덱스 2 초과(greater than) : 인덱스 3, 4를 의미함
+        console.log( $('#box9 li:odd').text() );    // 인덱스 홀수
+        console.log( $('#box9 li:even').text() );   // 인덱스 짝수
+    </script>
+
+    <div id="box10">
+        <form>
+            <input type="text" value="안녕하세요" autofocus>
+            <input type="password">
+            <input type="checkbox" id="agree1" checked>
+            <input type="checkbox" id="agree2">
+            <select>
+                <option>spring</option>
+                <option selected>summer</option>
+                <option>autumn</option>
+                <option>winter</option>
+            </select>
+        </form>
+    </div>
+    <script>
+        // $(':text')             : type="text"
+        // $(':password')         : type="password"
+        // $(':checkbox')         : type="checkbox"
+        // $(':radio')            : type="radio"
+        // $(':checkbox:checked') : type="checkbox" 중 체크된 요소
+        // $(':radio:checked')    : type="radio" 중 체크된 요소
+        // $(':selected')         : <select> 태그에서 선택된 <option> 
+        console.log( $(':text') );        // type="text"인 요소(input[type="text"])
+        console.log( $('#box10 :text') ); // box10 내부의 type="text"인 요소(input[type="text"])
+        console.log( $(':password') );    // type="password"
+        console.log( $(':checkbox') );    // type="checkbox"
+
+        console.log( $(':checkbox:checked') ); // type="checkbox"중 체크된 요소
+        console.log( $(':selected') );         // 선택된 option 요소
+        console.log( $(':focus') );            // 포커스를 가진 요소
+    </script>
+
+    <div id="box11">
+        <ul id="menu">
+            <li>불고기</li>
+        </ul>
+    </div>
+    <script>
+        // 1. 추가 (부모-자식)
+        $('#menu').append( '<li>배추김치</li>' );         // 마지막 요소로 추가
+        $('#menu').append( $('<li>').text('콩나물국') );  // 마지막 요소로 추가
+        $('#menu').prepend( '<li>계란말이</li>' );        // 첫 번째 요소로 추가
+        $('#menu').prepend( $('<li>').text('총각김치') ); // 첫 번째 요소로 추가
+        
+        $('<li>시금치무침</li>').appendTo('#menu');       // 마지막 요소로 추가
+        $('<li>').text('멸치볶음').appendTo('#menu');     // 마지막 요소로 추가
+        $('<li>무말랭이</li>').prependTo('#menu');        // 첫 번째 요소로 추가
+        $('<li>').text('샐러드').prependTo('#menu');      // 첫 번째 요소로 추가
+        
+        // 2. 추가 (형제)
+        $('#menu').before($('<h1>').text('오늘의 메뉴'));
+        $('#menu').after($('<a>').attr('href', '#').text('불만신고하기'));
+    </script>
+
+    <div id="box12">
+        <h1 id="title">좋아하는 영화목록</h1>
+        <ul id="movies">
+            <li>스타워즈</li>
+            <li>스타트랙</li>
+            <li>에일리언</li>
+            <li>프레데터</li>
+            <li id="best">아바타</li>
+            <li>터미네이터</li>
+        </ul>
+    </div>
+    <script>
+        // 1. 골라서 제거
+        $('#title').remove();              // id="title" 제거
+        $('#best').remove();               // id="best" 제거
+        $('#movies li').remove(':eq(2)');  // 인덱스 2 제거
+        $('#movies li').remove(':first');  // 첫 번째 제거
+        $('#movies li').remove(':last');   // 마지막 제거
+
+        // 2. 전체 제거
+        $('#movies').empty();              // id="movies" 내부 전체 제거(id="movies"는 남음)
+    </script>
+
+    <div id="box13">안녕하세요</div>
+    <style>
+        .bold_text {
+            font-weight: 900;
+        }
+        .red_text {
+            color: red;
+        }
+    </style>
+    <script>
+        // 1. class 추가
+        $('#box13').addClass('bold_text');             // 1개 클래스 추가
+        $('#box13').addClass('bold_text red_text');    // 2개 클래스 추가
+
+        // 2. class 제거
+        $('#box13').removeClass('bold_text');          // 1개 클래스 제거
+        $('#box13').removeClass('bold_text red_text'); // 2개 클래스 제거
+
+        // 3. class 토글
+        $('#box13').toggleClass('bold_text');          // bold_text 클래스 추가
+        $('#box13').toggleClass('bold_text');          // bold_text 클래스 제거
+    </script>
+
+    <div id="box14">반갑습니다</div>
+    <script>
+        $('#box14').css('font-size', '20px');  // 하이픈(-) 그대로 사용
+        $('#box14').css('fontWeight', '900');  // camelCase 사용
+        $('#box14').css({                      // 2개 이상 CSS 적용 (객체)
+            'color': 'red',
+            'font-style': 'italic'
+        });
+        $('#box14').css('background', 'blue')  // 2개 이상 CSS 적용 (메소드 체이닝)
+                   .css('text-align', 'center');
+    </script>
+
+    <script>
+        /*
+            jQuery 이벤트
+
+            1. bind(), live(), delegate()와 현재 사용하는 on() 메소드를 통해서
+               이벤트 바인딩(binding)을 할 수 있다.
+            2. on()
+                1) 여러 이벤트를 한 번에 등록할 수 있다.
+                2) 동적으로 생성된 요소에 이벤트를 등록할 수 있다.
+                3) 사용방법
+                    (1) $(부모).on(이벤트 타입, 이벤트 대상, 이벤트 리스너)
+                    (2) $(이벤트 대상).on(이벤트 타입, 이벤트 리스너)
+            3. one()
+                1) 한 번만 동작하는 이벤트이다.
+                2) 사용방법
+                    $(이벤트 대상).one(이벤트 타입, 이벤트 리스너)
+            4. off()
+                1) 이벤트를 제거한다.
+                2) 사용방법
+                    $(이벤트 대상).off(이벤트 타입)
+        */
+    </script>
+    <div id="box15">
+        <ul>
+            <li>베란다</li>
+            <li>침실</li>
+            <li>공부방</li>
+            <li>세탁실</li>
+            <li>거실</li>
+        </ul>
+    </div>
+    <script>
+        // 1. #box15의 자식 중 li를 클릭하면
+        /*
+        $('#box15').on('click', 'li', function(ev){
+            alert($(this).text());
+        });
+        */
+        // 2. #box15의 자식 중 li를 클릭하면
+        /*
+        $('#box15 li').on('click', function(ev){
+            alert($(this).text());
+        });
+        */
+        // 3. #box15의 자식 중 li를 클릭하면
+        /*
+        $('#box15 li').click(function(ev){
+            alert($(this).text());
+        });
+        */
+    </script>
+    <script>
+        // 하나의 이벤트 대상에 여러 이벤트를 등록하기
+        /*
+        $('#box15 li').on('mouseover mouseout', function(ev){
+            alert('들어갔다 나왔다 하는군요.');
+        });
+        */
+        /*
+        $('#box15 li').on({
+            'click': function(ev){
+                alert('click');
+            },
+            'mouseover': function(ev){
+                alert('mouseover');
+            },
+            'mouseout': function(ev){
+                alert('mouseout');
+            }
+        });
+        */
+    </script>
+
+    <!-- 연습. 아이디/비밀번호를 모두 입력하면 submit 허용하기 -->
+    <form id="login_form" action="#" method="post">
+        <label for="user_id">
+            아이디 <input type="text" id="user_id">
+        </label>
+        <label for="user_pw">
+            비밀번호 <input type="password" id="user_pw">
+        </label>
+        <button>로그인</button>
+    </form>
+    <style>
+        label {
+            display: block;
+        }
+    </style>
+    <script>
+        $('#login_form').on('submit', function(ev){
+            // $('#user_id').attr('value');
+            // $('#user_id').prop('value');
+            // $('#user_id').val();
+            if( $('#user_id').val() == '' || $('#user_pw').val() == '' ) {
+                alert('아이디와 비밀번호는 필수입니다.');
+                ev.preventDefault();
+            }
+        });
+    </script>
+
+</body>
+</html>

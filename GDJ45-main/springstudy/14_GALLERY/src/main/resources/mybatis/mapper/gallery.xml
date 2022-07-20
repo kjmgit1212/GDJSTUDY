@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.goodee.ex14.mapper.GalleryMapper">
+
+
+	<!-- 갤러리 목록 -->
+	<!-- 전체 갤러리 갯수 -->
+	<select id="selectGalleryCount" resultType="Integer">
+		SELECT COUNT(GALLERY_NO)
+		  FROM GALLERY
+	</select>
+	<!-- 갤러리 목록 -->
+	<select id="selectGalleryList" parameterType="Map" resultType="GalleryDTO">
+	  SELECT A.GALLERY_NO, A.WRITER, A.TITLE, A.CONTENT, A.IP, A.HIT, A.CREATED, A.MODIFIED
+		FROM (SELECT ROW_NUMBER() OVER(ORDER BY GALLERY_NO DESC) AS ROW_NUM, GALLERY_NO, WRITER, TITLE, CONTENT, IP, HIT, CREATED, MODIFIED
+		        FROM GALLERY) A
+	   WHERE A.ROW_NUM BETWEEN #{beginRecord} AND #{endRecord}
+	</select>
+
+
+	<!-- 갤러리 상세 보기 -->
+	<!-- 갤러리 정보 -->
+	<select id="selectGalleryByNo" parameterType="Long" resultType="GalleryDTO">
+		SELECT GALLERY_NO, WRITER, TITLE, CONTENT, IP, HIT, CREATED, MODIFIED
+		  FROM GALLERY
+		 WHERE GALLERY_NO = #{galleryNo}
+	</select>
+	<!-- 갤러리에 첨부된 첨부 파일 목록 -->
+	<select id="selectFileAttachListInTheGallery" parameterType="Long" resultType="FileAttachDTO">
+		SELECT FILE_ATTACH_NO, PATH, ORIGIN, SAVED, GALLERY_NO, DOWNLOAD_CNT
+		  FROM FILE_ATTACH
+		 WHERE GALLERY_NO = #{galleryNo}
+	</select>
+	<!-- 갤러리 조회수 증가 -->
+	<update id="updateGalleryHit" parameterType="Long">
+		UPDATE GALLERY
+		   SET HIT = HIT + 1
+		 WHERE GALLERY_NO = #{galleryNo}
+	</update>
+	<!-- 첨부 파일 정보 -->
+	<select id="selectFileAttachByNo" parameterType="Long" resultType="FileAttachDTO">
+		SELECT FILE_ATTACH_NO, PATH, ORIGIN, SAVED, GALLERY_NO, DOWNLOAD_CNT
+		  FROM FILE_ATTACH
+		 WHERE FILE_ATTACH_NO = #{fileAttachNo}
+	</select>
+	<!-- 다운로드 횟수 증가 -->
+	<update id="updateDownloadCnt" parameterType="Long">
+		UPDATE FILE_ATTACH
+		   SET DOWNLOAD_CNT = DOWNLOAD_CNT + 1
+		 WHERE FILE_ATTACH_NO = #{fileAttachNo}
+	</update>
+
+	
+	<!-- 갤러리 추가 -->
+	<!-- selectKey : GALLERY_SEQ.NEXTVAL 값을 INSERT문 실행 전에 GalleryDTO의 galleryNo에 넣어둔다. -->
+	<insert id="insertGallery" parameterType="GalleryDTO">
+		<selectKey keyProperty="galleryNo" resultType="Long" order="BEFORE">
+			SELECT GALLERY_SEQ.NEXTVAL
+			  FROM DUAL
+		</selectKey>
+		INSERT INTO GALLERY
+			(GALLERY_NO, WRITER, TITLE, CONTENT, IP, HIT, CREATED, MODIFIED)
+		VALUES
+			(#{galleryNo}, #{writer}, #{title}, #{content}, #{ip}, 0, SYSDATE, SYSDATE)
+	</insert>
+	<!-- 파일 첨부 추가 -->
+	<insert id="insertFileAttach" parameterType="FileAttachDTO">
+		INSERT INTO FILE_ATTACH
+			(FILE_ATTACH_NO, PATH, ORIGIN, SAVED, GALLERY_NO, DOWNLOAD_CNT)
+		VALUES
+			(FILE_ATTACH_SEQ.NEXTVAL, #{path}, #{origin}, #{saved}, #{galleryNo}, 0)
+	</insert>
+	
+	
+	<!-- 갤러리 삭제 -->
+	<!-- GALLERY 테이블의 ROW가 삭제되면, FILE_ATTACH 테이블의 ROW도 함께 삭제됨. -->
+	<delete id="deleteGallery" parameterType="Long">
+		DELETE
+		  FROM GALLERY
+		 WHERE GALLERY_NO = #{galleryNo}
+	</delete>
+	
+	
+	<!-- 갤러리 수정 -->
+	<update id="updateGallery" parameterType="GalleryDTO">
+		UPDATE GALLERY
+		   SET TITLE = #{title}, CONTENT = #{content}, MODIFIED = SYSDATE
+		 WHERE GALLERY_NO = #{galleryNo}
+	</update>
+	
+	
+	<!-- 첨부 파일 삭제 -->
+	<delete id="deleteFileAttach" parameterType="Long">
+		DELETE
+		  FROM FILE_ATTACH
+		 WHERE FILE_ATTACH_NO = #{fileAttachNo}
+	</delete>
+	
+	
+	<!-- 어제 저장된 첨부 파일 목록 -->
+	<select id="selectFileAttachListAtYesterday" resultType="FileAttachDTO">
+		SELECT FILE_ATTACH_NO, PATH, ORIGIN, SAVED, GALLERY_NO, DOWNLOAD_CNT
+		  FROM FILE_ATTACH
+		 WHERE PATH = 'C:\\upload\\' || TO_CHAR(SYSDATE - 1, 'yyyy\\mm\\dd')
+	</select>
+
+
+</mapper>

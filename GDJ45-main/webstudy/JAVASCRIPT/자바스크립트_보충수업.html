@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="jquery-3.6.0.js"></script>
+    <script src="login.js"></script>
+    <style>
+        .no {
+            color: red;
+            font-size: 12px;
+        }
+        .yes {
+            color: blue;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    
+    <!-- 로그인 처리 -->
+    <form id="login_form" action="#" method="post">
+        <input type="text" id="user_id" placeholder="ID">
+        <div id="id_check_result"></div>
+        <br>
+        <input type="password" id="user_pw" placeholder="Password">
+        <div id="pw_check_result"></div>
+        <br>
+        <!-- <button> 태그를 클릭하면 submit 이벤트가 동작한다. -->
+        <button>로그인</button>
+    </form>
+
+</body>
+</html>

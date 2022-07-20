@@ -1,0 +1,88 @@
+Spring Boot
+
+1. Tool
+  1) STS4 사용 (수업에서 사용하던 이클립스 2021-03월 기반 버전은 STS-4.10.0)
+    (공유폴더     - spring-tool-suite-4-4.10.0.RELEASE-e4.19.0-win32.win32.x86_64.zip)
+    (다운로드링크 - https://github.com/spring-projects/sts4/wiki/Previous-Versions)
+  2) Lombok 사용시 SpringToolSuite4.exe 대상으로 lombok 설치
+  3) springbootstudy 디렉터리를 workspace로 설정
+  4) [Help] - [Eclipse Marketplace] - "java web" 검색
+     - "Eclipse Enterprise Java and Web Developer Tools 3.21" 설치
+  5) [Window] - [Preferences]
+    (1) 테마/글꼴
+    (2) 인코딩
+    (3) Limit.console.output 해제
+
+
+2. Project
+  1) start.spring.io에서 프로젝트를 만들고 STS4는 해당 프로젝트를 import함
+    Project - Maven Project
+    Language - Java
+    Spring Boot - 2.6.8
+    Project Metadata
+    - Group    - com.goodee
+    - Artifact - ex01
+    - Name     - ex01
+    Packing    - War
+    Java       - 11
+    Dependencies
+    - Spring Web : spring-boot-starter, spring-boot-starter-tomcat, jackson, spring-core, spring-mvc
+    - Lombok
+    - Oracle Driver
+    - MyBatis Framework
+  2) Generate 버튼 눌러서 프로젝트 다운로드(ex01.zip)
+  3) ex01.zip 압축 풀어서 springboot 디렉터리에 가져다 놓기
+  4) SprintToolSuite4.exe 실행하고 ex01 프로젝트 import 하기
+    [Maven] - [Existing Maven Projects]
+
+
+3. Project Setting
+  1) web 폴더 만들기
+    src/main/webapp/resources
+    src/main/webapp/WEB-INF/
+  2) application.properties 작업하기
+    src/main/resources/application.properties
+      # server port 변경
+      server.port=9999
+      # servlet-context.xml
+      spring.web.resources.static-locations=/resources/**
+      spring.mvc.view.prefix=/WEB-INF/
+      spring.mvc.view.suffix=.jsp
+      # web.xml
+      server.servlet.encoding.charset=UTF-8
+      server.servlet.encoding.enabled=true
+      server.servlet.encoding.force=true
+      # session(1800초==30분)
+      server.servlet.session.timeout=1800
+      # db.properties
+      spring.datasource.driver-class-name=oracle.jdbc.OracleDriver
+      spring.datasource.url=jdbc:oracle:thin:@localhost:1521:xe
+      spring.datasource.username=scott
+      spring.datasource.password=1111
+      # mybatis
+      mybatis.config-location=mybatis/config/mybatis-config.xml
+      mybatis.mapper-locations=mybatis/mapper/*.xml
+  3) pom.xml 작업하기
+    (1) tomcat-embed-jasper
+	<!-- https://mvnrepository.com/artifact/org.apache.tomcat.embed/tomcat-embed-jasper -->
+	<dependency>
+	    <groupId>org.apache.tomcat.embed</groupId>
+	    <artifactId>tomcat-embed-jasper</artifactId>
+	</dependency>
+    (2) jstl
+	<!-- https://mvnrepository.com/artifact/javax.servlet/jstl -->
+	<dependency>
+	    <groupId>javax.servlet</groupId>
+	    <artifactId>jstl</artifactId>
+	</dependency>
+  4) JSP 추가
+    src/main/webapp/WEB-INF/index.jsp
+  5) Controller 생성
+    src/main/java
+      ㄴcom.goodee.ex01.controller
+        ㄴHomeController.java
+
+
+4. Project Run
+  1) [Run As] - [Spring Boot App]
+  2) 브라우저 열고 http://localhost:9999 입력 (http://localhost:9999/ex01 아님을 주의)

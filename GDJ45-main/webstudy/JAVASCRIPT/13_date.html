@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+    <!-- 1. Date 객체 -->
+    <script>
+
+        // 1. 현재 날짜와 시간
+        var now = new Date();
+        console.log(now);
+
+        // 2. 특정 날짜와 시간
+        var datetime1 = new Date(2022, 2, 29);            // 2022-03-29 (월 : 0~11)
+        var datetime2 = new Date(2022, 2, 29, 13, 7, 30); // 2022-03-29 13:07:30
+        var datetime3 = new Date('2022-03-29 13:08:30');  // 문자열로 전달할 때는 월을 그대로 전달
+        console.log(datetime1);
+        console.log(datetime2);
+        console.log(datetime3);
+
+        // 3. 년,월,일,시,분,초 추출
+        var year = now.getFullYear();
+        var month = now.getMonth() + 1;  // 월 : 0~11
+        var day = now.getDate();
+        var weekNum = now.getDay();      // 0(일), 1(월), 2(화), ..., 6(토)
+        var hour = now.getHours();
+        var minute = now.getMinutes();
+        var second = now.getSeconds();
+        console.log(year, month, day, weekNum, hour, minute, second);
+        
+    </script>
+
+    <!-- 문제. 시계 만들기 -->
+    <div id="box1">
+        <span id="year"></span>년
+        <span id="month"></span>월
+        <span id="date"></span>일
+        <span id="day"></span>요일
+        <span id="hour"></span>시
+        <span id="minute"></span>분
+        <span id="second"></span>초
+        <span id="ampm"></span>
+    </div>
+    <script>
+        /*  1초마다 반복하기-1
+            setInterval(function(){
+                실행코드
+            }, 1000);
+        */
+        /*  1초마다 반복하기-2
+            (function watch() {
+                setTimeout(function(){
+                    실행코드
+                    watch();
+                }, 1000);
+            })();
+        */
+        
+        // 0~9 -> 00~09
+        function makeZero(n) {
+            return (n < 10) ? '0' + n : '' + n;
+        }
+
+        // '일'~'토' 반환 함수를 Date 객체에 등록하기
+        Date.prototype.getDayName = function(){
+            let weekName = ['일', '월', '화', '수', '목', '금', '토'];
+            return weekName[this.getDay()];
+        }
+
+        // ampm 반환 함수를 Date 객체에 등록하기
+        Date.prototype.getAmpm = function(){
+            return (this.getHours() < 12) ? 'AM' : 'PM';
+        }
+
+        setInterval(function(){
+            let now = new Date();
+            document.getElementById('year').textContent   = now.getFullYear();
+            document.getElementById('month').textContent  = makeZero(now.getMonth() + 1);
+            document.getElementById('date').textContent   = makeZero(now.getDate());
+            document.getElementById('day').textContent    = now.getDayName();
+            document.getElementById('hour').textContent   = makeZero((now.getHours() > 12) ? now.getHours() - 12 : now.getHours());
+            document.getElementById('minute').textContent = makeZero(now.getMinutes());
+            document.getElementById('second').textContent = makeZero(now.getSeconds());
+            document.getElementById('ampm').textContent   = now.getAmpm();
+        }, 1000);
+
+    </script>
+
+</body>
+</html>

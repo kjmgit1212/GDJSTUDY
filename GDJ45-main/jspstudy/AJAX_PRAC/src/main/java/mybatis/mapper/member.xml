@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mybatis.mapper.member">
+
+	<insert id="insertMember" parameterType="domain.MemberDTO">
+		INSERT INTO MEMBER
+			(NO, ID, NAME, GENDER, ADDRESS)
+		VALUES
+			(MEMBER_SEQ.NEXTVAL, #{id}, #{name}, #{gender}, #{address})
+	</insert>
+
+	<select id="selectMemberList" resultType="domain.MemberDTO">
+		SELECT NO, ID, NAME, GENDER, ADDRESS
+		  FROM MEMBER
+		 ORDER BY NO DESC
+	</select>
+	
+	<select id="getMemberCount" resultType="int">
+		SELECT COUNT(*)
+		  FROM MEMBER
+	</select>
+	
+	<select id="selectMemberByNo" parameterType="Long" resultType="domain.MemberDTO">
+		SELECT NO, ID, NAME, GENDER, ADDRESS
+		  FROM MEMBER
+		 WHERE NO = #{no}
+	</select>
+	
+	<update id="updateMember" parameterType="domain.MemberDTO">
+		UPDATE MEMBER
+		   SET NAME = #{name}
+		     , ADDRESS = #{address}
+		 WHERE ID = #{id}
+	</update>
+	
+	<delete id="deleteMember" parameterType="Long">
+		DELETE
+		  FROM MEMBER
+		 WHERE NO = #{no}
+	</delete>
+	
+</mapper>

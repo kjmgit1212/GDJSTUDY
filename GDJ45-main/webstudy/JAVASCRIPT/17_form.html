@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+    <script>
+        /*
+            서브밋(submit)
+
+            1. form 태그 내부 요소에 입력되거나 선택된 값을
+               form 태그의 action 속성에 작성된 경로로 보내는 작업이다.
+            2. submit 이벤트의 대상(target)은 form 태그이다.
+            3. 수행 방법
+                1) <button> 태그를 클릭한다. (기본 이벤트로 등록)
+                2) <input type="submit"> 태그를 클릭한다.
+                3) <input type="button"> 태그를 작성한 뒤 서브밋 코드를 
+                    자바스크립트로 작성해서 클릭 이벤트로 등록한다.
+        */
+    </script>
+
+    <!-- 1. <button> 태그로 submit 하기 -->
+    <!-- 
+        구글의 검색 URI
+        https://www.google.com/search?q=하하하
+    -->
+    <form action="https://www.google.com/search"
+          method="get"
+          id="f1">
+        <input type="text" name="q" id="q1">
+        <button>submit</button>
+    </form>
+    <script>
+        var f1 = document.getElementById('f1');
+        var q1 = document.getElementById('q1');
+        f1.onsubmit = function(ev){
+            if(q1.value == '') {
+                alert('검색어를 입력하세요');
+                q1.focus();           // 검색란으로 커서 보내 줌
+                ev.preventDefault();  // 이벤트 동작 방지
+            }
+        }
+    </script>
+
+    <!-- 2. <input type="submit"> 태그로 submit 하기 -->
+    <form action="https://www.google.com/search"
+          method="get"
+          id="f2">
+        <input type="text" name="q" id="q2">
+        <input type="submit" value="submit">    
+    </form>
+    <script>
+        var f2 = document.getElementById('f2');
+        var q2 = document.getElementById('q2');
+        f2.onsubmit = function(ev){
+            if(q2.value.length < 4) {
+                alert('검색어는 4글자 이상입니다.');
+                ev.preventDefault();
+            }
+        }
+    </script>
+
+    <!-- 3. <input type="button"> 태그로 submit 하기 -->
+    <form action="https://www.google.com/search"
+          method="get"
+          id="f3">
+        <input type="text" name="q" id="q3">
+        <input type="button" value="submit" id="btn_submit">
+    </form>
+    <script>
+        var f3 = document.getElementById('f3');
+        var q3 = document.getElementById('q3');
+        var btnSubmit = document.getElementById('btn_submit');
+        btnSubmit.onclick = function(ev){
+            if(q3.value == '게임') {
+                alert('게임은 검색할 수 없습니다.');
+                q3.value = '';    // 입력란 초기화
+                return;           // click 이벤트 종료(이벤트 리스너 종료)
+            }
+            f3.submit();          // 서브밋 수행 코드
+        }
+    </script>
+
+    <!-- 4. 인라인 onsubmit 이벤트로 처리하기 -->
+    <form action="https://www.google.com/search"
+          method="get"
+          onsubmit="return googleSearch1()">
+        <input type="text" name="q" id="q4">
+        <button>submit</button>
+    </form>
+    <script>
+        function googleSearch1(ev){
+            var q4 = document.getElementById('q4');
+            if(q4.value == '') {
+                alert('검색어를 입력하세요');
+                return false;  // onsubmit 이벤트에 false 반환
+            }
+            return true;       // onsubmit 이벤트에 true 반환
+        }
+    </script>
+
+    <!-- 5. 인라인 onclick 이벤트로 처리하기 -->
+    <form action="https://www.google.com/search"
+          method="get">
+        <input type="text" name="q">
+        <input type="button" value="submit" onclick="googleSearch2(this.form)">
+    </form>
+    <script>
+        function googleSearch2(f) {
+            if(f.q.value == '') {
+                alert('검색어를 입력하세요');
+                return;
+            }
+            f.submit();
+        }
+    </script>
+
+    <!-- 6. 체크 박스 선택/해제(전체 선택/개별 선택) -->
+    <form>
+        <h1>약관 동의 페이지</h1>
+        <label for="check_all">
+            <input type="checkbox" id="check_all">
+            모두 동의합니다
+        </label>
+        <label for="service">
+            <input type="checkbox" id="service" class="check">
+            이용약관에 동의합니다
+        </label>
+        <label for="privacy">
+            <input type="checkbox" id="privacy" class="check">
+            개인정보 수집에 동의합니다
+        </label>
+        <label for="location">
+            <input type="checkbox" id="location" class="check">
+            위치정보 수집에 동의합니다
+        </label>
+        <label for="promotion">
+            <input type="checkbox" id="promotion" class="check">
+            광고정보 수신에 동의합니다
+        </label>
+    </form>
+    <style>
+        label { display: block; }
+    </style>
+    <script>
+        
+        var checkAll = document.getElementById('check_all');
+        var check = document.getElementsByClassName('check');
+        
+        // 1. 전체 선택을 클릭한 경우
+        checkAll.onclick = function(ev){
+            /*
+            if(checkAll.checked == true) {
+                check[0].checked = true;
+                check[1].checked = true;
+                check[2].checked = true;
+                check[3].checked = true;
+            } else {
+                check[0].checked = false;
+                check[1].checked = false;
+                check[2].checked = false;
+                check[3].checked = false;
+            }
+            */
+            for(let i = 0; i < check.length; i++) {
+                check[i].checked = checkAll.checked;
+            }
+        }
+
+        // 2. 개별 선택을 클릭한 경우
+        for(let i = 0; i < check.length; i++) {
+            check[i].onclick = function(ev){
+                // 4개 개별 선택 중 하나를 클릭하면
+                // 4개 선택을 모두 확인해서
+                // 4개 선택이 모두 체크되어 있으면 전체 선택 체크
+                // 하나라도 체크가 해제되어 있으면 전체 선택 해제
+                for(let j = 0; j < check.length; j++) {
+                    if(check[j].checked == false) {
+                        checkAll.checked = false;
+                        return;  // 함수가 종료되므로 return; 이후의 코드는 실행되지 않는다.
+                    }
+                }
+                checkAll.checked = true;
+            }
+        }
+
+    </script>
+
+</body>
+</html>

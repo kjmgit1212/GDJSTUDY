@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+    <!--
+        1. 순서가 없는 목록(unordered list)
+            1) 블록레벨
+            2) <ul> 태그를 사용하고 하위 태그로 <li> 태그를 사용
+            3) <ul> 태그의 type 속성으로 글머리기호(●) 변경
+                (1) <ul type="disc">   : ● (디폴트, 생략가능)
+                (2) <ul type="circle"> : ○
+                (3) <ul type="square"> : ■
+    -->
+    <ul type="square">
+        <li>메일</li>  <!-- 복제 : SHIFT + ALT + 방향키(↓↑) -->
+        <li>카페</li>
+        <li>블로그</li>
+        <li>지식iN</li>
+        <li>쇼핑</li>
+    </ul>
+    <!--
+        Emmet 활용
+        ul>li*5
+    -->
+    <ul>
+        <li>사전</li>
+        <li>뉴스</li>
+        <li>증권</li>
+        <li>부동산</li>
+        <li>지도</li>
+    </ul>
+
+    <!--
+        2. 순서가 있는 목록(ordered list)
+            1) 블록레벨
+            2) <ol> 태그를 사용하고 하위 태그로 <li> 태그를 사용
+            3) <ol> 태그의 type 속성으로 번호(1) 변경
+                (1) <ol type="1"> : 1,2,3... (디폴트, 생략가능)
+                (2) <ol type="a"> : a,b,c...
+                (3) <ol type="A"> : A,B,C...
+                (4) <ol type="i"> : i,ii,iii...
+                (5) <ol type="I"> : I,II,III...
+    -->
+    <h3>다음 중 SELECT문은 어떤 종류에 속하는가?</h3>
+    <ol type="I">
+        <li>DDL</li>
+        <li>DML</li>
+        <li>DQL</li>
+        <li>DCL</li>
+    </ol>
+
+    <!--
+        3. 정의 목록(개요 목록)
+            1) 블록레벨
+            2) 개념을 정리할 때 한 개념을 목록으로 처리
+            3) 한 개념 = 용어/설명, 제목/내용
+            4) <dl> 태그를 사용하고 하위 태그로 <dt>/<dd> 태그를 사용
+            5) <dl> : description list
+               <dt> : description term
+               <dd> : description description
+    -->
+    <h1>오징어 게임</h1>
+    <dl>
+        <dt>오픈</dt>
+        <dd>2021.09.17.</dd>
+        <dt>채널</dt>
+        <dd>넷플릭스</dd>
+        <dt>등장인물</dt>
+        <dd>
+            <ul>
+                <li>기훈 역(이정재)</li>
+                <li>상우 역(박해수)</li>
+                <li>일남 역(오영수)</li>
+            </ul>
+        </dd>
+    </dl>
+
+</body>
+</html>

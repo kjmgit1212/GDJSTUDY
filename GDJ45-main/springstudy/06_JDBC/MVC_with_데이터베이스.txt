@@ -1,0 +1,39 @@
+MVC
+
+1. 목록 보기
+   1) JSP         ${contextPath}/board/list 요청                board/list.jsp에서 ${boards} 내용을 목록으로 출력함
+                  ↓                                                        ↑
+   2) Controller  @GetMapping(/board/list)                                 ↑
+                  public String list(Model model) {                        ↑
+                    List<> boards = boardService.findBoards()   DB에서가져온목록을 boards에 저장하고,
+                    model.addAttribute("boards", boards);       list를 model에 속성으로 추가함(request.setAttribute("boards", boards)임) 
+                    return "board/list";                        /WEB-INF/views/board/list.jsp로 포워드(request 정보를 유지해서 이동)
+                  }                                                        ↑
+                  ↓                                                        ↑
+   3) Service     public List<> findBoards() {                             ↑
+                    return boardRepository.selectBoards();      DB에서가져온목록을 Controller에 전달
+                  }                                                        ↑
+                  ↓                                                        ↑
+   4) Repository  public List<> selectBoards() {                           ↑
+                    SELECT * FROM BOARD 실행                               ↑
+                    return DB에서가져온목록-------------------------------→↑
+                  }
+
+2. 상세 보기
+   1) JSP         ${contextPath}/board/detail?board_no=1 요청                board/detail.jsp에서 ${board} 내용을 출력함
+                  ↓                                                                     ↑
+   2) Controller  @GetMapping(/board/detail)                                            ↑
+                  public String list(Long board_no, Model model) {                      ↑
+                    BoardDTO board = boardService.findBoardByNo(board_no)   DB에서가져온객체를 board에 저장하고,
+                    model.addAttribute("board", board);                     board를 model에 속성으로 추가함(request.setAttribute("board", board)임) 
+                    return "board/detail";                                  /WEB-INF/views/board/detail.jsp로 포워드(request 정보를 유지해서 이동)
+                  }                                                                     ↑
+                  ↓                                                                     ↑
+   3) Service     public BoardDTO findBoardByNo(Long board_no) {                        ↑
+                    return boardRepository.selectBoardByNo(board_no);      DB에서가져온객체를 Controller에 전달
+                  }                                                                     ↑
+                  ↓                                                                     ↑
+   4) Repository  public BoardDTO selectBoards(Long board_no) {                         ↑
+                    SELECT * FROM BOARD WHERE BOARD_NO = ? 실행                         ↑
+                    return DB에서가져온객체--------------------------------------------→↑
+                  }

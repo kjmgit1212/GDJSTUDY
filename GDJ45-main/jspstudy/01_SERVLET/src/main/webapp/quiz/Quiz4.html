@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script src="../js/jquery-3.6.0.js"></script>
+<script>
+	$(document).ready(function(){
+		
+		fnSelectLang();
+		$('#source').on('change', function(){
+			fnSelectLang();
+		});
+		
+		$('#btn').on('click', function(){
+			var source = $('#source');
+			var target = $('#target');
+			var text = $('#text');
+			var translatedText = $('#translatedText');
+			if(source.val() == '') {
+				return;
+			}
+			$.ajax({
+				type: 'get',
+				url: '/SERVLET/Quiz4',
+				data: 'source=' + source.val() + '&target=' + target.val() + '&text=' + text.val(),
+				dataType: 'json',
+				success: function(resData){
+					translatedText.val(resData.message.result.translatedText);
+				},
+				error: function(jqXHR){
+					alert(jqXHR.responseText);
+				}
+			});
+		});
+		
+	});
+	
+	
+	function fnSelectLang(){
+		var source = $('#source');
+		var target = $('#target');
+		if(source.val() == 'ko') {
+			target.val('en');
+		} else if(source.val() == 'en') {
+			target.val('ko');
+		}
+	}
+</script>
+</head>
+<body>
+
+	<h1>파파고 번역</h1>
+	
+	<table>
+		<tr>
+			<td>
+				<select id="source">
+					<option value="ko">한국어</option>
+					<option value="en">영어</option>
+				</select>
+			</td>
+			<td rowspan="2">
+				<input type="button" value="번역하기" id="btn">
+			</td>
+			<td>
+				<select id="target">
+					<option value="ko">한국어</option>
+					<option value="en">영어</option>
+				</select>
+			</td>
+		</tr>
+		<tr>
+			<td><textarea id="text" rows="5" cols="100"></textarea></td>
+			<td><textarea id="translatedText" rows="5" cols="100"></textarea></td>
+		</tr>
+	</table>
+
+</body>
+</html>

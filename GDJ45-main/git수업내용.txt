@@ -1,0 +1,439 @@
+git
+
+1. git-scm.com에서 download 받아 설치한다.
+   Git-2.36.0-64-bit.exe
+2. 설치 과정
+   git init 명령을 내렸을 때 어떤 브랜치를 기본 브랜치 이름으로 사용할 것인가? main 브랜치
+3. 설치 완료 후 git bash 실행(linux command)
+4. linux command
+   1) pwd : 현재 디렉터리 경로 확인
+   2) ls : 현재 디렉터리에 포함된 파일 및 디렉터리 확인
+   3) mkdir : 디렉터리 만들기
+   4) cd : 디렉터리 이동
+      (1) ~  : 루트 디렉터리
+      (2) .  : 현재 디렉터리
+      (3) .. : 상위 디렉터리
+      (4) /  : 디렉터리 구분자
+   5) rmdir : 디렉터리 삭제
+   6) touch : 파일 만들기
+      (1) echo : 데이터 보내기
+      (2) cat  : 파일 열기
+   7) rm : 파일 삭제
+
+-----------------------
+linux command 연습
+-----------------------
+복사 : Ctrl + Insert
+붙이기 : Shift + Insert
+-----------------------
+
+GDJ45@DESKTOP-5O7J493 MINGW64 ~  ## ~는 루트 디렉터리를 의미한다.
+$ pwd
+/c/Users/GDJ45
+
+
+GDJ45@DESKTOP-5O7J493 MINGW64 ~
+$ ls  ## 현재 디렉터리에 있는 파일과 디렉터리를 모두 보여준다.
+'3D Objects'/
+ AppData/
+'Application Data'@
+ Contacts/
+...
+
+
+GDJ45@DESKTOP-5O7J493 MINGW64 ~
+$ mkdir sample  ## 현재 디렉터리에 sample 디렉터리 만들기
+
+
+GDJ45@DESKTOP-5O7J493 MINGW64 ~
+$ cd sample  ## sample 디렉터리로 이동하기
+
+
+GDJ45@DESKTOP-5O7J493 MINGW64 ~/sample  ## 이동된 경로를 확인할 수 있다.
+$ touch sample.txt  ## sample.txt 파일을 새로 만들기
+
+
+GDJ45@DESKTOP-5O7J493 MINGW64 ~/sample
+$ echo 'hello world' >> sample.txt  ## sample.txt 파일로 'hello world' 텍스트 기록하기
+
+
+GDJ45@DESKTOP-5O7J493 MINGW64 ~/sample
+$ cat sample.txt  ## sample.txt 파일 열기(내용 확인)
+hello world
+
+
+GDJ45@DESKTOP-5O7J493 MINGW64 ~/sample
+$ rm sample.txt  ## sample.txt 파일 삭제
+
+
+GDJ45@DESKTOP-5O7J493 MINGW64 ~/sample
+$ cd ..  ## 상위 디렉터리로 이동
+
+
+GDJ45@DESKTOP-5O7J493 MINGW64 ~
+$ rmdir sample  ## sample 디렉터리 삭제
+
+
+-----------------------
+git 개요
+-----------------------
+1. 대표적인 형상관리도구이다.
+   소스코드의 유지, 버전 관리
+2. 로컬PC에 '로컬저장소(local repository)'를 만든다.
+   (디렉터리를 만든다.)
+3. '로컬저장소'에 관리할 파일을 만든다.
+4. 관리할 파일을 추적한다.(stage에 올린다 : staging)
+5. 추적이 시작된 파일은 수정된 내용이 git에 의해서 관리된다.
+6. 추적된 내용은 사용자가 저장을 해 준다.(commit 한다.)
+7. commit이 완료된 상태에서 '원격저장소(remote repository)'에 올린다.
+
+
+-----------------------
+git command
+-----------------------
+git 관련 명령은 git으로 시작한다.
+-----------------------
+
+GDJ45@DESKTOP-5O7J493 MINGW64 ~
+$ mkdir local  ## local 디렉터리 만들기
+
+
+GDJ45@DESKTOP-5O7J493 MINGW64 ~
+$ cd local  ## local 디렉터리로 이동하기
+
+
+GDJ45@DESKTOP-5O7J493 MINGW64 ~/local
+$ git init  ## 현재 디렉터리를 '로컬저장소'로 만들기
+Initialized empty Git repository in C:/Users/GDJ45/local/.git/
+
+## 로컬저장소가 되면 .git 디렉터리가 생성된다.
+## .git 디렉터리를 지우면 더 이상 로컬저장소가 아니다.
+
+
+GDJ45@DESKTOP-5O7J493 MINGW64 ~/local (main)  ## (main) 로컬저장소의 브랜치(branch)를 보여준다.
+
+
+GDJ45@DESKTOP-5O7J493 MINGW64 ~/local (main)
+$ ls  ## 생성된 .git 디렉터리를 확인한다.(.git은 숨김폴더라서 안 보인다.)
+
+
+GDJ45@DESKTOP-5O7J493 MINGW64 ~/local (main)
+$ ls -a  ## 숨김파일 보기 옵션 -a를 사용해서 확인할 수 있다.
+./  ../  .git/
+
+## git을 사용하려면 사전에 사용자이름과 이메일을 등록해야 한다.
+
+
+GDJ45@DESKTOP-5O7J493 MINGW64 ~/local (main)
+$ git config user.name  ## git 사용자이름 확인하기
+goodeeit
+
+
+GDJ45@DESKTOP-5O7J493 MINGW64 ~/local (main)
+$ git config user.name goodeeit  ## git 사용자이름을 goodeeit로 등록하기
+
+
+## 등록할 이름은 알아서 정한다.
+## git config user.name 사용자이름 : 현재 로컬저장소의 git 사용자 등록하기
+## git config --global user.name 사용자이름 : 현재 PC의 git 사용자 등록하기(개인노트북, 개인개발PC는 --global 옵션을 사용하자.)
+
+
+GDJ45@DESKTOP-5O7J493 MINGW64 ~/local (main)
+$ git config user.email  ## git 사용자의 이메일 확인하기
+gt_min@naver.com
+
+
+GDJ45@DESKTOP-5O7J493 MINGW64 ~/local (main)
+$ git config user.email gt_min@naver.com  ## git 사용자의 이메일 등록하기
+
+
+## git config --global user.email 명령으로 현재 PC의 git 사용자 이메일을 등록할 수 있다.
+
+
+GDJ45@DESKTOP-5O7J493 MINGW64 ~/local (main)
+$ touch a.txt  ## 로컬저장소에 새로운 파일이 추가되었다.
+
+
+GDJ45@DESKTOP-5O7J493 MINGW64 ~/local (main)
+$ echo 'hello world' >> a.txt  ## 로컬저장소의 파일이 수정되었다.
+
+
+GDJ45@DESKTOP-5O7J493 MINGW64 ~/local (main)
+$ git status  ## git 상태 확인 (로컬저장소의 상태 확인)
+On branch main
+
+No commits yet  ## commit이 되지 않았다.
+
+Untracked files:  ## 추적하지 않는 파일이 있다.
+  (use "git add <file>..." to include in what will be committed)
+        a.txt  ## 추적하고 싶으면 git add 명령을 써라.
+
+nothing added to commit but untracked files present (use "git add" to track)
+
+
+GDJ45@DESKTOP-5O7J493 MINGW64 ~/local (main)
+$ git add a.txt  ## a.txt 파일을 추적하라. (staging하라.)
+warning: LF will be replaced by CRLF in a.txt.
+The file will have its original line endings in your working directory
+
+
+GDJ45@DESKTOP-5O7J493 MINGW64 ~/local (main)
+$ git status  ## 로컬저장소 상태확인
+On branch main
+
+No commits yet  ## 여전히 commit은 안 되어 있다.
+
+Changes to be committed:  ## 이제 a.txt 파일이 변한 건 알고 있다.
+  (use "git rm --cached <file>..." to unstage)
+        new file:   a.txt
+
+## git rm --cached 명령으로 staging을 취소할 수 있다. (git add를 취소)
+
+
+GDJ45@DESKTOP-5O7J493 MINGW64 ~/local (main)
+$ git commit  ## 커밋한다. (저장한다. vim 이라는 에디터가 열린다.)
+
+
+-----------------------
+vim editor
+-----------------------
+## i   : 삽입모드  (이제 입력할 수 있다.)
+## esc : 해당 모드의 종료
+## :wq : 저장하고 vim 종료
+
+
+-----------------------
+
+## 1. i 명령으로 삽입 모드로 진입한다.
+
+my first commit  ## 2. my first commit 이라는 커밋메시지를 작성한다.
+                 ## 3. esc키를 눌러서 삽입 모드에서 빠져 나온다.
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+#
+# On branch main
+#
+# Initial commit
+#
+# Changes to be committed:
+#       new file:   a.txt
+#
+~
+C:/Users/GDJ45/local/.git/COMMIT_EDITMSG[+] [unix] (11:21 28/04/2022)                     1,15 All
+:wq  ## 4. :wq 명령으로 저장하고 vim 편집기를 닫는다.
+-----------------------
+
+
+[main (root-commit) 89557a8] my first commit  ## 커밋아이디(89557a8)와 커밋메시지를 확인할 수 있다.
+ 1 file changed, 1 insertion(+)
+ create mode 100644 a.txt
+
+
+GDJ45@DESKTOP-5O7J493 MINGW64 ~/local (main)
+$ echo 'nice to meet you' >> a.txt  ## 새로운 내용이 추가되었다.
+
+
+GDJ45@DESKTOP-5O7J493 MINGW64 ~/local (main)
+$ git add .  ## 다시 추적한다. 이전 커밋 시점부터 현재까지 내용이 대상이다.
+             ## . 는 모든 파일을 추적하라는 의미이다.
+warning: LF will be replaced by CRLF in a.txt.
+The file will have its original line endings in your working directory
+
+
+GDJ45@DESKTOP-5O7J493 MINGW64 ~/local (main)
+$ git commit -m 'my second commit'  ## 커밋메시지를 작성하면서 커밋한다. (추천)
+[main ee82b22] my second commit  ## 2번째 커밋의 커밋아이디와 커밋메시지 확인
+ 1 file changed, 1 insertion(+)
+
+
+## git commit -am '커밋메시지' 명령으로 add와 commit을 동시에 할 수 있다.
+## 최초 commit은 반드시 git add와 git commit을 따로 명령 내려야 한다.
+
+
+GDJ45@DESKTOP-5O7J493 MINGW64 ~/local (main)
+$ git log  ## 커밋내역확인하기
+
+commit ee82b225ca48880018ae5f9e221c0a88f4e6b71f (HEAD -> main)  ## HEAD는 직전 commit을 의미한다.
+Author: goodeeit <gt_min@naver.com>
+Date:   Thu Apr 28 11:40:14 2022 +0900
+
+    my second commit
+
+commit 89557a8f00f9cf4cb1e2fa314239b6177bfd1526
+Author: goodeeit <gt_min@naver.com>
+Date:   Thu Apr 28 11:21:19 2022 +0900
+
+    my first commit
+
+
+## git log --oneline 명령으로 간단히 살펴볼 수 있다.
+
+
+##################################################################
+## 여기까지 로컬저장소 작업                                     ##
+## commit이 완료되면 '로컬저장소'는 현재 상태로 저장된다.       ##
+## commit이 되지 않으면 '원격저장소'와 내용을 주고 받을 수 없다.##
+##################################################################
+
+
+-----------------------
+원격저장소 작업하기
+-----------------------
+1. github.com 회원가입하기
+2. github.com 에서 저장소(repository) 만들기
+3. 저장소(repository) 주소를 로컬저장소의 원격저장소로 등록하기
+4. github으로 올리는 건 push, 내려 받는 건 pull
+
+
+
+## 원격저장소 만들기
+## 1. 저장소 이름 : local  (로컬저장소 이름과 통일할 것)
+## 2. README.md 파일 만들기 할 것.
+## 3. .gitignore 파일 (가급적) 만들기 할 것.
+##    gitignore.io 사이트에서 생성
+
+
+## 원격저장소 주소 알아내기
+## 1. local 레파지토리 열면 녹색 code 버튼 있음.
+## 2. 클릭하면 주소 보임.
+
+
+GDJ45@DESKTOP-5O7J493 MINGW64 ~/local (main)
+$ git remote add origin https://github.com/goodeeit/local.git  ## 원격저장소 등록
+
+
+## 현재 상황
+## 로컬저장소      원격저장소
+## a.txt           README.md
+##                 .gitignore
+
+
+## 중요한 용어
+## 1. push  :  로컬저장소 -> 원격저장소
+## 2. pull  :  로컬저장소 <- 원격저장소
+
+
+## 가장 먼저 해야 할 일
+## pull을 먼저 해야 한다.
+## 원격저장소의 main 브랜치를 pull한다.
+
+
+GDJ45@DESKTOP-5O7J493 MINGW64 ~/local (main)
+$ git pull origin main  ## 원격저장소(origin)의 main 브랜치를 내려 받겠다.
+remote: Enumerating objects: 7, done.
+remote: Counting objects: 100% (7/7), done.
+remote: Compressing objects: 100% (6/6), done.
+remote: Total 7 (delta 1), reused 0 (delta 0), pack-reused 0
+Unpacking objects: 100% (7/7), 2.16 KiB | 73.00 KiB/s, done.
+From https://github.com/goodeeit/local
+ * branch            main       -> FETCH_HEAD
+ * [new branch]      main       -> origin/main
+fatal: refusing to merge unrelated histories  ## 최초 pull 할 때는 거절된다. 그래서 옵션을 써야 한다.
+
+
+## push, pull을 위해서 미리 github.com 에서 personal access token을 받아 둔다.
+## 외울 수 없으므로 텍스트 파일로 저장해 두길 추천.
+
+
+
+GDJ45@DESKTOP-5O7J493 MINGW64 ~/local (main)
+$ git pull origin main --allow-unrelated-histories  ## 처음 pull 할 때 사용해야 하는 옵션
+
+
+## vim 이 열리고 메시지가 완성되어 있음
+## 저장하고 닫으면 됨 ( :wq )
+
+
+From https://github.com/goodeeit/local
+ * branch            main       -> FETCH_HEAD
+Merge made by the 'ort' strategy.
+ .gitignore | 123 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ README.md  |   1 +
+ 2 files changed, 124 insertions(+)
+ create mode 100644 .gitignore
+ create mode 100644 README.md
+
+
+## 현재 상황 (pull 했음)
+## 
+## 로컬저장소      원격저장소
+## a.txt           README.md
+## README.md       .gitignore
+## .gitignore
+
+
+
+## 로컬저장소의 a.txt 파일을 원격저장소로 올려야 한다.
+## 한마디로 push를 해야 한다.
+## 이게 마지막 작업이다.
+
+
+GDJ45@DESKTOP-5O7J493 MINGW64 ~/local (main)
+$ git push origin main  ## 로컬저장소의 main 브랜치 내용을 원격저장소 main 브랜치로 올려라.
+
+
+## 처음 push 할 때 personal token을 입력해서 인증해야 한다.
+## 앞으로 같은 로컬저장소에서 push 할 때는 더 이상 입력할 필요가 없다.
+
+
+## 더 이상 입력할 필요가 없는 이유
+## 운영체제에 저장이 되어 있기 때문이다.
+## 제어판 - 자격 증명 관리자 - Windows 자격 증명
+
+
+Enumerating objects: 9, done.
+Counting objects: 100% (9/9), done.
+Delta compression using up to 4 threads
+Compressing objects: 100% (4/4), done.
+Writing objects: 100% (8/8), 773 bytes | 386.00 KiB/s, done.
+Total 8 (delta 0), reused 0 (delta 0), pack-reused 0
+To https://github.com/goodeeit/local.git
+   8b2d877..c2fc6c3  main -> main
+
+
+## 현재 상황 (push 했음)
+## 
+## 로컬저장소      원격저장소
+## a.txt           README.md
+## README.md       .gitignore
+## .gitignore      a.txt
+
+## 이제 로컬저장소와 원격저장소가 같아 졌기 때문에 퇴근!
+
+
+## 이후에는 작업하고, add, commit 하고 push만 하면 된다.
+
+GDJ45@DESKTOP-5O7J493 MINGW64 ~/local (main)
+$ echo 'hahaha' >> a.txt  ## 추가 작업 하고,
+
+GDJ45@DESKTOP-5O7J493 MINGW64 ~/local (main)
+$ git commit -am 'my third commit'  ## add와 commit을 동시에 진행하고,
+warning: LF will be replaced by CRLF in a.txt.
+The file will have its original line endings in your working directory
+[main b744478] my third commit
+ 1 file changed, 1 insertion(+)
+
+GDJ45@DESKTOP-5O7J493 MINGW64 ~/local (main)
+$ git push origin main  ## push 한다.
+Enumerating objects: 5, done.
+Counting objects: 100% (5/5), done.
+Delta compression using up to 4 threads
+Compressing objects: 100% (2/2), done.
+Writing objects: 100% (3/3), 281 bytes | 281.00 KiB/s, done.
+Total 3 (delta 1), reused 0 (delta 0), pack-reused 0
+remote: Resolving deltas: 100% (1/1), completed with 1 local object.
+To https://github.com/goodeeit/local.git
+   c2fc6c3..b744478  main -> main
+
+
+
+## 연습
+
+## galaxy 라는 이름의 Dynamic Web Project를 만들고,
+## 임의의 Java 파일 및 Jsp 파일 추가
+
+## galaxy 디렉터리를 '로컬저장소'로 등록
+
+## github.com에 galaxy 레파지토리 생성
+
+## push 와 pull 과정 모두 성공하기

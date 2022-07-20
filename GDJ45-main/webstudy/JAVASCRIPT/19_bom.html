@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        /*
+            BOM
+
+            1. Browser Object Model(브라우저 객체 모델)
+            2. 브라우저의 구성요소를 자바스크립트 객체로 처리할 수 있다.
+            3. 주요 객체
+                1) window   : 최상위 객체. 생략할 수 있음.
+                2) screen   : 화면 객체. 화면의 너비/높이.
+                3) history  : 방문 경로 저장 객체. 뒤로/앞으로.
+                4) location : 경로 객체. URI(경로).
+        */
+    </script>
+
+    <!-- 1. screen -->
+    <script>
+        console.log('화면 너비 ' + screen.width);
+        console.log('화면 높이 ' + screen.height);
+        console.log('사용가능 너비 ' + screen.availWidth);
+        console.log('사용가능 높이 ' + screen.availHeight);
+    </script>
+
+    <!-- 2. history -->
+    <!--
+        1) 뒤로 가기   : history.back()
+        2) 앞으로 가기 : history.forward()
+        3) 뒤로 2번    : history.go(-2)
+        4) 앞으로 2번  : history.go(2)
+    -->
+    <input type="button" value="back" id="btn_back">
+    <script>
+        var btnBack = document.getElementById('btn_back');
+        btnBack.onclick = function(ev){
+            alert('뒤로 갑니다.');
+            history.back();
+        }
+    </script>
+
+    <!-- 3. location -->
+    <!--
+        1) 이동 : location.href='경로'
+        2) 이동 : location.assign('경로')
+        3) 이동 : location.replace('경로'), history를 남기지 않음.
+    -->
+    <input type="button" value="send1" id="btn_send1">
+    <input type="button" value="send2" id="btn_send2">
+    <script>
+        var btnSend1 = document.getElementById('btn_send1');
+        var btnSend2 = document.getElementById('btn_send2');
+        btnSend1.onclick = function(ev){
+            location.href='https://www.naver.com';
+            // location.assign('https://www.naver.com');
+            // location.replace('https://www.naver.com');
+        }
+        btnSend2.onclick = function(ev){
+            location.href='https://www.google.com/search?q=하하하';
+        }
+    </script>
+
+    <!-- 4. window -->
+    <input type="button" value="open" id="btn_open">
+    <script>
+        /*
+            window.open(url, target, feature);
+            1. url    : 열어 줄 파일의 경로. 생략하면 빈 창.
+            2. target : 현재 창으로 열기. 새 창으로 열기. 생략하면 새 창으로 열기.
+            3. 주요 feature
+                1) width  : 창의 너비
+                2) height : 창의 높이
+                3) top    : 창의 top 위치
+                4) bottom : 창의 bottom 위치
+                5) left   : 창의 left 위치
+                6) right  : 창의 right 위치
+        */
+        var btnOpen = document.getElementById('btn_open');
+        btnOpen.onclick = function(ev){
+            open('', '', 'width=640px, height=480px');
+        }
+    </script>
+
+    <hr>
+
+    <!-- 5. 부모창/자식창 -->
+    <h1 id="receive_msg"></h1>
+    <form>
+        <input type="text" id="parent_input" placeholder="자식창으로 보낼 데이터 입력">
+        <input type="button" id="btn_open_child" value="자식창열기">
+    </form>
+    <script>
+        var parentInput = document.getElementById('parent_input');
+        var btnOpenChild = document.getElementById('btn_open_child');
+        var childWindow;  // 전역 변수(모든 함수에서 사용 가능)
+        function openChild(){
+            childWindow = open('19_child.html', '', 'width=640px, height=480px');
+        }
+        function sendData(){
+            childWindow.onload = function(ev){
+                childWindow.document.getElementById('receive_msg').textContent = parentInput.value;
+            }
+        }
+        btnOpenChild.onclick = function(ev) {
+            openChild();
+            sendData();
+        }
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,12 @@
+예외
+
+1. Exception
+2. 각종 오류(예외)이다.
+3. 각 예외 상황별로 동작하는 예외 클래스가 생성되어 있다.
+4. 주요 예외 클래스
+   1) NullPointerException  : null 값이 메소드 호출할 때
+   2) NumberFormatException : String -> Number 타입 변환할 때
+   3) ClassCastException    : 클래스 변환(캐스팅)할 때
+   4) IOException           : 입출력 스트림 사용할 때
+   5) SQLException          : 데이터베이스 처리할 때
+5. 예외 발생이 가능한 코드는 반드시 예외 처리를 해야만 실행된다.

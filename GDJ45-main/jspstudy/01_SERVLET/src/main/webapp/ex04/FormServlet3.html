@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+
+	<form action="/SERVLET/FormServlet3" method="get">
+		
+		<input type="text" name="id" placeholder="아이디"><br>
+		
+		<input type="password" name="pw" placeholder="비밀번호"><br>
+		
+		<label><input type="radio" name="gender" value="male">남자</label>
+		<label><input type="radio" name="gender" value="female">여자</label><br>
+		
+		<label><input type="checkbox" name="hobbies" value="여행">여행</label>
+		<label><input type="checkbox" name="hobbies" value="SNS">SNS</label>
+		<label><input type="checkbox" name="hobbies" value="운동">운동</label><br>
+		
+		<select name="cities" multiple>
+			<option value="서울">서울</option>
+			<option value="경기">경기</option>
+			<option value="인천">인천</option>
+		</select><br>
+		
+		<select name="mobile">
+			<option value="010">010</option>
+			<option value="011">011</option>
+			<option value="016">016</option>
+			<option value="019">019</option>
+		</select>
+		<input type="text" name="tel1">
+		<input type="text" name="tel2"><br>
+		
+		<input type="text" name="email" placeholder="아이디">@
+		<input type="text" name="domain" list="domain" placeholder="입력 및 선택">
+		<datalist id="domain">
+			<option value="gmail.com" />
+			<option value="naver.com" />
+			<option value="kakao.com" />
+		</datalist><br>
+		
+		<textarea name="info" placeholder="정보"></textarea><br><br>
+		
+		<button>전송</button>
+		
+	</form>
+
+</body>
+</html>

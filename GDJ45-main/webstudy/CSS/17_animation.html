@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .box1 {
+            width: 100px;
+            height: 100px;
+            /* 애니메이션 속성 */
+            animation-name: my_animation1;       /* 애니메이션 이름(맘대로 정함) */
+            animation-duration: 3s;              /* 애니메이션 동작시간(초) */
+            animation-timing-function: ease-in;  /* 애니메이션 전환시간배분 */
+            animation-iteration-count: infinite; /* 애니메이션 반복횟수 */
+        }
+        /* my_animation1 생성 */
+        @keyframes my_animation1 {
+            from {  /* 애니메이션 시작할 때, 0%와 동일 */
+                background-color: skyblue;
+                border: 1px solid navy;
+            }
+            to {    /* 애니메이션 끝날 때, 100%와 동일 */
+                background-color: crimson;
+                border: 1px solid darkred;
+            }
+        }
+        
+        .box2 {
+            width: 100px;
+            height: 100px;
+            border: 1px solid #aaaaaa;
+            /*
+            animation-name: my_animation2;
+            animation-duration: 3s;
+            animation-timing-function: ease-out;
+            animation-iteration-count: infinite;
+            animation-direction: alternate;
+            */
+            animation: my_animation2 3s ease-out infinite alternate;
+        }
+        @keyframes my_animation2 {
+            0% {
+                margin-left: 0;
+            }
+            100% {
+                margin-left: 50%;
+            }
+        }
+
+        .box3 {
+            width: 100px;
+            height: 10px;
+            border-radius: 10px;
+            border: 1px solid #aaaaaa;
+            animation: my_animation3 1s ease infinite alternate;
+        }
+        @keyframes my_animation3 {
+            0% {
+                background-color: teal;
+                margin-left: 0%;
+            }
+            25% {
+                background-color: aqua;
+                margin-left: 10%;
+            }
+            50% {
+                background-color: orange;
+                margin-left: 20%;
+            }
+            75% {
+                background-color: blueviolet;
+                margin-left: 30%;
+            }
+            100% {
+                background-color: greenyellow;
+                margin-left: 40%;
+            }
+        }
+    </style>
+</head>
+<body>
+    
+    <div class="box1">
+        box1
+    </div>
+
+    <div class="box2">
+        box2
+    </div>
+
+    <div class="box3">
+        
+    </div>
+
+</body>
+</html>

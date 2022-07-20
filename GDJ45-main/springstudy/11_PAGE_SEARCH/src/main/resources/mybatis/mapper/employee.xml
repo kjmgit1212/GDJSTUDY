@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.goodee.ex11.mapper.EmployeeMapper">
+
+	<!-- EMPLOYEE 테이블과 DEPARTMENT 테이블의 조인 -->
+	<resultMap type="Department" id="DepartmentMap">
+		<result column="DEPARTMENT_ID" property="departmentId" />
+		<result column="DEPARTMENT_NAME" property="departmentName" />
+		<result column="MANAGER_ID" property="managerId" />
+		<result column="LOCATION_ID" property="locationId" />
+	</resultMap>
+		<resultMap type="Employee" id="EmployeeMap">
+		<result column="EMPLOYEE_ID" property="employeeId" />
+		<result column="FIRST_NAME" property="firstName" />
+		<result column="LAST_NAME" property="lastName" />
+		<result column="EMAIL" property="email" />
+		<result column="PHONE_NUMBER" property="phoneNumber" />
+		<result column="HIRE_DATE" property="hireDate" />
+		<result column="JOB_ID" property="jobId" />
+		<result column="SALARY" property="salary" />
+		<result column="COMMISSION_PCT" property="commissionPct" />
+		<result column="MANAGER_ID" property="managerId" />
+		<collection resultMap="DepartmentMap" property="department" />
+	</resultMap>
+
+	<!-- 전체 레코드 갯수 -->
+	<select id="selectEmployeeCount" resultType="int">
+		SELECT COUNT(*)
+		  FROM EMPLOYEES
+	</select>
+	
+	<!-- BEGIN~END 사이 목록 반환 -->
+	<select id="selectEmployees" parameterType="Map" resultMap="EmployeeMap">
+		SELECT A.*
+		  FROM (SELECT ROW_NUMBER() OVER(ORDER BY E.HIRE_DATE DESC) AS ROW_NUM, E.*, D.DEPARTMENT_NAME
+		          FROM DEPARTMENTS D RIGHT JOIN EMPLOYEES E
+		            ON D.DEPARTMENT_ID = E.DEPARTMENT_ID) A
+         WHERE A.ROW_NUM BETWEEN #{beginRecord} AND #{endRecord}
+	</select>
+	
+	<!-- 검색된 레코드 갯수 -->
+	<select id="selectFindCount" parameterType="Map" resultType="Integer">
+		SELECT COUNT(*)
+		  FROM EMPLOYEES
+		<where>
+			<choose>
+		 		<when test="column == 'EMPLOYEE_ID'">${column} = TRIM(#{query})</when>
+		 		<when test="column == 'FIRST_NAME'">UPPER(${column}) LIKE '%' || UPPER(#{query}) || '%'</when>
+		 		<when test="column == 'HIRE_DATE'">${column} BETWEEN TO_DATE(#{begin}, 'YYYY-MM-DD') AND TO_DATE(#{end}, 'YYYY-MM-DD')</when>
+		 		<when test="column == 'SALARY'">${column} BETWEEN #{begin} AND #{end}</when>
+		 	</choose>
+		</where>
+	</select>
+	
+	<!-- 검색 -->
+	<select id="selectFindList" parameterType="Map" resultMap="EmployeeMap">
+		SELECT A.*
+		  FROM (SELECT ROW_NUMBER() OVER(ORDER BY E.HIRE_DATE DESC) AS ROW_NUM, E.*, D.DEPARTMENT_NAME
+		          FROM DEPARTMENTS D RIGHT JOIN EMPLOYEES E
+		            ON D.DEPARTMENT_ID = E.DEPARTMENT_ID
+				<where>
+					<choose>
+				 		<when test="column == 'EMPLOYEE_ID'">${column} = TRIM(#{query})</when>
+				 		<when test="column == 'FIRST_NAME'">LOWER(${column}) LIKE '%' || LOWER(#{query}) || '%'</when>
+				 		<when test="column == 'HIRE_DATE'">${column} BETWEEN TO_DATE(#{begin}, 'YYYY-MM-DD') AND TO_DATE(#{end}, 'YYYY-MM-DD')</when>
+		 				<when test="column == 'SALARY'">${column} BETWEEN #{begin} AND #{end}</when>
+				 	</choose>
+				</where>) A
+         WHERE A.ROW_NUM BETWEEN #{beginRecord} AND #{endRecord}
+	</select>
+	
+	<!-- 자동완성 -->
+	<select id="autoComplete" parameterType="Map" resultType="Employee">
+		SELECT DISTINCT ${column}
+		  FROM EMPLOYEES
+		 WHERE ${column} LIKE #{query} || '%'
+	</select>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+
+</mapper>

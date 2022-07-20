@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        /*
+            1. 객체
+                1) 여러 개의 값으로 구성된 하나의 데이터이다.
+                2) 각 데이터는 '속성(property)'과 '값(value)'으로 구성된다.
+                3) 객체의 데이터는 중괄호({})를 이용해서 묶는다.
+            
+            2. 객체의 속성(property)
+                1) 객체를 구성하는 데이터 단위이다.
+                2) HTML 속성       : attribute
+                   Javascript 속성 : property
+                3) 속성의 호출 방법
+                    (1) 객체.속성
+                    (2) 객체['속성']
+                4) 속성의 순회
+                    (1) for-in문을 사용한다. (일반 for문 불가)
+                    (2) for(var 속성 in 객체) {  // 속성의 자료형은 string이다.
+                            객체.속성     -> 불가
+                            객체['속성']  -> 가능
+                        }
+            
+            3. 객체 생성
+                1) 중괄호({})를 이용한 직접 생성
+                    var 객체명 = {
+                        '속성': 값,
+                        '속성': 값
+                    }
+                2) 생성자 함수를 이용한 생성
+                    function 함수명(매개변수1, 매개변수2) {
+                        this.속성1 = 매개변수1;
+                        this.속성2 = 매개변수2;
+                    }
+                3) this
+                    (1) 객체 자신을 나타내는 키워드이다.
+                    (2) 객체 내부에서 각 속성(property)을 호출할 때 사용한다.
+                        this.속성
+            
+            4. 프로토타입(prototype)
+                1) 객체들이 공유하는 하나의 메모리 공간이다.
+                2) 공통 값, 공통 함수 등은 프로토타입에 저장하는 것이 좋다.
+                3) 사용방법
+                    (1) 생성자 함수 외부
+                        객체타입.prototype.속성 = 공통값
+                        객체타입.prototype.속성 = 공통함수
+                    (2) 생성자 함수 내부
+                        this.__proto__.속성 = 공통값
+                        this.__proto__.속성 = 공통함수
+        */
+    </script>
+    <script>
+
+        // 객체 생성
+        var me = {
+            'name': '민경태',
+            'age': 45
+        };
+
+        // 객체 확인
+        console.log(me);
+
+        // 객체 속성
+        console.log(me.name + ', ' + me.age);
+        console.log(me['name'] + ', ' + me['age']);
+
+        // 연습. 아래 객체를 생성하고, 각 속성을 확인하시오.
+        /*
+            객체명 : you
+            속성
+                name : 브레드
+                age : 50
+                birthday : 2022-03-01
+                friend : name이 '초코'이고 age가 30인 객체
+                hobbies : '이발', '달리기'
+                intro : 'Hello'를 console에 출력하는 함수
+        */
+        var you = {
+            'name': '브레드',
+            'age': 50,
+            'birthday': '2022-03-01',
+            'friend': {
+                'name': '초코',
+                'age': 30
+            },
+            'hobbies': [
+                '이발',
+                '달리기'
+            ],
+            'intro': function(){
+                console.log('Hello');
+            }
+        };
+        console.log(you.name);
+        console.log(you.age);
+        console.log(you.birthday);
+        console.log(you.friend);
+        console.log(you.friend.name, you.friend.age);
+        console.log(you.hobbies);
+        console.log(you.hobbies[0], you.hobbies[1]);
+        console.log(you.intro);
+        (you.intro)();
+
+    </script>
+    <script>
+
+        // 생성자 함수 : 객체를 만드는 목적의 함수
+        // 관례상 생성자 함수명은 대문자로 시작함.
+        function Book(bookNo, title, author) {
+            this.bookNo = bookNo;  // this에 의한 bookNo 속성의 동적 추가
+            this.title = title;
+            this.author = author;
+        }
+
+        // 객체 생성
+        var book1 = new Book(1000, '어린왕자', '생텍쥐베리');
+        var book2 = new Book(1001, '소나기', '황순원');
+        var book3 = new Book(1002, '홍길동전', '허균');
+
+        // 객체 확인
+        console.log(book1);
+        console.log(book1.bookNo, book1.title, book1.author);
+        console.log(book2);
+        console.log(book2.bookNo, book2.title, book2.author);
+        console.log(book3);
+        console.log(book3.bookNo, book3.title, book3.author);
+
+    </script>
+
+    <script>
+
+        var car = {
+            'model': 'BMW',
+            'price': 7000,
+            'drive': function(){
+                console.log(this.model + '타고 drive');
+            }
+        };
+
+        console.log(car.model, car.price);
+        (car.drive)();
+
+    </script>
+    
+    <script>
+
+        // 비어 있는 객체
+        var computer = {};
+
+        // 속성 추가
+        // 동적 추가 : 처음 사용한 속성은 자동으로 추가됨.
+        computer.model = '맥북';
+        computer.maker = 'apple';
+        computer.price = 200;
+        console.log(computer);
+        
+        // 속성 수정
+        // 이미 있는 속성은 수정됨.
+        computer.model = 'gram';
+        computer.maker = 'LG';
+        console.log(computer);
+        
+        // 속성 삭제
+        // delete 키워드를 이용해서 삭제함.
+        delete computer.maker;
+        console.log(computer);
+
+        // 속성의 순회
+        for(var p in computer) {
+            // console.log(p + ':' + computer.p);  불가
+            console.log(p + ':' + computer[p]);
+        }
+
+    </script>
+
+    <script>
+
+        // 생성자 함수
+        function Person(name) {
+            this.name = name;
+        }
+
+        // 생성자 함수 외부에서 prototype 추가
+        var person1 = new Person('Kim');
+        var person2 = new Person('Lee');
+        Person.prototype.country = 'KOREA';
+        Person.prototype.slogan = function(){
+            console.log('빨리빨리');
+        }
+        
+        // 객체 속성 확인
+        console.log(person1.name, person1.country);
+        (person1.slogan)();
+        console.log(person2.name, person2.country);
+        (person2.slogan)();
+
+
+        // 생성자 함수 내부에서 prototype 추가
+        function Product(name, price) {
+            this.name = name;
+            this.price = price;
+            this.__proto__.maker = '오뚜기';     // 공통값
+            this.__proto__.slogan = function(){  // 공통함수
+                console.log('벌떡');
+            }
+        }
+
+        // 객체 생성
+        var product1 = new Product('3분카레', 1000);
+        var product2 = new Product('3분짜장', 2000);
+
+        // 객체 속성 확인
+        console.log(product1.name, product1.price, product1.maker);
+        (product1.slogan)();
+        console.log(product2.name, product2.price, product2.maker);
+        (product2.slogan)();
+
+    </script>
+
+</body>
+</html>

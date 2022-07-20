@@ -1,0 +1,33 @@
+1. 이클립스 실행
+2. workspace 수정(jspstudy)
+3. 속성(Window - Preferences)
+    1) general - 테마
+    2) general - 글꼴
+    3) 인코딩(UTF-8)
+        (1) general - workdspace
+        (2) web - CSS Files, HTML Files, JSP Files
+    4) java - editor - syntax coloring
+        (1) 클래스 : 핑크
+        (2) 인터페이스 : 회색
+        (3) 메소드 : 오렌지
+4. 웹 브라우저(Window - Web Browser)
+    Chrome
+-----
+1. tomcat.apache.org 접속
+2. 왼쪽 Download - Tomcat 9.0
+3. Core - zip 다운로드 (apache-tomcat-9.0.62.zip)
+4. C:\GDJ45\installer\apache-tomcat-9.0.62 압축 풀어 두기(Catalina Home)
+5. 이클립스 실행
+6. 속성(Window - Preferences)
+    server - runtime environments - add 버튼 눌러서 tomcat 추가
+-----
+1. 이클립스 실행
+2. 화면 하단 servers 탭에 등록된 tomcat 더블 클릭
+3. HTTP/1.1 포트번호 기존 8080 -> 9090 수정(오라클 HTTP포트가 8080이기 때문)
+    오라클 DB가 아니라면 이 작업은 필요가 없음.
+-----
+tomcat 디렉터리
+1. bin  : 톰캣 실행과 중지 등 실행 스크립트 저장
+2. conf : 환경 설정 파일
+3. lib  : 라이브러리 저장(jar 저장)
+4. webapps : 배포 디렉토리

@@ -1,0 +1,22 @@
+스프링 동작 자세히 살펴보기
+
+1. 사용자가 요청한다.
+   <a href="${contextPath}/list">
+
+2. DispatcherServlet이 요청을 받는다.
+
+3. DispatcherServlet은 요청을 어떤 컨트롤러가 처리하는지
+   판단하는 HandlerMapping을 부른다.
+
+4. HandlerMapping에 의해서 요청을 처리하는 Controller가 호출된다.
+
+5. Controller가 요청을 처리하고 응답을 담당하는 ModelAndView를 부른다.
+   Model : JSP에서는 request로 값을 전달하고, 스프링에서는 Model로 값을 전달한다.
+
+6. ModelAndView가 전달할 값과 전달할 뷰(JSP : return "list")를 DispatcherServlet에게 전달한다.
+
+7. DispatcherServlet은 응답할 정보를 ViewResolver에게 전달한다.
+
+8. ViewResolver는 응답할 뷰(JSP : return "/WEB-INF/views/list.jsp") 정보를 만들어서 다시 DispatcherServlet에게 전달한다.
+
+9. DispatcherServlet이 응답할 뷰로 이동한다.

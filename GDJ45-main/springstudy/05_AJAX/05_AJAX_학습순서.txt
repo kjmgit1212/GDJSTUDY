@@ -1,0 +1,22 @@
+학습순서
+
+root-context.xml에 bean 생성
+
+1. ajax 이용해 객체, Map 처리하기
+   member.jsp
+   MemberController
+   MemberService
+   MemberServiceImpl
+   MemberDTO
+
+2. 1번 연습
+   Board 관련
+
+3. ajax 이용해 List 처리하기
+   Product 관련
+
+4. ajax 이용해 ResponseEntity 처리하기
+   Reservation 관련
+   ResponseEntity 이용해서 이미지 처리
+
+5. 영화진흥위원회 OPEN API

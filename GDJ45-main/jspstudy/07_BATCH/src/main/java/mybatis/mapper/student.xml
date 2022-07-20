@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mybatis.mapper.student">
+
+	<!-- 1. 전체학생목록 -->
+	<select id="selectStudentList" resultType="domain.Student">
+		SELECT STU_NO, NAME, KOR, ENG, MAT, AVG, GRADE
+		  FROM STUDENT
+		 ORDER BY STU_NO DESC
+	</select>
+	
+	<!-- 2. 전체학생수 -->
+	<select id="getTotalCount" resultType="Integer">
+		SELECT COUNT(*)
+		  FROM STUDENT
+	</select>
+	
+	<!-- 3. 전체학생평균 -->
+	<select id="getTotalAverage" resultType="Double">
+		SELECT NVL(AVG(AVG), 0)
+		  FROM STUDENT
+	</select>
+	
+	<!-- 4. 학생추가 -->
+	<insert id="insertStudent" parameterType="domain.Student">
+		INSERT INTO 
+		STUDENT(STU_NO, NAME, KOR, ENG, MAT, AVG, GRADE)
+		VALUES (STUDENT_SEQ.NEXTVAL, #{name}, #{kor}, #{eng}, #{mat}, #{avg}, #{grade})
+	</insert>
+	
+	<!-- 5. 학생상세조회 -->
+	<select id="selectStudentByStuNo" parameterType="Long" resultType="domain.Student">
+		SELECT STU_NO, NAME, KOR, ENG, MAT, AVG, GRADE
+		  FROM STUDENT
+		 WHERE STU_NO = #{stuNo}
+	</select>
+	
+	<!-- 6. 학생수정 -->
+	<update id="updateStudent" parameterType="Map">
+		UPDATE STUDENT
+		   SET NAME = #{name}
+		     , KOR = #{kor}
+		     , ENG = #{eng}
+		     , MAT = #{mat}
+		     , AVG = #{avg}
+		     , GRADE = #{grade}
+		 WHERE STU_NO = #{stuNo}
+	</update>
+	
+	<!-- 7. 학생삭제 -->
+	<delete id="deleteStudent" parameterType="Long">
+		DELETE
+		  FROM STUDENT
+		 WHERE STU_NO = #{stuNo}
+	</delete>
+	
+	<!-- 8. 학생조회(점수) -->
+	<select id="selectStudentByAvg" parameterType="Map" resultType="domain.Student">
+		SELECT STU_NO, NAME, KOR, ENG, MAT, AVG, GRADE
+		  FROM STUDENT
+		 WHERE <![CDATA[AVG >= #{begin} AND AVG <= #{end}]]>
+	</select>
+	<!--
+	SELECT STU_NO, NAME, KOR, ENG, MAT, AVG, GRADE
+	  FROM STUDENT
+	 WHERE AVG BETWEEN #{begin} AND #{end}
+	-->
+	
+	<!-- 9. 조회된 학생수(점수) -->
+	<select id="getSearchCount" parameterType="Map" resultType="Integer">
+		SELECT COUNT(*)
+		  FROM STUDENT
+		 WHERE <![CDATA[AVG >= #{begin} AND AVG <= #{end}]]>
+	</select>
+	
+	<!-- 10. 조회된 학생평균(점수) -->
+	<select id="getSearchAverage" parameterType="Map" resultType="Double">
+		SELECT NVL(AVG(AVG), 0)
+		  FROM STUDENT
+		 WHERE <![CDATA[AVG >= #{begin} AND AVG <= #{end}]]>
+	</select>
+	
+	<!-- 11. 평균 기준 상위 3명 조회하기 -->
+	<select id="selectStudentTop3" resultType="domain.Student">
+		SELECT S.RANK, S.NAME, S.AVG
+		  FROM (SELECT RANK() OVER(ORDER BY AVG DESC) AS RANK, NAME, AVG
+		          FROM STUDENT) S
+		 WHERE S.RANK BETWEEN 1 AND 3
+	</select>
+	
+</mapper>

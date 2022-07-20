@@ -1,0 +1,13 @@
+1. DTO(Data Transfer Object)
+    1) 자바와 DB간 주고 받은 데이터의 단위
+    2) 테이블의 칼럼을 클래스의 필드와 1:1 매칭
+    3) 동의어 : VO(Value Object), Bean
+
+2. DAO(Database Access Object)
+    1) DB 처리를 담당하는 자바 객체
+    2) Singleton Pattern으로 제작
+        -> 인스턴스를 하나만 생성할 수 있다.
+
+3. 프로퍼티(Properties)
+    1) 각종 설정 정보를 저장한 텍스트 파일
+    2) 자바의 Properties 클래스를 이용해 프로퍼티 파일 처리

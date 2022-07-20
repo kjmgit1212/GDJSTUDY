@@ -1,0 +1,4 @@
+- 모든 피자(Pizza)는 도우(dough)와 치즈(cheese)가 들어간다.
+- 불고기 피자(BulgogiPizza)는 불고기(bulgogi)가 들어간다.
+
+상속 관계로 피자(Pizza)와 불고기피자(BulgogiPizza)를 만들어 보자.

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+    <!-- 
+        문제. 국어,영어,수학 점수를 입력창으로 입력 받아  
+              화면에 이름,평균,학점(A,B,C,D,F)을 출력하시오.
+              학점은 굵게 표시하시오.
+    -->
+    <div>
+        <div>이름 : <span id="name"></span></div>
+        <div>평균 : <span id="average"></span>점</div>
+        <div>학점 : <span id="grade"></span></div>
+    </div>
+    <script>
+
+        // 입력
+        var name = prompt('이름을 입력하세요.');
+        var kor = Number(prompt('국어점수를 입력하세요.'));
+        var eng = Number(prompt('영어점수를 입력하세요.'));
+        var mat = Number(prompt('수학점수를 입력하세요.'));
+
+        // 평균
+        var average = (kor + eng + mat) / 3;
+
+        // 학점(if)
+        var grade;
+        if (average >= 90) {
+            grade = 'A';
+        } else if (average >= 80) {
+            grade = 'B';
+        } else if (average >= 70) {
+            grade = 'C';
+        } else if (average >= 60) {
+            grade = 'D';
+        } else {
+            grade = 'F';
+        }
+
+        // 학점(switch : Just Like JAVA)
+        switch ( parseInt(average / 10) ) {
+        case 10:
+        case 9: grade = 'A';
+                break;
+        case 8: grade = 'B';
+                break;
+        case 7: grade = 'C';
+                break;
+        case 6: grade = 'D';
+                break;
+        default:
+                grade = 'F';
+        }
+
+        // 학점(switch : JavaScript)
+        // 자바스크립트의 switch문은 case에서 크기 비교 연산이 가능하다.
+        switch (true) {  // switch문을 실행하시오.
+        case average >= 90 : grade = 'A';
+                             break;
+        case average >= 80 : grade = 'B';
+                             break;
+        case average >= 70 : grade = 'C';
+                             break;
+        case average >= 60 : grade = 'D';
+                             break;
+        default:             grade = 'F';
+        }
+
+        // 결과 출력
+        document.getElementById('name').textContent = name;
+        document.getElementById('average').textContent = average;
+        document.getElementById('grade').innerHTML = '<strong>' + grade + '</strong>';
+        
+    </script>
+
+</body>
+</html>

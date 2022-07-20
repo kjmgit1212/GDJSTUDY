@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.goodee.gdlibrary.mapper.SeatMapper">
+   
+
+   <select id="selectSeatList" resultType="SeatDTO">
+      SELECT SEAT_NO, MEMBER_NO, SEAT_STATUS, SEAT_DATE, SEAT_CODE
+        FROM SEAT
+       ORDER BY SEAT_NO
+   </select>
+   
+   <select id="selectSeatByNo" parameterType="Long" resultType="SeatDTO">
+      SELECT SEAT_NO, MEMBER_NO, SEAT_STATUS, SEAT_DATE, SEAT_CODE
+        FROM SEAT
+       WHERE SEAT_NO = #{seatNo}
+   </select>
+   
+   <update id="updateUpSeatStatus" parameterType="SeatDTO">
+      UPDATE SEAT
+         SET MEMBER_NO = #{memberNo}, SEAT_STATUS = 2
+       WHERE SEAT_NO = #{seatNo}
+   </update>
+   
+   <update id="updateDownSeatStatus" parameterType="Long">
+      UPDATE SEAT
+         SET SEAT_STATUS = 1, MEMBER_NO = NULL, SEAT_DATE = NULL, SEAT_CODE = NULL
+       WHERE SEAT_CODE = #{seatCode}
+   </update>
+   
+   <select id="selectSeatById" parameterType="String" resultType="SeatDTO">
+      SELECT S.SEAT_NO, M.MEMBER_NAME
+        FROM SEAT S INNER JOIN MEMBER M
+          ON S.MEMBER_NO = M.MEMBER_NO
+       WHERE MEMBER_ID = #{memberId}
+   </select>
+   
+   <update id="updateDownSeatStatusByScheduled">
+       <![CDATA[
+         UPDATE SEAT
+              SET MEMBER_NO = NULL, SEAT_STATUS = 1, SEAT_DATE = NULL, SEAT_CODE = NULL
+            WHERE TIME_TO_SEC(TIMEDIFF(CURRENT_TIMESTAMP(), SEAT_DATE)) > TIME_TO_SEC('02:00:00')
+         ]]>
+   </update>
+   
+   <update id="updateRandomCode" parameterType="SeatDTO">
+      UPDATE SEAT
+         SET SEAT_CODE = #{seatCode}
+       WHERE SEAT_NO = #{seatNo}
+   </update>
+   
+   <update id="updateSeatDate" parameterType="SeatDTO">
+      UPDATE SEAT
+         SET SEAT_DATE = CURRENT_TIMESTAMP()
+       WHERE SEAT_NO = #{seatNo}
+   </update>
+   
+   <insert id="insertSeatInfo" parameterType="SeatDTO">
+      INSERT INTO SEAT_INFO 
+         (MEMBER_NO, SEAT_NO, SEAT_DATE)
+      VALUES
+          (#{memberNo}, #{seatNo}, CURRENT_TIMESTAMP())
+      
+   </insert>
+   
+   
+   <!-- 추가한 부분 -->
+   <select id="selectSeatByMemberNo" parameterType="Long" resultType="Integer">
+      SELECT COUNT(*)
+        FROM SEAT
+       WHERE MEMBER_NO = #{memberNo}
+   </select>
+
+</mapper>

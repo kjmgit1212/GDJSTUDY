@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<!-- Calculator -->
+	<bean class="com.goodee.ex01.xml06.Calculator" id="calc" />
+	
+	<!-- BMICalculator -->
+	<bean class="com.goodee.ex01.xml06.BMICalculator" id="bmiCalc">
+		<constructor-arg>
+			<ref bean="calc"/>
+		</constructor-arg>
+		<constructor-arg>
+			<value>180.5</value>
+		</constructor-arg>
+		<constructor-arg>
+			<value>80.5</value>
+		</constructor-arg>
+	</bean>
+	
+	<!-- GymMember -->
+	<bean class="com.goodee.ex01.xml06.GymMember" id="gymMember">
+		<property name="name" value="홍길동" />
+		<property name="course">
+			<set>
+				<value>헬스</value>
+				<value>스피닝</value>
+				<value>필라테스</value>
+			</set>
+		</property>
+		<property name="height" value="180.5" />
+		<property name="weight" value="80.5" />
+		<property name="bmiCalculator" ref="bmiCalc" />
+	</bean>
+
+</beans>

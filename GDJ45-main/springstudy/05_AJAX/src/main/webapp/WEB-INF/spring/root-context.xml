@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd">
+	
+	<!-- Root Context: defines shared resources visible to all other web components -->
+	
+	<!-- MemberServiceImpl -->
+	<bean class="com.goodee.ex05.service.MemberServiceImpl" id="memberService" />
+	
+	<!-- BoardServiceImpl -->
+	<bean class="com.goodee.ex05.service.BoardServiceImpl" id="boardService" />
+	
+	<!-- ProductServiceImpl -->
+	<bean class="com.goodee.ex05.service.ProductServiceImpl" id="productService" />
+	
+	<!-- ReservationServiceImpl -->
+	<bean class="com.goodee.ex05.service.ReservationServiceImpl" id="reservationService" />
+	
+	<!-- OpenApiServiceImpl -->
+	<bean class="com.goodee.ex05.service.OpenApiServiceImpl" id="openApiService" />
+	
+</beans>

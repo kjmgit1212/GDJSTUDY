@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<bean class="com.goodee.ex01.xml02.Engine" id="engine" scope="prototype">
+		<property name="fuel" value="디젤" />
+		<property name="efficency" value="10.5" />
+		<property name="hp" value="340" />
+		<property name="cc" value="2993" />
+	</bean>
+	
+	<bean class="com.goodee.ex01.xml02.Car" id="bmw_x7" scope="prototype">
+		<property name="model" value="xDrive 40d" />
+		<property name="price" value="13140" />
+		<property name="engine" ref="engine" />
+	</bean>
+	
+</beans>

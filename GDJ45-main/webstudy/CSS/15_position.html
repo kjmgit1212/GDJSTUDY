@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        /* CSS 초기화 */
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap');
+        /* 모든 요소 */
+        * {
+            font-family: 'Noto Sans KR', sans-serif;
+        }
+        /* margin, padding, box-sizing */
+        body, header, section, article, footer, aside,
+        div, ul, ol, dl, li, dt, dd {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        /* list */
+        ul, ol {
+            list-style-type: none;
+        }
+        /* anchor */
+        a {
+            color: rgb(0, 0, 0);
+            text-decoration: none;
+        }
+    </style>
+    <style>
+        /*
+            position 속성
+
+            1. position="static"
+                1) HTML문서 흐름대로 배치
+                2) 옵셋(상대적 위치: top,bottom,left,right) 적용 안됨
+                3) 디폴트, 생략가능
+            2. position="relative"
+                1) HTML문서 흐름대로 배치
+                2) 옵셋(상대적 위치: top,bottom,left,right) 적용됨
+                3) 옵셋기준 : 원래 자신의 위치
+            3. position="absolute"
+                1) HTML문서 흐름을 깨고 배치
+                2) 옵셋(상대적 위치: top,bottom,left,right) 적용됨
+                3) 옵셋기준 : 부모요소
+                4) 옵셋제한사항 : 부모요소가 position=static이면 적용 안됨
+            4. position=fixed
+                1) HTML문서 특정 위치에 고정
+                2) 옵셋(상대적 위치: top,bottom,left,right) 적용됨
+                3) 옵셋기준 : 브라우저 화면
+        */
+        .box1 > div {
+            width: 100px;
+            height: 100px;
+            border: 1px solid grey;
+        }
+        .static_box {
+            position: static;
+            /* position=static은 옵셋 적용 안됨 */
+            top: 10px;
+            left: 10px;
+        }
+        .relative_box {
+            position: relative;
+            /* position=relative는 옵셋 적용됨 */
+            top: 10px;
+            left: 10px;
+        }
+
+        .box2 {
+            width: 400px;
+            height: 400px;
+            border: 1px solid red;
+            /* 부모요소 position=relative */
+            position: relative;
+        }
+        .box2 > div {
+            width: 100px;
+            height: 100px;
+            text-align: center;
+            line-height: 100px;
+            border: 1px solid gray;
+        }
+        .box2 > div:nth-of-type(1) {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+        }
+        .box2 > div:nth-of-type(2) {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+        .box2 > div:nth-of-type(3) {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+        }
+        .box2 > div:nth-of-type(4) {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+        }
+
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            height: 50px;
+            opacity: 0.5;  /* 투명도 */
+            background-image: url(../images/blackboard.jpg);
+        }
+        aside {
+            position: fixed;
+            top: 300px;
+            right: 0;
+            width: 100px;
+            height: 500px;
+            background-color: beige;
+        }
+
+    </style>
+</head>
+<body>
+    
+    <div class="box1">
+        <div class="static_box">static box</div>
+        <div class="relative_box">relative box</div>
+    </div>
+
+    <div class="box2">
+        <div>11시</div>
+        <div>1시</div>
+        <div>7시</div>
+        <div>5시</div>
+    </div>
+
+    <header>
+        header
+    </header>
+
+    <aside>
+        aside
+    </aside>
+
+</body>
+</html>

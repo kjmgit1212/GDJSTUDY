@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
+
+	<!-- Gun -->
+	<bean class="com.goodee.ex01.java05.Gun" id="gun1">
+		<property name="model" value="K2" />    <!-- setter injection -->
+		<property name="bullet" value="15" />   <!-- setter injection -->
+	</bean>
+	
+	<!-- Soldier -->
+	<bean class="com.goodee.ex01.java05.Soldier" id="soldier1">
+		<property name="name" value="김상사" /> <!-- setter injection -->
+		<property name="gun" ref="gun1" />      <!-- setter injection -->
+		<property name="army">                  <!-- setter injection -->
+			<map>
+				<entry key="name" value="백골" />
+				<entry key="location" value="철원" />
+			</map>
+		</property>
+	</bean>
+	
+	<!-- SpringBeanConfig.java에 등록된 Bean 가지고 오기 -->
+	<context:annotation-config />
+	<bean class="com.goodee.ex01.java05.SpringBeanConfig" />
+
+</beans>

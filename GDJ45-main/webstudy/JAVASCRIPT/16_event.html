@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        /*
+            1. 이벤트
+
+                1) 이벤트 타입
+                    (1) 이벤트의 종류를 의미한다.
+                    (2) 이벤트 객체의 type 속성(property)으로 확인할 수 있다.
+                    (3) 종류
+                        ① click     : 클릭
+                        ② dblclick  : 더블클릭
+                        ③ load      : HTML 문서를 모두 읽음
+                        ④ mouseover : 마우스가 들어옴
+                        ⑤ mouseout  : 마우스가 나감
+                        ⑥ keydown   : 키가 내려감 (입력 직전)
+                        ⑦ keyup     : 키가 올라옴 (입력 직후)
+                        ⑧ focus     : 포커스를 가짐
+                        ⑨ blur      : 포커스를 잃음
+                        ⑩ submit    : 서브밋 (form 태그의 모든 입력 요소를 서버로 보냄)
+                
+                2) 이벤트 대상
+                    (1) 이벤트가 적용되는 HTML 구성요소이다.
+                    (2) 이벤트 객체의 target 속성(property)으로 확인할 수 있다.
+                
+                3) 이벤트 리스너
+                    (1) 이벤트가 발생하면 호출되는 함수이다.
+                    (2) 선언적 함수, 익명 함수 모두 사용할 수 있다.
+                    (3) 이벤트 리스너의 매개변수에는 자동으로 이벤트 객체가 전달된다.
+                
+                4) 이벤트 객체
+                    (1) 해당 이벤트의 상세 정보를 저장하고 있는 객체이다.
+                    (2) 이벤트가 발생하면 자동으로 생성되고 이벤트 리스너에 인수로 전달된다.
+
+
+            2. 이벤트 속성(property)
+                1) 이벤트를 등록시키는 속성이다.
+                2) 'on + 이벤트타입' 형식으로 이름이 구성된다.
+
+
+            3. 이벤트 모델(이벤트 처리 방법)
+
+                1) 고전 이벤트 모델
+
+                    - 하나의 이벤트 리스너만 등록할 수 있다.
+                    - 이벤트 등록할 때 이벤트 속성(onclick)을 사용한다.
+                
+                    (1) 선언적 함수 등록
+                        <div id="box"></div>  // 이벤트 대상
+                        function func(ev){    // 이벤트 리스너, 이벤트 객체 : 매개변수 ev
+
+                        }
+                        document.getElementById('box').onclick = func;  // func에 괄호 없음.
+                
+                    (2) 익명 함수 등록
+                        <div id="box"></div>  // 이벤트 대상
+                        document.getElementById('box').onclick = function(ev){}  // 익명 함수가 이벤트 리스너
+                
+                2) 인라인 이벤트 모델
+                
+                    - HTML 구성요소에 이벤트 속성을 직접 작성해서 이벤트 리스너를 등록한다.
+                    - 간단한 작업의 경우 이벤트 리스너를 생략하고 직접 코드를 작성한다.
+                    
+                    (1) 선언적 함수 등록
+                        <div onclick="func()"></div>  // func()에 괄호 있음.
+                        function func(ev) {
+
+                        }
+                    
+                    (2) 익명 함수 등록
+                        <div onclick="function(ev){}"></div>  // 거의 사용 안함.
+                    
+                    (3) 이벤트 리스너 생략(코드 직접 등록)
+                        <div onclick="alert('메시지');"></div>
+                
+                3) 표준 이벤트 모델
+                
+                    - 여러 개의 이벤트 리스너를 등록할 수 있다.
+                    - 이벤트 등록할 때 이벤트 속성(onclick) 대신 이벤트 타입(click)을 사용한다.
+                    
+                    (1) 선언적 함수 등록
+                        <div id="box"></div>
+                        function func1(ev) {
+
+                        }
+                        function func2(ev) {
+
+                        }
+                        document.getElementById('box').addEventListener('click', func1);  // onclick 아님, func1() 아님
+                        document.getElementById('box').addEventListener('click', func2);  // onclick 아님, func2() 아님
+                    
+                    (2) 익명 함수 등록
+                        <div id="box"></div>
+                        document.getElementById('box').addEventListener('click', function(ev){});
+
+
+            4. 이벤트 취소
+                1) 기본 이벤트 : 이미 등록되어 있는 이벤트이다.
+                2) 대표 종류
+                    (1) <button> 태그를 클릭하면 submit 된다.
+                    (2) <a> 태그를 클릭하면 링크로 이동한다.
+                3) 어떤 이벤트를 취소하려는 경우 이벤트 객체의 preventDefault() 메소드를 호출한다.
+        */
+    </script>
+
+
+    <!-- 1. 고전 이벤트 모델 -->
+    <input type="button" value="클릭해보세요" id="btn1">
+    <script>
+        document.getElementById('btn1').onclick = function(ev){
+            // 이 내부에 btn1을 클릭했을 때 동작할 코드 작성
+            
+            // 이벤트 대상(btn1)
+            console.log(ev.target);
+            console.log(this);
+
+            // 이벤트 타입(click)
+            console.log(ev.type);
+
+            // 간단한 작업
+            // 클릭한 버튼의 value 속성 수정하기
+            this.value = '눌렀니?';
+        }
+        // 이벤트 대상   : btn1(리스너에서는 this)
+        // 이벤트 종류   : click
+        // 이벤트 속성   : onclick
+        // 이벤트 리스터 : function(){}
+        // 이벤트 객체   : ev
+    </script>
+
+    <hr>
+
+    <!-- 2. 인라인 이벤트 모델 -->
+    <div id="box1"></div>
+    <input type="button" value="선택해보세요" id="btn2" onmouseover="func1()" onmouseout="func2()">
+    <script>
+        function func1(ev) {
+            document.getElementById('box1').textContent = '들어왔는감?';
+        }
+        function func2(ev) {
+            document.getElementById('box1').textContent = '나갔는감?';
+        }
+    </script>
+
+    <hr>
+
+    <!-- 3. 표준 이벤트 모델 -->
+    <input type="button" value="클릭해보세요" id="btn3">
+    <script>
+        function f1(ev) {
+            alert('나는 ' + this.id + '입니다.');
+        }
+        function f2(ev) {
+            alert('만나서 반갑습니다.');
+        }
+        var btn3 = document.getElementById('btn3');
+        btn3.addEventListener('click', f1);
+        btn3.addEventListener('click', f2);
+    </script>
+
+    <hr>
+
+    <!-- 4. 이벤트 취소 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <form action="https://search.naver.com/search.naver"
+          method="get"
+          id="search_form">
+        <input type="text" name="query" id="query">
+        <button type="submit">
+            <i class="fa-solid fa-magnifying-glass"></i>
+        </button>
+    </form>
+    <script>
+        // submit 취소하기
+        var searchForm = document.getElementById('search_form');
+        searchForm.onsubmit = function(ev){
+            var query = document.getElementById('query');
+            if(query.value == '') {
+                alert('검색어를 입력하세요');
+                ev.preventDefault();
+            }
+        }
+    </script>
+
+    <input type="text" name="query" id="query2">
+    <a href="https://search.naver.com/search.naver" id="search_link">
+        <i class="fa-solid fa-magnifying-glass"></i>
+    </a>
+    <script>
+        // 링크 이동 취소하기(<a>태그 기본 이벤트 취소)
+        var searchLink = document.getElementById('search_link');
+        searchLink.onclick = function(ev) {
+            var query2 = document.getElementById('query2');
+            if(query2.value == '게임') {
+                alert('게임은 검색할 수 없습니다.');
+                ev.preventDefault();  // 링크 이동 취소
+            } else {
+                searchLink.href += '?query=' + query2.value;
+            }
+        }
+    </script>
+
+    <hr>
+
+    <!-- 연습1. load 이벤트 -->
+    <script>
+        // 페이지 로드 이벤트
+        // 스크립트 처리 전에 HTML 문서를 모두 읽을 것
+        onload = function(){  // window.onload 이지만 window는 언제나 생략한다.
+            document.getElementById('ex1').textContent = 'Hello';
+        }
+    </script>
+    <div id="ex1"></div>
+
+    <hr>
+
+    <!-- 연습2. 선택/해제 버튼 만들기 -->
+    <div id="ex2">
+        <input type="button" value="선택하기" class="btn" data-checked="0">
+        <img src="../images/uncheck.png" width="20px" id="check_img">
+    </div>
+    <script>
+        var btn = document.querySelector('#ex2 .btn');
+        console.log(btn);
+        btn.onclick = function(ev){  // btn == this == ev.target
+            var checkImg = document.getElementById('check_img');
+            if(btn.getAttribute('data-checked') == 0) { // if(btn.dataset.checked == 0)
+                btn.setAttribute('value', '해제하기');  // btn.value = '해제하기';
+                btn.setAttribute('data-checked', 1);    // btn.dataset.checked = 1;
+                checkImg.setAttribute('src', '../images/check.png');  // checkImg.src = '../images/check.png';
+            } else {
+                btn.setAttribute('value', '선택하기');
+                btn.setAttribute('data-checked', 0);
+                checkImg.setAttribute('src', '../images/uncheck.png');
+            }
+        }
+    </script>
+
+    <hr>
+
+    <!-- 연습3. 랜덤 이미지 -->
+    <div id="ex3">
+        <input type="button" value="이미지 변환" class="btn">
+        <img src="../images/fruit1.jpg" width="300px" height="200px" id="random_img">
+    </div>
+    <script>
+        var btn = document.querySelector('#ex3 .btn');
+        var images = [
+            'fruit1.jpg',
+            'fruit2.jpg',
+            'fruit3.jpg',
+            'fruit4.jpg',
+            'fruit5.jpg'
+        ];
+        btn.onclick = function(ev){
+            var pickImg = images[Math.floor(Math.random() * images.length)];
+            var randomImg = document.getElementById('random_img');
+            randomImg.setAttribute('src', '../images/' + pickImg);  // randomImg.src = '../images/' + pickImg;
+        }
+    </script>
+
+    <hr>
+
+    <!-- 연습4. 이미지 슬라이드 -->
+    <div id="ex4">
+        <input type="button" value="이전" id="btn_prev">
+        <span id="image_no">1 / 5</span>
+        <input type="button" value="다음" id="btn_next">
+        <br>
+        <img src="../images/fruit1.jpg" width="400px" height="300px" id="slide_img">
+    </div>
+    <script>
+        var images = [
+            'fruit1.jpg',
+            'fruit2.jpg',
+            'fruit3.jpg',
+            'fruit4.jpg',
+            'fruit5.jpg'
+        ];
+        var slideImg = document.getElementById('slide_img');
+        var imageNo = document.getElementById('image_no');
+        var idx = 0;  // 초기 이미지 fruit1.jpg의 인덱스를 사용
+        function changeImg(n) {
+            // 보여줄 이미지의 인덱스 계산
+            idx += n;
+            if (idx < 0) {                    // 첫 이미지에서 '이전' 버튼을 누른 경우
+                idx = images.length - 1;      // 마지막 이미지로 이동
+            }
+            else if (idx == images.length) {  // 마지막 이미지에서 '다음' 버튼을 누른 경우
+                idx = 0;                      // 첫 이미지로 이동
+            }
+            // 이미지 바꾸기
+            slideImg.setAttribute('src', '../images/' + images[idx]);  // slideImg.src = '../images/' + images[idx];
+            // 이미지 번호 바꾸기
+            imageNo.textContent = (idx + 1) + ' / ' + images.length;
+        }
+        var btnPrev = document.getElementById('btn_prev');
+        var btnNext = document.getElementById('btn_next');
+        btnPrev.onclick = function(ev){
+            changeImg(-1);
+        }
+        btnNext.onclick = function(ev){
+            changeImg(1);
+        }
+    </script>
+
+    <hr>
+
+    <!-- 연습5. 썸네일을 선택하면 큰 이미지 보여주기 -->
+    <div id="ex5">
+        <img src="../images/fruit1.jpg" width="400px" height="300px" id="big_img">
+        <br><br>
+        <img src="../images/fruit1.jpg" width="40px" height="30px" class="thumbnail">
+        <img src="../images/fruit2.jpg" width="40px" height="30px" class="thumbnail">
+        <img src="../images/fruit3.jpg" width="40px" height="30px" class="thumbnail">
+        <img src="../images/fruit4.jpg" width="40px" height="30px" class="thumbnail">
+        <img src="../images/fruit5.jpg" width="40px" height="30px" class="thumbnail">
+    </div>
+    <script>
+        var bigImg = document.getElementById('big_img');
+        var thumbnails = document.getElementsByClassName('thumbnail');
+        for(let i = 0; i < thumbnails.length; i++) {
+            thumbnails[i].onmouseover = function(ev){
+                bigImg.src = this.src;
+            }
+        }
+    </script>
+
+    <hr>
+
+    <!-- 연습6. CSS와 자바스크립트 함께 사용하기 -->
+    <div id="ex6">
+        <span id="text">내 색깔을 바꿔보세요</span>
+        <br>
+        <input type="button" value="레드" id="btn_red">
+        <input type="button" value="그린" id="btn_green">
+        <input type="button" value="블루" id="btn_blue">
+    </div>
+    <style>
+        .red_text { color: red; }
+        .green_text { color: green; }
+        .blue_text { color: blue; }
+    </style>
+    <script>
+        var text = document.getElementById('text');
+        var btnRed = document.getElementById('btn_red');
+        var btnGreen = document.getElementById('btn_green');
+        var btnBlue = document.getElementById('btn_blue');
+        btnRed.onclick = function(ev){
+            text.setAttribute('class', 'red_text');  // text.className = 'red_text';
+        }
+        btnGreen.onclick = function(ev){
+            text.setAttribute('class', 'green_text');
+        }
+        btnBlue.onclick = function(ev){
+            text.setAttribute('class', 'blue_text');
+        }
+    </script>
+
+    <hr>
+
+    <!-- 연습7. CSS와 자바스크립트 함께 사용하기 -->
+    <div id="ex7">
+        <ul>
+            <li>JAVA</li>
+            <li>ORACLE</li>
+            <li>HTML</li>
+            <li>CSS</li>
+            <li>JAVASCRIPT</li>
+        </ul>
+    </div>
+    <style>
+        #ex7 ul {
+            list-style-type: none;
+        }
+        #ex7 ul li {
+            padding-left: 20px;
+            margin-top: 3px;
+            background-image: url(../images/uncheck.png);
+            background-repeat: no-repeat;
+            background-size: 16px 16px;
+        }
+        #ex7 ul li:hover {
+            cursor: pointer;
+        }
+        #ex7 ul li.checked {
+            background-image: url(../images/check.png);
+        }
+    </style>
+    <script>
+        var li = document.querySelectorAll('#ex7 ul li');
+        for(let i = 0; i < li.length; i++) {
+            li[i].onclick = function(ev){
+                // toggle : 지정한 class를 줬다 뺐다하는 것
+                this.classList.toggle('checked');
+            }
+        }
+    </script>
+</body>
+</html>

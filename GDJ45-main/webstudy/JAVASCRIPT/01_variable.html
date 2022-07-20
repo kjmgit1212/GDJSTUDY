@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script>
+        // script 태그 내부는 자바스크립트 영역이다.
+        // 자바와 같은 방법으로 주석을 처리한다. 
+        // script 태그는 head 태그와 body 태그에서 모두 사용할 수 있다.
+    </script>
+</head>
+<body>
+    <script>
+        /*
+            1. 기본 자료형
+                1) number : 정수, 실수의 구분이 없다.
+                            숫자, NaN(Not a Number), +Infinite, -Infinite(+0/-0으로 나누면 확인 가능)
+                2) string : 문자, 문자열의 구분이 없다.
+                            작은 따옴표(''), 큰 따옴표("")를 모두 사용할 수 있다.
+                3) boolean : true, false
+                4) null      : null, 의도적으로 값을 비운 상태.
+                5) undefined : undefined, 값이 저장된 적이 없는 상태.
+            2. 변수
+                1) 동적 타입, 느슨한 타입
+                2) 변수를 선언할 때 자료형(타입)을 결정하지 않고,
+                   변수명만 선언한다.
+                3) 변수에 값을 저장할 때 자료형(타입)이 결정된다.
+                4) 변수 선언 없이 사용할 수 있다. (ES6에서 개선)
+            3. 변수 선언 키워드
+                1) var
+                    (1) 스코프 : 함수 레벨
+                    (2) 선언 생략 가능
+                    (3) 같은 변수명으로 재선언 가능
+                    (4) 초기화 생략 가능 : undefined 상태
+                    (5) 저장된 값의 수정 가능
+                2) let (ES6 표준) - 지역변수의 개념
+                    (1) 스코프 : 블록 레벨({})
+                    (2) 선언 생략 불가능
+                    (3) 같은 변수명으로 재선언 불가능
+                    (4) 초기화 생략 가능 : 메모리에 변수가 없는 상태
+                    (5) 저장된 값이 수정 가능
+                3) const (ES6 표준) - 지역상수의 개념
+                    (1) 스코프 : 블록 레벨({})
+                    (2) 선언 생략 불가능
+                    (3) 같은 변수명으로 재선언 불가능
+                    (4) 초기화 생략 불가능 : 상수이므로
+                    (5) 저장된 값이 수정 불가능 : 상수이므로
+            4. 호이스팅(hoisting)
+                1) 코드 중에서 항상 먼저 처리하는 코드가 있다.
+                2) 선언부를 항상 먼저 처리한다.
+                3) 호이스팅 대상
+                    var, let, const, function, class
+        */
+    </script>
+    <script>
+
+        // 출력 방식
+
+        // 1. 경고창 이용하기
+        // alert('Hello Javascript');  // 세미콜론(;) 생략 가능
+
+        // 2. 브라우저 화면 이용하기
+        // document.write('Hello Javascript');
+
+        // 3. console 화면 이용하기(개발자 도구 - console 탭)
+        // console.log('Hello Javascript');
+
+    </script>
+    <script>
+
+        var a;  // 선언만 하고 초기화가 없으면 undefined
+        console.log(a);
+
+        console.log(b);
+        var b;  // 변수 선언부는 먼저 처리된다.(호이스팅)
+
+        var c = 10;  // 10을 저장하면서 변수 c는 number 자료형을 가진다.(동적 변수)
+        console.log(c);
+        console.log(typeof c);  // 변수 c의 자료형 확인
+
+        var c = 'hello';  // 같은 변수를 재선언할 수 있다. ("hello"도 가능하다.)
+        console.log(c);
+        console.log(typeof c);  // 변수 c의 자료형 확인
+
+        var d = Math.sqrt(-25);  // 루트 -25는 존재하지 않는 숫자로 NaN
+        console.log(d);
+
+        var e = 10 / +0;  // 0으로 나누면 Infinite
+        console.log(e);
+    </script>
+    <script>
+
+        // 1. 문자열 -> 정수
+        //    1) Number('100')   : 100
+        //    2) parseInt('100') : 100
+        var a = '100';
+        console.log(Number(a));   // 100
+        console.log(parseInt(a)); // 100
+        var b = '1.9';
+        console.log(Number(b));   // 1.9
+        console.log(parseInt(b)); // 1
+
+        // 2. 문자열 -> 실수
+        //    1) Number(1.5)     : 1.5
+        //    2) parseFloat(1.5) : 1.5
+        var c = '1.5';
+        console.log(Number(c));     // 1.5
+        console.log(parseFloat(c)); // 1.5
+
+        // 3. 숫자 -> 문자열
+        //    1) String(100) : '100'
+        //    2) String(1.5) : '1.5'
+        var d = 100;
+        console.log(String(d));  // '100'
+        var e = 1.5;
+        console.log(String(e));  // '1.5'
+
+    </script>
+</body>
+</html>

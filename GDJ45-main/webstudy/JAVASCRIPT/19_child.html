@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+
+    <h1 id="receive_msg"></h1>
+    <form>
+        <input type="text" id="child_input" placeholder="부모창으로 보낼 데이터 입력">
+        <input type="button" id="btn_open_parent" value="부모창열기">
+    </form>
+    <script>
+        // 자식창을 열어 준 부모창을 opener라고 한다.
+        var childInput = document.getElementById('child_input');
+        var btnOpenParent = document.getElementById('btn_open_parent');
+        btnOpenParent.onclick = function(ev){
+            opener.document.getElementById('receive_msg').textContent = childInput.value;
+            window.close();  // 현재창(자식창) 닫기
+        }
+    </script>
+
+</body>
+</html>

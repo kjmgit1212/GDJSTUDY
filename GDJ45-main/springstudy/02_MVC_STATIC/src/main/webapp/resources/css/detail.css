@@ -1,0 +1,10 @@
+@charset "UTF-8";
+
+/* 웹 경로에서 contextPath는 web root 폴더인 webapp을 의미합니다. */
+
+.picture {
+	background-image: url('/ex02/resources/images/eagle.jpg');
+	width: 640px;
+	height: 480px;
+	background-size: 640px 480px;
+}

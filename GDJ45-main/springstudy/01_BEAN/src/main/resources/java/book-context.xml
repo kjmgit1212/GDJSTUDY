@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
+
+	<!-- Publisher -->
+	<bean class="com.goodee.ex01.java04.Publisher" id="publisher1">
+		<property name="name" value="한국출판사" />
+		<property name="tel" value="02-1111-2222" />
+	</bean>
+	
+	<!-- Book -->
+	<bean class="com.goodee.ex01.java04.Book" id="book1">
+		<property name="title" value="어린왕자" />
+		<property name="author" value="생텍쥐베리" />
+		<property name="publisher" ref="publisher1" />
+	</bean>
+	
+	<!-- SpringBeanConfig.java에 등록된 Bean을 XML로 가져오기 -->
+	<!--
+		1. Namespace 탭에서 context 옵션을 체크한다.
+		2. <context:annotation-config /> 태그를 추가한다.
+		3. SpringBeanConfig.java 파일을 <bean> 태그로 생성한다.
+	-->
+	
+	<context:annotation-config />
+	<bean class="com.goodee.ex01.java04.SpringBeanConfig" />
+
+</beans>

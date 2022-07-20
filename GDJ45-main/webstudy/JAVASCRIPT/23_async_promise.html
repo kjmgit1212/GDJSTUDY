@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="jquery-3.6.0.js"></script>
+</head>
+<body>
+
+    <script>
+        /*
+            비동기(asynchronous) 처리
+
+            1. 특정 코드의 처리가 끝날 때까지 기다려주지 않고,
+               다음 코드를 먼저 처리하는 처리방식
+            2. ajax, setTimeout
+        */
+    </script>
+
+    <script>
+        // 1. ajax 비동기 처리 확인하기
+        /*
+        function fnGetData(){
+            var res;  // undefined 상태
+            $.get('data.txt', function(data){
+                res = data;
+            });
+            return res;
+        }
+        console.log(fnGetData());  // undefined 출력, $.get()으로 요청한 내용(data.txt)을 받아올 때까지 기다리지 않고 처리하기 때문에.
+        */
+
+        // 2. setTimeout 비동기 처리 확인하기
+        /*
+        console.log('before setTimeout');
+        setTimeout(function(){
+            console.log('inside setTimeout');
+        }, 3000);  // 3초 후에 function(){} 실행
+        console.log('after setTimeout');
+        */
+    </script>
+
+    <script>
+        // ajax 비동기 처리 해결하기 (콜백 함수 이용하기)
+        /*
+        fnGetData(function(res){
+            console.log(res);
+        });
+        function fnGetData(callback){
+            // fnGetData()를 호출하면 $.get()만 실행된다.
+            // $.get() 이후 코드가 없어서 비동기 처리를 걱정할 필요가 없다.
+            $.get('data.txt', function(data){
+                callback(data);
+            });
+        }
+        */
+    </script>
+
+    <script>
+        // 콜백 지옥
+        // 사용자 입력 처리 -> 입력 정보를 이용해 인증 -> 인증 이후 화면에 표시
+        /*
+        $.get('data.txt', function(user_input){
+            fnParseInput(user_input, function(id){
+                fnAuth(id, function(result){
+                    fnDisplay(result, function(data){
+                        console.log(data);
+                    });
+                });
+            });
+        });
+        function fnParseInput(a, callback1){
+            callback1(a);
+        }
+        function fnAuth(b, callback2){
+            callback2(b);
+        }
+        function fnDisplay(c, callback3){
+            callback3(c);
+        }
+        */
+    </script>
+
+    <script>
+        /*
+            promise
+
+            1. 비동기 처리의 완료를 기다리는 객체이다.
+            2. new Promise()로 생성한다.
+            3. 비동기 처리 결과의 성공 또는 실패를 모두 처리할 수 있다.
+        */
+    </script>
+
+    <script>
+        // promise 사용해 보기
+        /*
+        var myPromise = new Promise(function(resolve, reject){  // 함수명 결정하기. 성공하면 resolve, 실패하면 reject.
+            // 절반 확률로 성공 또는 실패 만들기
+            if(Math.random() < 0.5){
+                resolve('SUCCESS');
+            } else {
+                reject('FAIL');
+            }
+        });
+        myPromise.then(
+            function(data){  // 성공했을 때 실행(resolve의 몸체)
+                console.log(data);
+            },
+            function(data){  // 실패했을 때 실행(reject의 몸체)
+                console.log(data);
+            }
+        );
+        */
+        /*
+        new Promise(function(resolve, reject){
+            if(Math.random() < 0.5){
+                resolve('SUCCESS');
+            } else {
+                reject('FAIL');
+            }
+        }).then(
+            function(data){
+                console.log(data);
+            },
+            function(data){
+                console.log(data);
+            }
+        );
+        */
+    </script>
+
+    <script>
+        // 자바스크립트 ajax 처리와 promise
+        // ajax 처리가 끝날 때까지 기다렸다가 resolve 또는 reject 함수를 실행
+        /*
+        new Promise(function(resolve, reject){  // 성공하면 실행할 함수는 resolve
+            var xhr = new XMLHttpRequest();
+            xhr.open('get', 'data.txt', true);
+            xhr.send();
+            xhr.onload = function(event){       // onreadystatechange 이벤트 대신 onload 사용 가능
+                if (xhr.readyState == 4 && xhr.status == 200){  // ajax 통신 성공
+                    resolve(xhr.responseText);                  // resolve 함수에 응답 받은 데이터 전달
+                } else {                                        // ajax 통신 실패
+                    reject(xhr.statusText);                     // reject 함수에 응답 받은 데이터 전달
+                }
+            }
+        }).then(
+            function(data){
+                console.log(data);
+            },
+            function(errorData){
+                console.log(errorData);
+            }
+        );
+        */
+    </script>
+
+    <script>
+        // 제이쿼리 ajax 처리와 promise
+        /*
+        new Promise(function(resolve, reject){
+            $.ajax({
+                type: 'get',
+                url: 'data.txt',
+                dataType: 'text',
+                success: function(data){
+                    resolve(data);
+                },
+                error: function(jqXHR){
+                    reject(jqXHR.status + ' ' + jqXHR.statusText);
+                }
+            });
+        }).then(
+            function(data){
+                fnSuccess(data);
+            },
+            function(errorData){
+                fnFail(errorData);
+            }
+        );
+
+        function fnSuccess(data){
+            console.log(data);
+        }
+        function fnFail(errorData){
+            console.log(errorData);
+        }
+        */
+    </script>
+
+    <script>
+        new Promise(function(resolve, reject){
+            setTimeout(function(){
+                resolve(1);  // 3초 후 resolve(1) 호출, resolve()가 호출되면 promise는 대기->이행 상태로 넘어간다. then()으로 로직이 넘어간다.
+            }, 3000);
+        }).then(function(n){
+            console.log(n);
+            return n + 1;  // 반환 정보가 2번째 then()으로 넘어간다.
+        }).then(function(n){
+            console.log(n);
+            return n + 1;  // 반환 정보가 3번째 then()으로 넘어간다.
+        }).then(function(n){
+            console.log(n);
+        });
+    </script>
+
+</body>
+</html>

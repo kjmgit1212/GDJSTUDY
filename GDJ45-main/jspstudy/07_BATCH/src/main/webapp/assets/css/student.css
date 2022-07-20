@@ -1,0 +1,61 @@
+@charset "UTF-8";
+
+.wrap {
+	width: 800px;
+	margin: 0 auto;
+}
+.title {
+	text-align: center;
+	color: limegreen;
+}
+.btn_area {
+	width: 100%;
+	height: 100px;
+	text-align: center;
+	line-height: 100px;
+}
+.search_area {
+	width: 100%;
+	height: 50px;
+	text-align: center;
+	line-height: 50px;
+}
+.btn_insert {
+	width: 200px;
+	height: 50px;
+	background-color: limegreen;
+	border: 0;
+	outline: 0;
+	font-size: 20px;
+	text-align: center;
+}
+.btn_insert:hover {
+		cursor: pointer;
+		background-color: orange;
+}
+table {
+	width: 100%;
+	border-collapse: collapse;
+}
+.list_area caption {
+	margin-bottom: 5px;
+}
+.list_area td {
+	border-top: 1px solid gray;
+	border-bottom: 1px solid gray;
+	text-align: center;
+	padding: 5px;
+}
+.insert_area td, .detail_area td {
+	border: 1px solid gray;
+	padding: 10px;
+	text-align: center;
+}
+.insert_area tfoot input, .detail_area tfoot input {
+	width: 100px;
+	height: 30px;
+}
+.detail_area tbody input {
+	width: 100px;
+	text-align: center;
+}

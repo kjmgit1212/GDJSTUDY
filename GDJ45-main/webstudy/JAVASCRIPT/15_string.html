@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+    <script>
+
+        var str = 'JavaScript';
+
+        // 1. 길이
+        console.log(str.length);
+
+        // 2. 특정 문자
+        console.log(str.charAt(0));  // 첫 번째 문자
+        console.log(str.charAt(str.length - 1));  // 마지막 문자
+
+        // 3. 특정 문자열
+        console.log(str.substring(0, 4));  // 인덱스 0 포함, 인덱스 4 이전(불포함) 추출
+        console.log(str.substring(4));     // 인덱스 4부터 끝까지 추출(종료 인덱스 생략)
+        
+        console.log(str.substr(0, 4));  // 인덱스 0부터 4글자 추출
+        console.log(str.substr(4));     // 인덱스 4부터 끝까지 추출(추출할 글자수 생략)
+
+        // 4. 특정 문자열 인덱스 반환
+        console.log(str.indexOf('J'));      // 발견된 첫 J의 인덱스, 없으면 -1 반환
+        console.log(str.indexOf('j'));      // 대소문자를 구분해서 검색
+        console.log(str.lastIndexOf('a'));  // 발견된 마지막 a의 인덱스
+
+        // 5. 대소문자 변환
+        console.log(str.toLowerCase());  // 소문자
+        console.log(str.toUpperCase());  // 대문자
+
+        // 6. 좌우 공백 제거
+        var str2 = '     Java    Script    ';
+        console.log(str2.trimLeft());  // 왼쪽 공백 제거
+        console.log(str2.trimRight()); // 오른쪽 공백 제거
+        console.log(str2.trim());      // 양쪽 공백 제거
+
+        // 7. 문자열 분리
+        //    구분자(separator)를 이용해 분리한 뒤 배열에 저장
+        var str3 = 'Java,DB,HTML,CSS,JavaScript';
+        var subjects = str3.split(',');
+        console.log(subjects);
+
+        // 8. 배열 요소를 연결해서 문자열 만들기
+        var str4 = subjects.join(',');
+        console.log(str4);
+
+        // 9. 찾아 바꾸기
+        var str5 = 'java,java';
+        console.log(str5.replace('java', '자바'));  // 첫 'java'를 '자바'로 변경
+
+        // 10. 지정된 문자열로 시작하는가? 끝나는가?
+        var str6 = 'JavaScript';
+        console.log(str6.startsWith('Java'));  // 'Java'로 시작하면 true
+        console.log(str6.endsWith('Java'));    // 'Java'로 끝나면 true
+
+    </script>
+
+    <script>
+
+        // replaceAll 함수
+        String.prototype.replaceAll = function(before, after){
+            // this : replaceAll 속성(property)을 호출하는 객체
+            let str = this;
+            while(true) {
+                if(str.indexOf(before) == -1) {
+                    break;
+                }
+                str = str.replace(before, after);
+            }
+            return str;
+        }
+        var str = 'java,java,java';
+        console.log(str.replaceAll('java', '자바'));
+
+
+        // replaceALL 함수
+        String.prototype.replaceALL = function(before, after){
+            let str = this;
+            return str.split(before).join(after);
+            // str = 'java,java,java'
+            // str.split('java')              : ['', ',', ',', '']
+            // str.split('java').join('자바') : '자바,자바,자바'
+        }
+        var str = 'java,java,java';
+        console.log(str.replaceALL('java', '자바'));
+
+    </script>
+
+</body>
+</html>

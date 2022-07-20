@@ -1,0 +1,35 @@
+st-- 오류 없이 압축 풀려면 "반디집 스탠다드 에디션 설치"
+
+-- 1. 압축 풀기
+--    1) spring-tool-suite-3.9.18.RELEASE-e4.19.0-win32-x86_64.zip
+--    2) 결과
+--       installer
+--        ㄴsts-bundle
+
+-- 2. lombok 설치하기
+--    1) cmd 이용 설치
+--       C:\GDJ45\installer\jar> java -jar lombok-1.18.22.jar
+--    2) C:\GDJ45\installer\sts-bundle\sts-3.9.18.RELEASE\STS.exe 선택 후 설치
+
+-- 3. springstudy 폴더 만들기
+
+-- 4. STS.exe 실행 후
+--    workspace로 springstudy 선택
+
+
+-- STS (Spring Tool Suite)
+-- 이클립스 기반의 Spring Tool
+
+-- Tomcat 대신 pivotal-tc-server 서버가 설치되어 있다.
+-- 제거 후 Tomcat 설치가 필요하다.
+-- Window - Preferences - Server - Runtime Environments
+
+
+-- Window - Preferences
+-- Run/Debug - Console - Limit console output 해제
+-- 테마
+-- 글꼴
+-- 인코딩 UTF-8 workspace, web->css html jsp
+-- Window - Web Browser - Chrome
+
+-- syntax coloring(class pink, method orange, interface gray)

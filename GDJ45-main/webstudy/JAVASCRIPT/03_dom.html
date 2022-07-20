@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+
+    <script>
+        /*
+            DOM
+
+            1. Document Object Model(문서 객체 모델)
+            2. 문서(HTML)의 구성요소(태그)를 알아내고 사용한다.
+            3. 알아낸 구성요소를 변수에 저장할 수 있다.
+            4. 알아낸 구성요소의 수정, 삭제가 가능하다. (브라우저 조작)
+            5. 문서객체 : 구성요소(태그)를 알아내는 방법
+                1) document.getElementById('아이디')         : 변수
+                2) document.getElementsByTagName('태그')     : 배열
+                3) document.getElementsByClassName('클래스') : 배열
+                4) document.querySelector('선택자')          : 변수
+                5) document.querySelectorAll('선택자')       : 배열
+            6. 문서객체 주요 속성
+                1) textContent : 구성요소(태그)의 내부 텍스트
+                2) innerHTML   : 구성요소(태그)의 내부 HTML(태그)
+                3) style       : 구성요소(태그)의 CSS
+                4) 속성(Attribute) 작업
+                    (1) getAttribute('속성')     : 속성 값 알아내기
+                    (2) setAttribute('속성', 값) : 속성 값 저장하기
+        */
+    </script>
+
+
+
+    <!-- 스크립트가 먼저 나오면 문서객체를 인식하지 못한다. -->
+    <script>
+        var h1 = document.getElementById('hello');
+        console.log(h1);
+    </script>
+
+    <!-- 태그는 먼저 나와야 한다. -->
+    <h1 id="hello">Hello</h1>
+
+    <!-- 스크립트는 나중에 나와야 한다. -->
+    <script>
+        var h1 = document.getElementById('hello');
+        console.log(h1);
+    </script>
+
+
+
+    <!-- 문서객체 알아내기 -->
+    <div class="yellow_box" id="box1">노란박스</div>
+    <script>
+        // 아이디로 가져오면 변수이다.
+        var div = document.getElementById('box1');
+        console.log(div);
+        // 클래스로 가져오면 배열이다.
+        var div = document.getElementsByClassName('yellow_box')[0];
+        console.log(div);
+        // 태그로 가져오면 배열이다.
+        var div = document.getElementsByTagName('div')[0];
+        console.log(div);
+        // 아이디 선택자로 가져올 땐 querySelector를 사용한다.
+        var div = document.querySelector('#box1');
+        console.log(div);
+        // 클래스 선택자로 가져올 땐 querySelectorAll을 사용한다.
+        var div = document.querySelectorAll('.yellow_box')[0];
+        console.log(div);
+    </script>
+
+
+
+    <!-- 문서객체 속성 사용하기 -->
+    <h1 id="title"><a href="javascript:void(0)">Hello</a></h1>
+    <script>
+        var h1 = document.getElementById('title');
+        console.log(h1);
+        // <h1> 내부 텍스트
+        console.log(h1.textContent);
+        // <h1> 내부 태그
+        console.log(h1.innerHTML);
+        // <h1> CSS 변경하기
+        title.style.fontSize = '12px';
+        // <h1> id 속성 값 알아내기
+        console.log(h1.id);
+        console.log(h1.getAttribute('id'));
+        // <h1> class 속성 값 저장하기
+        h1.class = 'title';
+        h1.setAttribute('class', 'title');
+    </script>
+
+
+    <!-- 문제. 클릭하면 네이버로 이동하는 네이버 로고 이미지를 넣으시오. -->
+    <a id="naver_link"></a>
+    <script>
+        // <a> 태그 알아내기
+        var a = document.getElementById('naver_link');
+        // <a> 태그에 이미지 넣기
+        a.innerHTML = '<img width="200px" alt="네이버로고" src="../images/naver.png">';
+        // <a> 태그에 href 속성 넣기
+        a.href = 'https://www.naver.com';
+        a.setAttribute('href', 'https://www.naver.com');
+    </script>
+
+    <!-- 문제. 클릭하면 다음으로 이동하는 다음 로고 이미지를 넣으시오. -->
+    <div id="daum_logo"></div>
+    <script>
+        var div = document.getElementById('daum_logo');
+        div.innerHTML = '<a href="https://www.daum.net"><img width="200px" src="../images/daum.png"></a>';
+    </script>
+
+
+
+    <div id="box2"></div>
+    <script>
+        /*
+            1. 문서객체 생성 : document.createElement(요소)
+            2. 문서객체 삽입 : 부모요소.appendChild(요소)
+            3. 문서객체 변경 : 부모요소.replaceChild(신요소, 구요소)
+            4. 문서객체 삭제 : 부모요소.removeChild(삭제요소)
+                               삭제요소.parentNode.removeChild(삭제요소)
+        */
+
+        // <h1> 태그 만들기
+        var h1 = document.createElement('h1');
+        // <h1> 태그에 텍스트 넣기
+        h1.textContent = '안녕하세요';
+        // <h1> 태그를 id="box2"인 요소에 넣기
+        document.getElementById('box2').appendChild(h1);
+
+        // 변경하기 전 <div> 태그
+        var div = document.getElementById('box2');
+        // 변경할 새로운 <span> 태그
+        var span = document.createElement('span');
+        // <div> -> <span> 변경하기
+        document.body.replaceChild(span, div);
+
+        // 변경된 <span> 태그 삭제하기
+        document.body.removeChild(span);
+    </script>
+
+    <!-- 문제. 봄,여름,가을,겨울 요소를 넣으시오. -->
+    <ul id="season"></ul>
+    <script>
+        // createElement() 사용하기
+        var li1 = document.createElement('li');
+        li1.textContent = '봄';
+        var li2 = document.createElement('li');
+        li2.textContent = '여름';
+        var li3 = document.createElement('li');
+        li3.textContent = '가을';
+        var li4 = document.createElement('li');
+        li4.textContent = '겨울';
+        var ul = document.getElementById('season');
+        ul.appendChild(li1);
+        ul.appendChild(li2);
+        ul.appendChild(li3);
+        ul.appendChild(li4);
+
+        // 내부 태그를 텍스트로 만들어서 넣기
+        var ul = document.getElementById('season');
+        ul.innerHTML   = '<li>봄</li><li>여름</li><li>가을</li><li>겨울</li>';
+    </script>
+
+
+</body>
+</html>

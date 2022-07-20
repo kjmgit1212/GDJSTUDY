@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script src="../js/jquery-3.6.0.js"></script>
+<script>
+	$(document).ready(function(){
+		$('#btn1').click(function(event){
+			location.href='/SERVLET/LocationServlet';
+		});
+		$('#btn2').click(function(event){
+			var name = $('#name').text();
+			var age = $('#age').text();
+			location.href='/SERVLET/LocationServlet?name=' + name + '&age=' + age;
+		});
+		$('#btn3').click(function(event){
+			var name = $(this).data('name');
+			var age = $(this).data('age');
+			location.href='/SERVLET/LocationServlet?name=' + name + '&age=' + age;
+		});
+	});
+</script>
+</head>
+<body>
+
+	<input type="button" value="요청1" id="btn1">
+	<hr>
+	
+	<div id="name">민경태</div>
+	<div id="age">45</div>
+	<input type="button" value="요청2" id="btn2">
+	<hr>
+	
+	<input type="button" value="요청3" id="btn3" data-name="민경태" data-age="45">
+	
+</body>
+</html>

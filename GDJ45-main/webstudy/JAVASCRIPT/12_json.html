@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+    <script>
+        /*
+            JSON
+
+            1. JavaScript Object Notation
+               자바스크립트 객체 표기법
+            2. 서버-클라이언트 간 데이터 교환 표준 형식 중 하나이다.
+            3. 자바스크립트의 객체가 곧 JSON 데이터이다.
+            4. 실제 데이터 교환에서는 객체를 문자열 형식으로 주고 받는다.
+                클라이언트(front)      서버(back)
+                {}    ->    '{}'   ->  Instance, Map
+                {}    <-    '{}'   <-  Instance, Map
+            5. 내장 객체 JSON을 통해서 객체 <-> 문자열 변환을 수행한다.
+                1) 객체 -> 문자열 : JSON.stringify(객체)
+                2) 문자열 -> 객체 : JSON.parse(문자열)
+        */
+    </script>
+
+    <script>
+
+        // 객체 = JSON
+        var person = {
+            'name': '민경태',
+            'age': 45
+        };
+
+        // 객체 -> 문자열
+        // 클라이언트 -> 서버
+        var strPerson = JSON.stringify(person);
+        console.log(typeof strPerson, strPerson);
+
+        // 문자열 -> 객체
+        // 서버 -> 클라이언트
+        var objPerson = JSON.parse(strPerson);
+        console.log(typeof objPerson, objPerson);
+
+    </script>
+
+
+</body>
+</html>

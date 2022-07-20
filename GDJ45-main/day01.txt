@@ -1,0 +1,99 @@
+(디지털컨버전스) 공공데이터 융합 자바/스프링 개발자 양성과정
+
+질문은 많이 하면 좋은 것
+
+backend + frontend = full stack programmer
+
+java+jsp/servlet+spring : backend - backend programmer (O)
+
+html+css+javascript : frontend - frontend programmer
+
+database : Oracle + MySQL
+
+---------------------------------------------------------------------
+
+자바 설치
+
+- 자바를 이용한 개발 키트 : JDK (Java Development Kit)
+
+Oracle JDK - original (Sun 인수합병 - 유료화) - 선택
+Open JDK
+
+버전
+Java 8   -> 11 -> ...
+Java 1.8 -> 11 -> ...
+
+JDK 11 버전 사용
+
+
+* Java 환경 변수 등록
+
+  시스템에게 Java가 어디에 설치되어 있는지 알려준다.
+
+  [제어판]-[시스템]-[고급 시스템 설정]
+
+  1. JAVA_HOME 시스템 변수 등록
+    C:\Program Files\Java\jdk-11.0.13
+
+  2. 등록된 시스템 변수를 Path에 추가
+    %JAVA_HOME%\bin (입력한 Path)
+    C:\Program Files\Java\jdk-11.0.13\bin (실제로 등록된 Path)
+    -> 여기에 자바 실행에 필요한 모든 실행파일이 모여 있다라는 의미.
+
+---------------------------------------------------------------------
+
+IDE 설치
+
+IDE : 통합개발환경(Integrated Development Environment)
+
+코드 작성 + 실행 + 디버깅 등 개발에 필요한 모든 걸 지원하는 소프트웨어
+
+자바에서는 "이클립스", "인텔리제이"가 유명함.
+
+"이클립스" : 무료
+"인텔리제이" : 무료 혹은 유료
+
+이클립스는 설치하지 않고 압축만 풀어서 바로 사용한다.
+
+---------------------------------------------------------------------
+
+이클립스 실행 및 세팅
+
+1. Perspective 확인 (개발환경에 맞춰 보기와 메뉴 세팅)
+    [Window]-[Perspective]
+
+    1) Java : Java
+    2) JSP  : Java EE
+
+2. View 확인
+    [Window]-[Show View]
+    불필요한 View는 정리한다.
+    각 View의 위치는 드래그를 이용해서 조정 가능.
+
+3. View가 망가지면 Perspective를 Reset한다.
+
+4. Preference 설정 (IDE 설정)
+    1) 테마 : 밝은/어두운
+    2) 글꼴 : 나눔/D2Coding
+    3) 인코딩 : 한글 처리를 위함(UTF-8)
+
+    MS949 (CP949) : ANSI (한글 처리에 부적절)
+    UTF-8 : Unicode (전 세계 표준 코드)
+
+---------------------------------------------------------------------
+
+자바 프로젝트 구조
+
+  프로젝트 (애플리케이션:앱)
+    ㄴ패키지 (디렉터리:폴더)
+      ㄴ자바파일 (개별코드)
+
+---------------------------------------------------------------------
+
+이클립스 코드 작성 및 실행
+
+  1. 프로젝트 : Java Project
+  2. 패키지
+  3. 클래스
+
+  4. 실행 : Ctrl + F11

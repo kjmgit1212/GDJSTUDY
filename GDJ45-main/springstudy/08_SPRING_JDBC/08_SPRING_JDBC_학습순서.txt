@@ -1,0 +1,76 @@
+학습순서
+
+* 개요 : Spring JDBC와 AOP
+
+1. pom.xml
+
+   1) 버전 최신화 하기
+   2) ojdbc6를 다운로드 받던 repository에 오류가 발생하여 ojdbc6.jar를
+      프로젝트의 build path에 등록하고 사용함.
+      tomcat 폴더의 lib 폴더에 ojdbc6.jar를 복사해 두는 방법도 있음.
+   3) lombok dependency 추가
+   4) spring test dependency 추가 (JUnit)
+   5) spring jdbc dependency 추가 (Spring JDBC)
+   6) aspectJ weaver dependency 추가 (AOP)
+
+2. web.xml 에 인코딩 필터 태그 넣기
+  	<!-- Encoding -->
+	<filter>
+		<filter-name>encodingFilter</filter-name>
+		<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+		<init-param>
+			<param-name>encoding</param-name>
+			<param-value>UTF-8</param-value>
+		</init-param>
+		<init-param>
+			<param-name>forceEncoding</param-name>
+			<param-value>true</param-value>
+		</init-param>
+	</filter>
+	<filter-mapping>
+		<filter-name>encodingFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+
+3. webapp/resources/sql 디렉터리 생성하고,
+   book.sql 작성
+
+4. BookConfig.java를 이용해서 서비스, 레파지토리 bean 작성
+
+5. DBConfig.java를 이용해서 DB 접속 bean 작성
+
+6. AOP(관점 지향 프로그래밍)
+   Aspect Oriented Programming
+
+ AOP 적용 전
+
+ 회원 : 요청 - 컨트롤러 - 서비스 - 레파지토리 - DB
+               log        transaction(IUD after : commit/rollback)
+ 자게 : 요청 - 컨트롤러 - 서비스 - 레파지토리 - DB
+               log        transaction(IUD after : commit/rollback)
+ 공지 : 요청 - 컨트롤러 - 서비스 - 레파지토리 - DB
+               log        transaction(IUD after : commit/rollback)
+
+
+ AOP 적용 후
+ 공통 작업을 매번 작성할 필요가 없도록 처리하는 프로그래밍 방식
+
+ 회원 : 요청 - 컨트롤러 - 서비스 - 레파지토리 - DB
+               ↑         ↑
+ 자게 : 요청 - 컨트롤러 - 서비스 - 레파지토리 - DB
+               ↑         ↑
+ 공지 : 요청 - 컨트롤러 - 서비스 - 레파지토리 - DB
+               ↑         ↑
+               log        transaction(IUD after : commit/rollback)
+
+ 지정한 어느 시점(point)에 처리되기 때문에 PointCut이라는 용어 사용 
+
+ 패키지와 클래스
+
+ == 로그 ==
+ aop 패키지 AspectLogger.java
+ 
+ == 트랜잭션 == 
+ config 패키지 @EnableTransactionManagement DBConfig.java
+               @bean TransactionManager
+ config 패키지 TransactionConfig.java

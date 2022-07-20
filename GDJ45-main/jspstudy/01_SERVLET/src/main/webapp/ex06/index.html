@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script src="../js/jquery-3.6.0.js"></script>
+<script>
+	$(document).ready(function(){
+		
+		$.ajax({
+			type: 'get',   // 요청 메소드
+			url: '/SERVLET/ResponseTextServlet',     // 요청 서버 경로
+			data: 'name=민경태&age=4.5',  // 서버로 전송하는 데이터(파라미터)
+			dataType: 'text',  // 응답 데이터 타입
+			success: function(resData){  // resData : 응답 데이터
+				$('#box1').text(resData);
+			},
+			error: function(jqXHR){  // jqXHR : 제이쿼리 ajax 처리 객체
+				$('#box1').html(jqXHR.status + "<br>" + jqXHR.responseText);
+			}
+		});
+		
+		$.ajax({
+			type: 'get',
+			url: '/SERVLET/ResponseJSONServlet',
+			data: 'name=민경태&age=4.5',
+			dataType: 'json',
+			success: function(resData){
+				$('#box2').html("이름 : " + resData.name + "<br>나이 : " + resData.age);
+			},
+			error: function(jqXHR){
+				$('#box2').html(jqXHR.status + "<br>" + jqXHR.responseText);
+			}
+		});
+		
+	});
+</script>
+</head>
+<body>
+	
+	<div id="box1"></div>
+	
+	<div id="box2"></div>
+	
+</body>
+</html>

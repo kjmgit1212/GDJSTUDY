@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<!--
+		CollectionClass collection = new CollectionClass();
+	-->
+	<bean class="com.goodee.ex01.xml04.CollectionClass" id="collection">
+	
+		<!-- List -->
+		<property name="list">
+			<list>
+				<value>김밥</value>
+				<value>떡볶이</value>
+				<value>순대</value>
+			</list>
+		</property>
+		
+		<!-- Set -->
+		<property name="set">
+			<set>
+				<value>JAVA</value>
+				<value>JAVA</value>
+				<value>JSP</value>
+				<value>JSP</value>
+				<value>SPRING</value>
+				<value>SPRING</value>
+			</set>
+		</property>
+		
+		<!-- Map -->
+		<property name="map">
+			<map>
+				<entry key="name" value="민경태" />
+				<entry key="age" value="45" />
+			</map>
+		</property>
+
+	</bean>
+
+</beans>

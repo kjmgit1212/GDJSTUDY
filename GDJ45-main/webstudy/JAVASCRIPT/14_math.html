@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+    <script>
+
+        console.log('최대값 : ' + Math.max(1, 2, 3, 4, 5));
+        console.log('최소값 : ' + Math.min(1, 2, 3, 4, 5));
+        console.log('절대값 : ' + Math.abs(-5));
+        console.log('제곱근 : ' + Math.sqrt(25));    // 루트
+        console.log('반올림 : ' + Math.round(1.5));  // 정수로 반올림
+        console.log('올림   : ' + Math.ceil(1.1));   // 정수로 올림
+        console.log('내림   : ' + Math.floor(1.9));  // 정수로 내림
+        console.log('절사   : ' + Math.trunc(1.9));  // 정수로 절사
+        console.log('제곱   : ' + Math.pow(2, 3));   // 2의 3제곱
+        console.log('난수   : ' + Math.random());    // 0.0 <= 난수 < 1.0
+
+    </script>
+
+    <script>
+
+        // 자릿수 지정이 가능한 round2, ceil2, floor2, trunc2 함수 만들기
+
+        Math.round2 = function(n, digit) {
+            /*
+            1.55 - n
+            15.5 - n * Math.pow(10, digit)
+            16   - Math.round(n * Math.pow(10, digit))
+            1.6  - Math.round(n * Math.pow(10, digit)) / Math.pow(10, digit)
+            */
+            digit || (digit = 0);  // digit 디폴트 처리
+            return Math.round(n * Math.pow(10, digit)) / Math.pow(10, digit);
+        }
+
+        console.log(Math.round2(1.555, 2));  // 1.56
+        console.log(Math.round2(1.555, 1));  // 1.6
+        console.log(Math.round2(1.555, 0));  // 2
+        console.log(Math.round2(1.555));     // 2
+        console.log(Math.round2(15555, -1)); // 15560
+        console.log(Math.round2(15555, -2)); // 15600
+        
+        Math.ceil2 = function(n, digit){
+            digit || (digit = 0);
+            return Math.ceil(n * Math.pow(10, digit)) / Math.pow(10, digit);
+        }
+        Math.floor2 = function(n, digit){
+            digit || (digit = 0);
+            return Math.floor(n * Math.pow(10, digit)) / Math.pow(10, digit);
+        }
+        Math.trunc2 = function(n, digit){
+            digit || (digit = 0);
+            return Math.trunc(n * Math.pow(10, digit)) / Math.pow(10, digit);
+        }
+
+        // begin~end 사이의 정수 난수를 반환하는 함수
+        Math.randomBetween = function(begin, end){
+            // Math.random()                      0.0 <= 난수 < 1.0
+            // Math.random() * 6                  0.0 <= 난수 < 6.0
+            // Math.floor(Math.random() * 6)      0 <= 난수 < 6
+            // Math.floor(Math.random() * 6) + 1  1 <= 난수 < 7
+            return Math.floor(Math.random() * (end - begin + 1)) + begin;
+        }
+        console.log(Math.randomBetween(1, 45));
+
+    </script>
+
+</body>
+</html>

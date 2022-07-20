@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    
+    <!-- spring bean configuration file : 안녕. 난 bean을 만드는 xml 파일이야. -->
+    <!-- 여기에서 작성된 bean은 Spring이 직접 만들어서 컨테이너(Container)에 가지고 있어. -->
+    
+    
+    <!--
+    	제어의 역전
+    	IoC : Inversion of Control
+    	기존에는 개발자가 new를 이용해서 직접 객체를 생성해서 사용했지만,
+    	스프링은 스프링이 객체를 생성하고 개발자는 이미 생성된 객체를 가져다 사용한다.
+    	객체를 처리하는 주체가 개발자에서 스프링으로 넘어갔기 때문에 "제어의 역전"이라고 한다.
+    -->
+    
+    
+    <!-- 
+    	1. 디폴트 생성자(NoArgsConstructor) + setter
+    	   : setter injection(세터 주입)	
+    -->
+    <!--
+    	1) 디폴트 생성자
+    		<bean class="클래스명" id="객체(인스턴스)명"></bean>
+    		<bean class="클래스명" id="객체(인스턴스)명"/>
+    	2) setter
+    		<property name="필드명">
+    			<value>값</value>     <- primitive type : value 태그 ->
+    		</property>
+    		<property name="필드명">
+    			<ref bean="객체명"/>  <- reference type : ref 태그의 bean 속성 ->
+    		</property>
+    -->
+ 	
+ 
+	<!--
+		디폴트 생성자 연습
+		Calculator calculator1 = new Calculator();
+	-->
+	<bean class="com.goodee.ex01.xml01.Calculator" id="calculator1"></bean>
+	
+ 
+ 	<!--
+ 		디폴트 생성자 + setter 연습
+ 		EngineerCalculator eCalculator1 = new EngineerCalculator();
+ 		eCalculator1.setA(7);
+ 		eCalculator1.setB(2);
+ 		eCalculator1.setCalculator(calculator1);
+ 	-->
+ 	<bean class="com.goodee.ex01.xml01.EngineerCalculator" id="eCalculator1">
+ 		<property name="a">           <!-- private int a; setter를 이용해서 동작해요. -->
+ 			<value>7</value>
+ 		</property>
+ 		<property name="b">           <!-- private int b; setter를 이용해서 동작해요. -->
+ 			<value>2</value>
+ 		</property>
+ 		<property name="calculator">  <!-- private Calculator calculator; setter를 이용해서 동작해요. -->
+ 			<ref bean="calculator1"/>
+ 		</property>
+ 	</bean>
+
+	<!--
+		만들어 봅시다.
+		Calculator calculator2 = new Calculator();
+		EngineerCalculator eCalculator2 = new EngineerCalculator();
+		eCalculator1.setA(13);
+		eCalculator1.setB(5);
+		eCalculator1.setCalculator(calculator2);
+	-->
+	<!--
+		scope="singleton" : 디폴트, 객체를 하나만 만들어 둔다.
+		scope="prototype" : 객체를 요청할때마다 새로 만들어서 준다.
+	-->
+	<bean class="com.goodee.ex01.xml01.Calculator" id="calculator2" scope="prototype" />
+	<bean class="com.goodee.ex01.xml01.EngineerCalculator" id="eCalculator2">
+		<property name="a" value="13" />
+		<property name="b" value="5" />
+		<property name="calculator" ref="calculator2" />
+	</bean>
+
+
+    <!--
+    	2. 필드를 이용한 생성자(AllArgsConstructor)
+    	   : constructor injection(생성자 주입)
+    -->
+	<!--
+		<bean class="클래스명" id="객체(인스턴스)명">
+			<constructor-arg>
+				<value>1번째인수값</value>
+			</constructor-arg>
+			<constructor-arg>
+				<value>2번째인수값</value>
+			</constructor-arg>
+			<constructor-arg>
+				<ref bean="3번째인수값(객체명)" />
+			</constructor-arg>
+		</bean>
+	-->
+	<!--
+		Calculator calculator3 = new Calculator();
+		EngineerCalculator eCalculator3 = new EngineerCalculator(8, 5, calculator3);
+	-->
+	<bean class="com.goodee.ex01.xml01.Calculator" id="calculator3"></bean>
+	<bean class="com.goodee.ex01.xml01.EngineerCalculator" id="eCalculator3">
+		<constructor-arg>
+			<value>8</value>
+		</constructor-arg>
+		<constructor-arg>
+			<value>5</value>
+		</constructor-arg>
+		<constructor-arg>
+			<ref bean="calculator3"/>
+		</constructor-arg>
+	</bean>
+
+	<!--
+		Calculator calculator4 = new Calculator();
+		EngineerCalculator eCalculator4 = new EngineerCalculator(25, 12, calculator4);
+	-->
+	<bean class="com.goodee.ex01.xml01.Calculator" id="calculator4"></bean>
+	<bean class="com.goodee.ex01.xml01.EngineerCalculator" id="eCalculator4">
+		<constructor-arg value="25" />
+		<constructor-arg value="12" />
+		<constructor-arg ref="calculator4" />
+	</bean>
+
+</beans>

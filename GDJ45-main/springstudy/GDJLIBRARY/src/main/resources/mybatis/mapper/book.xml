@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.goodee.gdlibrary.mapper.BookMapper">
+
+	
+	<insert id="insertBook" parameterType="BookDTO">
+		INSERT INTO BOOK
+			(BOOK_ISBN ,BOOK_TITLE, BOOK_AUTHOR, BOOK_PUBLISHER, BOOK_PUBDATETIME, BOOK_DESCRIPTION, BOOK_IMAGE, BOOK_TYPE)
+		 VALUES
+		 	(#{bookIsbn}, #{bookTitle}, #{bookAuthor}, #{bookPublisher}, #{bookPubdateTime}, #{bookDescription}, #{bookImage}, #{bookType})
+	</insert>
+	
+	<select id="selectBookCount" resultType="Integer">
+		SELECT COUNT(BOOK_TITLE)
+		  FROM BOOK
+	</select>
+	
+	<select id="selectBookList" parameterType="Map" resultType="BookDTO">
+		SELECT BOOK_NO, BOOK_ISBN ,BOOK_TITLE, BOOK_AUTHOR, BOOK_PUBLISHER, BOOK_PUBDATETIME, BOOK_DESCRIPTION, BOOK_IMAGE, BOOK_TYPE
+          FROM BOOK
+         ORDER BY BOOK_NO DESC
+		 LIMIT #{beginRecord}, #{recordPerPage}
+	</select>
+	
+	<select id="detailBook" parameterType="Long" resultType="BookDTO">
+		SELECT BOOK_NO, BOOK_ISBN ,BOOK_TITLE, BOOK_AUTHOR, BOOK_PUBLISHER, BOOK_PUBDATETIME, BOOK_DESCRIPTION, BOOK_IMAGE, BOOK_TYPE
+		  FROM BOOK
+		 WHERE BOOK_NO = #{bookNo}
+	</select>
+
+	<select id="searchBookCount" parameterType="Map" resultType="Integer">
+		SELECT COUNT(BOOK_TITLE)
+		  FROM BOOK
+		 WHERE ${column} LIKE CONCAT('%', CONCAT(IFNULL(#{query}, ''), '%'))
+		 
+	</select>
+	
+	<select id="searchBook" parameterType="Map" resultType="BookDTO">
+		SELECT BOOK_NO, BOOK_ISBN ,BOOK_TITLE, BOOK_AUTHOR, BOOK_PUBLISHER, BOOK_PUBDATETIME, BOOK_DESCRIPTION, BOOK_IMAGE, BOOK_TYPE
+          FROM BOOK
+         WHERE ${column} LIKE CONCAT('%', CONCAT(IFNULL(#{query}, ''), '%'))
+         ORDER BY BOOK_NO DESC
+		 LIMIT #{beginRecord}, #{recordPerPage}
+	</select>
+
+	
+	<select id="recomBook" resultType="BookDTO">
+	
+		SELECT B.BOOK_NO, B.BOOK_TITLE, B.BOOK_AUTHOR, B.BOOK_DESCRIPTION, B.BOOK_IMAGE, B.AVERAGE
+  		  FROM (SELECT A.BOOK_NO, A.BOOK_TITLE, A.BOOK_AUTHOR, A.BOOK_DESCRIPTION, A.BOOK_IMAGE, A.AVERAGE
+          		  FROM (SELECT B.BOOK_NO, B.BOOK_TITLE, B.BOOK_AUTHOR, B.BOOK_DESCRIPTION, B.BOOK_IMAGE, AVG(BR.BOOK_RATING) AS AVERAGE
+                  		  FROM BOOK B INNER JOIN BOOK_REPLY BR
+                            ON B.BOOK_NO = BR.BOOK_NO
+                         GROUP BY B.BOOK_NO, B.BOOK_TITLE, B.BOOK_AUTHOR, B.BOOK_DESCRIPTION, B.BOOK_IMAGE) A
+         		 ORDER BY A.AVERAGE DESC) B
+ 	     LIMIT 5
+	</select>
+	
+</mapper>

@@ -1,0 +1,97 @@
+.a {
+    /* 너비/높이는 블록레벨만 가능하다. */
+    /* 너비 */ width: 100px;
+    /* 높이 */ height: 100px;
+    /* 배경 */ background-color: bisque;
+}
+.b {
+    /* 인라인레벨은 너비/높이 지정이 불가능하다. */
+    width: 100px;
+    height: 100px;
+    background-color: bisque;
+}
+.c {
+    /* %단위는 부모 크기가 기준이다. */
+    width: 50%;
+    height: 100px;  /* 부모의 height가 없어서 %가 적용이 안된다. */
+    background-color: bisque;
+}
+.c > .c1 {
+    width: 50%;
+    height: 50%;
+    background-color: burlywood;
+}
+.c > .c2 {
+    width: 25%;
+    height: 25%;
+    background-color: chocolate;
+}
+.d {
+    width: 100px;
+    height: 100px;
+    /* 테두리 두께 */      border-width: 3px;
+    /* 테두리 종류 */      border-style: dashed;
+    /* 테두리 색상 */      border-color: black;
+    /* 테두리 단축속성 */  border: 1px dotted black;
+}
+.e {
+    width: 100px;
+    height: 100px;
+
+    /*  모서리곡률
+        ┌──────────┐
+        │ 1      2 │
+        │          │
+        │ 4      3 │
+        └──────────┘  */
+    /*    1234    */  border-radius: 10px;
+    /* 13      24 */  border-radius: 20px 0;
+    /* 1   24   3 */  border-radius: 20px 0 20px;
+    /* 1  2  3  4 */  border-radius: 10px 20px 30px 40px;
+}
+.f {
+    width: 100px;
+    height: 100px;
+    border: 1px solid black;
+    /*  내부여백
+        ┌─────────┐
+        │    1    │
+        │ 4     2 │
+        │    3    │
+        └─────────┘  */
+    /*    1234    */  padding: 10px;
+    /* 13      24 */  padding: 20px 0;
+    /* 1   24   3 */  padding: 20px 0 20px;
+    /* 1  2  3  4 */  padding: 10px 20px 30px 40px;
+}
+.g {
+    width: 100px;
+    height: 100px;
+    border: 1px solid black;
+
+    /* 바깥여백 */
+    margin: 10px;
+    /* padding처럼 4가지 방식으로 작성 */
+    /* margin의 특별한 쓰임새 : box를 화면의 가운데 배치 */
+    margin: 0 auto;
+}
+.content_box {
+    width: 100px;
+    height: 100px;
+    padding: 10px;
+    border: 1px solid black;
+    /* box 종류 */
+    box-sizing: content-box;  /* 디폴트(생략가능) */
+    /* box  크기 : width + padding + border
+       실제 크기 : 100px + 10px*2  + 1px*2  = 122px */
+}
+.border_box {
+    width: 100px;
+    height: 100px;
+    padding: 10px;
+    border: 1px solid black;
+    /* box 종류 */
+    box-sizing: border-box;  /* 실무는 거의 border-box 사용 */
+    /* box  크기 : width
+       실제 크기 : 100px (padding 10px 포함, border 1px 포함, content 78px */
+}

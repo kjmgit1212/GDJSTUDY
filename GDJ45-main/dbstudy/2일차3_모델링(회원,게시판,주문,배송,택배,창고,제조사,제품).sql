@@ -1,0 +1,152 @@
+-- 게시판
+CREATE TABLE BOARDS (
+    BOARD_NO     NUMBER NOT NULL,               -- 게시글번호
+    TITLE        VARCHAR2(2000 BYTE) NOT NULL,  -- 제목  
+    CONTENT      VARCHAR2(4000 BYTE),           -- 내용
+    HIT          NUMBER,                        -- 조회수
+    MEMBER_ID    VARCHAR2(30 BYTE) NOT NULL,    -- 작성자(회원아이디)
+    CREATE_DATE  DATE                           -- 작성일자
+);
+
+-- 게시판 기본키
+ALTER TABLE BOARDS ADD CONSTRAINT BOARDS_PK PRIMARY KEY ( BOARD_NO );
+
+
+
+-- 택배업체
+CREATE TABLE DELIVERY (
+    DELIVERY_CODE      VARCHAR2(12 BYTE) NOT NULL,  -- 택배업체코드
+    DELIVERY_NAME      VARCHAR2(30 BYTE) NOT NULL,  -- 택배업체명
+    DELIVERY_TEL       VARCHAR2(15 BYTE) NOT NULL,  -- 택배업체연락처
+    DELIVERY_LOCATION  VARCHAR2(500 BYTE) NOT NULL  -- 택배업체위치
+);
+
+-- 택배업체 기본키
+ALTER TABLE DELIVERY ADD CONSTRAINT DELIVERY_PK PRIMARY KEY ( DELIVERY_CODE );
+
+
+
+-- 제조사
+CREATE TABLE MAKER (
+    BUSINESS_NO  VARCHAR2(12 BYTE) NOT NULL,  -- 사업자번호
+    MAKER_NAME   VARCHAR2(30 BYTE) NOT NULL,  -- 제조사명
+    MAKER_TEL    VARCHAR2(15 BYTE),           -- 제조사연락처
+    CEO          VARCHAR2(30 BYTE)            -- 대표이사 
+);
+
+-- 제조사 기본키
+ALTER TABLE MAKER ADD CONSTRAINT MANUFACTURER_PK PRIMARY KEY ( BUSINESS_NO );
+
+
+
+-- 회원
+CREATE TABLE MEMBERS (
+    MEMBER_NO     NUMBER NOT NULL,             -- 회원번호
+    MEMBER_ID     VARCHAR2(30 BYTE) NOT NULL,  -- 회원아이디
+    MEMBER_PW     VARCHAR2(30 BYTE) NOT NULL,  -- 회원비빌번호
+    MEMBER_NAME   VARCHAR2(30 BYTE),           -- 회원명
+    MEMBER_EMAIL  VARCHAR2(100 BYTE),          -- 이메일
+    MEMBER_TEL    VARCHAR2(15 BYTE),           -- 회원연락처
+    REGISTE_DATE  DATE                         -- 가입일자
+);
+
+-- 회원 기본키
+ALTER TABLE MEMBERS ADD CONSTRAINT MEMBERS_PK PRIMARY KEY ( MEMBER_NO );
+
+-- 회원 아이디 중복불가
+ALTER TABLE MEMBERS ADD CONSTRAINT MEMBERS_ID_UN UNIQUE ( MEMBER_ID );
+
+
+
+-- 주문
+CREATE TABLE ORDERS (
+    ORDER_NO              NUMBER NOT NULL,             -- 주문번호
+    MEMBER_ID             VARCHAR2(30 BYTE) NOT NULL,  -- 주문회원(회원아이디)
+    SHIPPING_NO           VARCHAR2(15 BYTE) NOT NULL,  -- 배송번호
+    PAYMENT               VARCHAR2(10 BYTE) NOT NULL,  -- 결제방식
+    ORDER_DATE            DATE                        -- 주문일자
+);
+
+-- 주문 기본키
+ALTER TABLE ORDERS ADD CONSTRAINT ORDERS_PK PRIMARY KEY ( ORDER_NO );
+
+
+
+-- 제품
+CREATE TABLE PRODUCTS (
+    PRODUCT_CODE    VARCHAR2(10 BYTE) NOT NULL,   -- 제품코드
+    PRODUCT_NAME    VARCHAR2(100 BYTE) NOT NULL,  -- 제품명
+    ORDER_NO        NUMBER NOT NULL,              -- 주문번호
+    BUSINESS_NO     VARCHAR2(12 BYTE) NOT NULL,   -- 제조사(사업자번호)
+    WAREHOUSE_CODE  VARCHAR2(10 BYTE) NOT NULL,   -- 창고(창고코드)
+    CATEGORY        VARCHAR2(20 BYTE) NOT NULL    -- 카테고리
+);
+
+-- 제품 기본키
+ALTER TABLE PRODUCTS ADD CONSTRAINT PRODUCTS_PK PRIMARY KEY ( PRODUCT_CODE );
+
+
+
+-- 배송
+CREATE TABLE SHIPPING (
+    SHIPPING_NO     VARCHAR2(15 BYTE) NOT NULL,  -- 배송번호
+    DELIVERY_CODE   VARCHAR2(12 BYTE) NOT NULL,  -- 택배업체(택배업체코드)
+    SHIPPING_PRICE  NUMBER NOT NULL,             -- 가격
+    DEPARTURE       DATE,                        -- 출발일자
+    ARRIVAL         DATE                         -- 도착일자
+);
+
+-- 배송 기본키
+ALTER TABLE SHIPPING ADD CONSTRAINT SHIPPING_PK PRIMARY KEY ( SHIPPING_NO );
+
+
+
+-- 창고
+CREATE TABLE WAREHOUSE (
+    WAREHOUSE_CODE      VARCHAR2(10 BYTE) NOT NULL,   -- 창고코드
+    WAREHOUSE_NAME      VARCHAR2(10 BYTE) NOT NULL,   -- 창고명
+    WAREHOUSE_LOCATION  VARCHAR2(500 BYTE) NOT NULL,  -- 창고위치
+    STATE               NUMBER,                       -- 창고사용가능여부
+    WAREHOUSE_TEL       VARCHAR2(15 BYTE)             -- 창고연락처
+);
+
+
+-- 창고 기본키
+ALTER TABLE WAREHOUSE ADD CONSTRAINT WAREHOUSE_PK PRIMARY KEY ( WAREHOUSE_CODE );
+
+
+
+-- 게시판-회원 외래키(한 회원은 여러 게시글 작성 가능)
+ALTER TABLE BOARDS
+    ADD CONSTRAINT BOARDS_MEMBERS_FK FOREIGN KEY ( MEMBER_ID )
+        REFERENCES MEMBERS ( MEMBER_ID );
+
+-- 주문-회원 외래키(한 회원은 여러 주문 가능)
+ALTER TABLE ORDERS
+    ADD CONSTRAINT ORDERS_MEMBERS_FK FOREIGN KEY ( MEMBER_ID )
+        REFERENCES MEMBERS ( MEMBER_ID );
+
+-- 주문-배송 외래키(한 배송에 여러 주문 가능)
+ALTER TABLE ORDERS
+    ADD CONSTRAINT ORDERS_SHIPPING_FK FOREIGN KEY ( SHIPPING_NO )
+        REFERENCES SHIPPING ( SHIPPING_NO );
+
+-- 제품-제조사 외래키(한 제조사는 여러 제품 가능)
+ALTER TABLE PRODUCTS
+    ADD CONSTRAINT PRODUCTS_MAKER_FK FOREIGN KEY ( BUSINESS_NO )
+        REFERENCES MAKER ( BUSINESS_NO );
+
+-- 제품-주문 외래키(한 주문에 여러 제품 가능)
+ALTER TABLE PRODUCTS
+    ADD CONSTRAINT PRODUCTS_ORDERS_FK FOREIGN KEY ( ORDER_NO )
+        REFERENCES ORDERS ( ORDER_NO );
+
+-- 제품-창고 외래키(한 창고에 여러 제품 가능)
+ALTER TABLE PRODUCTS
+    ADD CONSTRAINT PRODUCTS_WAREHOUSE_FK FOREIGN KEY ( WAREHOUSE_CODE )
+        REFERENCES WAREHOUSE ( WAREHOUSE_CODE );
+
+-- 배송-택배업체 외래키(한 택배업체가 여러 배송 가능)
+ALTER TABLE SHIPPING
+    ADD CONSTRAINT SHIPPING_DELIVERY_FK FOREIGN KEY ( DELIVERY_CODE )
+        REFERENCES DELIVERY ( DELIVERY_CODE );

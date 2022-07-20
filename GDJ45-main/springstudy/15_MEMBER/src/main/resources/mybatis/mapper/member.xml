@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.goodee.ex15.mapper.MemberMapper">
+
+	<!--  -->
+	<select id="selectMemberById" parameterType="String" resultType="MemberDTO">
+		SELECT MEMBER_NO, ID, PW, NAME, EMAIL, AGREE_STATE, SIGN_IN, PW_MODIFIED, INFO_MODIFIED, SESSION_ID, SESSION_LIMIT
+		  FROM MEMBER
+		 WHERE ID = #{id}
+	</select>
+	
+	<!--  -->
+	<select id="selectMemberByEmail" parameterType="String" resultType="MemberDTO">
+		SELECT MEMBER_NO, ID, PW, NAME, EMAIL, AGREE_STATE, SIGN_IN, PW_MODIFIED, INFO_MODIFIED, SESSION_ID, SESSION_LIMIT
+		  FROM MEMBER
+		 WHERE EMAIL = #{email}
+	</select>
+
+	<!-- 회원가입 -->
+	<insert id="insertMember" parameterType="MemberDTO">
+		INSERT INTO MEMBER
+			(MEMBER_NO, ID, PW, NAME, EMAIL, AGREE_STATE, SIGN_IN, PW_MODIFIED, INFO_MODIFIED)
+		VALUES
+			(MEMBER_SEQ.NEXTVAL, #{id}, #{pw}, #{name}, #{email}, #{agreeState}, SYSDATE, SYSDATE, SYSDATE)
+	</insert>
+
+	<!-- 회원탈퇴 -->
+	<delete id="deleteMember" parameterType="Long">
+		DELETE
+		  FROM MEMBER
+		 WHERE MEMBER_NO = #{memberNo}
+	</delete>
+
+	<!--  -->
+	<select id="selectMemberByIdPw" parameterType="MemberDTO" resultType="MemberDTO">
+		SELECT MEMBER_NO, ID, PW, NAME, EMAIL, AGREE_STATE, SIGN_IN, PW_MODIFIED, INFO_MODIFIED, SESSION_ID, SESSION_LIMIT
+		  FROM MEMBER
+		 WHERE ID = #{id}
+		   AND PW = #{pw}
+	</select>
+
+	<!-- 로그인 기록 남기기 -->
+	<insert id="insertMemberLog" parameterType="String">
+		INSERT INTO MEMBER_LOG
+			(MEMBER_LOG_NO, ID, SIGN_UP)
+		VALUES
+			(MEMBER_LOG_SEQ.NEXTVAL, #{id}, TO_DATE(SYSDATE, 'yyyy-mm-dd hh24:mi:ss'))
+	</insert>
+	
+	<!-- 탈퇴한 회원 조회 -->
+	<select id="selectSignOutMemberById" parameterType="String" resultType="SignOutMemberDTO">
+		SELECT SIGN_OUT_NO, MEMBER_NO, ID, NAME, EMAIL, AGREE_STATE, SIGN_OUT
+		  FROM SIGN_OUT_MEMBER
+		 WHERE ID = #{id}
+	</select>
+	
+	<!-- 탈퇴한 회원 재가입 -->
+	<insert id="reInsertMember" parameterType="MemberDTO">
+		INSERT INTO MEMBER
+			(MEMBER_NO, ID, PW, NAME, EMAIL, AGREE_STATE, SIGN_IN, PW_MODIFIED, INFO_MODIFIED)
+		VALUES
+			(#{memberNo}, #{id}, #{pw}, #{name}, #{email}, #{agreeState}, TO_DATE(SYSDATE, 'yyyy-mm-dd hh24:mi:ss'), TO_DATE(SYSDATE, 'yyyy-mm-dd hh24:mi:ss'), TO_DATE(SYSDATE, 'yyyy-mm-dd hh24:mi:ss'))
+	</insert>
+	
+	<!-- 탈퇴한 회원 명단에서 제거 -->
+	<delete id="deleteSignOutMember" parameterType="String">
+		DELETE
+		  FROM SIGN_OUT_MEMBER
+		 WHERE ID = #{id}
+	</delete>
+
+	<!-- 로그인 유지를 체크한 회원의 session 관련 정보 업데이트 -->
+	<update id="updateSessionInfo" parameterType="MemberDTO">
+		UPDATE MEMBER
+		   SET SESSION_ID = #{sessionId}
+		     , SESSION_LIMIT = #{sessionLimit}
+		 WHERE ID = #{id}
+	</update>
+
+	<!-- 로그인 유지를 체크한 회원의 자동 로그인 처리 -->
+	<select id="selectMemberBySessionId" parameterType="String" resultType="MemberDTO">
+		SELECT MEMBER_NO, ID, PW, NAME, EMAIL, AGREE_STATE, SIGN_IN, PW_MODIFIED, INFO_MODIFIED, SESSION_ID, SESSION_LIMIT
+		  FROM MEMBER
+		 WHERE SESSION_ID = #{sessionId}
+		   AND SESSION_LIMIT > SYSDATE
+	</select>
+	
+	<!-- 아이디 찾기 -->
+	<select id="selectMemberByNameEmail" parameterType="MemberDTO" resultType="MemberDTO">
+		SELECT MEMBER_NO, ID, PW, NAME, EMAIL, AGREE_STATE, SIGN_IN, PW_MODIFIED, INFO_MODIFIED, SESSION_ID, SESSION_LIMIT
+		  FROM MEMBER
+		 WHERE EMAIL = #{email}
+		   AND NAME = #{name}
+	</select>
+	
+	<!-- 비밀번호 찾기 -->
+	<select id="selectMemberByIdEmail" parameterType="MemberDTO" resultType="MemberDTO">
+		SELECT MEMBER_NO, ID, PW, NAME, EMAIL, AGREE_STATE, SIGN_IN, PW_MODIFIED, INFO_MODIFIED, SESSION_ID, SESSION_LIMIT
+		  FROM MEMBER
+		 WHERE ID = #{id}
+		   AND EMAIL = #{email}
+	</select>
+	<update id="updatePw" parameterType="MemberDTO">
+		UPDATE MEMBER
+		   SET PW = #{pw}
+		 WHERE ID = #{id}
+	</update>
+	
+	
+	
+	
+	
+	
+
+</mapper>

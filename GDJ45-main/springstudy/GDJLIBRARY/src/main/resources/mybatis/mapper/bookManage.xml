@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.goodee.gdlibrary.mapper.BookManageMapper">
+
+
+	<!-- 책 조회하기(한권) -->
+	<select id="selectBookByNo" parameterType="Long" resultType="BookDTO">
+		SELECT BOOK_NO, BOOK_ISBN, BOOK_TITLE, BOOK_AUTHOR, BOOK_PUBLISHER, BOOK_PUBDATETIME, BOOK_DESCRIPTION, BOOK_IMAGE, BOOK_TYPE
+		  FROM BOOK
+		 WHERE BOOK_NO = #{bookNo}  
+	</select>
+	
+	<!-- 사용자가 대여할려는 책이 다른 사용자가 대여중인지 확인 -->
+	<select id="selectRentCheckByNo" parameterType="Long" resultType="Integer">
+		SELECT COUNT(*)
+		  FROM RENT
+		 WHERE BOOK_NO = #{bookNo}
+	</select>
+	
+	<!-- 사용자가 대여할려는 책이 다른 사용자가 연체중인지 확인 -->
+	<select id="selectOverdueCheckByNo" parameterType="Long" resultType="Integer">
+		SELECT COUNT(*)
+		  FROM OVERDUE
+		 WHERE BOOK_NO = #{bookNo}
+	</select>
+	
+	<!-- 사용자가 연체중인 책이 있는지 확인 -->
+	<select id="selectOverdueByMemberId" parameterType="String" resultType="Integer">
+		SELECT COUNT(*)
+		  FROM OVERDUE
+		 WHERE MEMBER_ID = #{memberId}
+	</select>
+
+	<!-- 사용자가 대여중인 책의 갯수 -->
+	<select id="selectRentCountByMemberId" parameterType="String" resultType="Integer">
+		SELECT COUNT(*)
+		  FROM RENT
+		 WHERE MEMBER_ID = #{memberId}
+	</select>
+	
+	<!-- 
+		책 대여하기(오라클) 
+	<insert id="insertRent" parameterType="Map">
+		INSERT INTO RENT
+			(RENT_NO, BOOK_NO, MEMBER_ID)
+		VALUES
+			(RENT_SEQ.NEXTVAL, #{bookNo}, #{memberId})
+	</insert>
+	-->
+	
+	<!-- 책 대여하기(MySQL) -->
+	<insert id="insertRent" parameterType="Map">
+		INSERT INTO RENT
+			(BOOK_NO, MEMBER_ID, RENT_EXPIRATION_DATE)
+		VALUES
+			(#{bookNo}, #{memberId}, DATE_ADD(CURDATE(), INTERVAL 7 DAY))
+	</insert>
+	
+	
+	<!-- 
+		사용자가 대여중인 책 목록(조인)(오라클) 
+	<select id="selectRentBookList" parameterType="String" resultType="Map">
+		SELECT R.RENT_NO, B.BOOK_IMAGE, B.BOOK_TITLE, TO_CHAR(R.RENT_DATE, 'YYYY-MM-DD') AS RENT_DATE, TO_CHAR(R.RENT_EXPIRATION_DATE, 'YYYY-MM-DD') AS RENT_EXPIRATION_DATE
+		  FROM BOOK B, RENT R
+		 WHERE B.BOOK_NO = R.BOOK_NO
+		   AND R.MEMBER_ID = #{memberId}
+	</select>
+	-->
+	
+	<!-- 사용자가 대여중인 책 목록(조인)(MySQL) -->
+	<select id="selectRentBookList" parameterType="String" resultType="Map">
+		SELECT R.RENT_NO, B.BOOK_IMAGE, B.BOOK_TITLE, DATE_FORMAT(R.RENT_DATE, '%Y-%m-%d') AS RENT_DATE, DATE_FORMAT(R.RENT_EXPIRATION_DATE, '%Y-%m-%d') AS RENT_EXPIRATION_DATE
+		  FROM BOOK B, RENT R
+		 WHERE B.BOOK_NO = R.BOOK_NO
+		   AND R.MEMBER_ID = #{memberId}
+	</select>
+	
+	
+	<!-- 사용자가 대여중인 책중 반납하기 위해 선택한 책의 정보를 대여 테이블에서 가져오기 -->
+	<select id="selectRentBookByRentNo" parameterType="Long" resultType="RentDTO">
+		SELECT RENT_NO, BOOK_NO, MEMBER_ID, RENT_DATE, RENT_EXPIRATION_DATE
+		  FROM RENT
+		 WHERE RENT_NO = #{rentNo}
+	</select>
+
+
+	<!-- 
+		대여한 책중에서 반납한 책들 반납 테이블로 삽입하기(오라클) 
+	<insert id="insertReturnedRent" parameterType="RentDTO">
+		INSERT INTO RETURNED
+			(RETURNED_NO, BOOK_NO, MEMBER_ID)
+		VALUES
+			(RETURNED_SEQ.NEXTVAL, #{bookNo}, #{memberId})
+	</insert>
+	-->
+	
+	<!-- 대여한 책중에서 반납한 책들 반납 테이블로 삽입하기(MySQL) -->
+	<insert id="insertReturnedRent" parameterType="RentDTO">
+		INSERT INTO RETURNED
+			(BOOK_NO, MEMBER_ID)
+		VALUES
+			(#{bookNo}, #{memberId})
+	</insert>
+	
+	<!-- 대여중인 책 중 반납한 책들 대여 테이블에서 삭제 처리 -->
+	<delete id="deleteRent" parameterType="Long">
+		DELETE
+		  FROM RENT
+		 WHERE RENT_NO = #{rentNo}
+	</delete>
+	
+	<!-- 
+		사용자가 연체중인 책 목록(조인)(오라클) 
+	<select id="selectOverdueBookList" parameterType="String" resultType="Map">
+		SELECT O.OVERDUE_NO, B.BOOK_IMAGE, B.BOOK_TITLE, TO_CHAR(O.RENT_EXPIRATION_DATE, 'YYYY-MM-DD') AS RENT_EXPIRATION_DATE
+		  FROM BOOK B, OVERDUE O
+		 WHERE B.BOOK_NO = O.BOOK_NO
+		   AND O.MEMBER_ID = #{memberId}
+	</select>
+	-->
+	
+	<!-- 사용자가 연체중인 책 목록(조인)(MySQL) -->
+	<select id="selectOverdueBookList" parameterType="String" resultType="Map">
+		SELECT O.OVERDUE_NO, B.BOOK_IMAGE, B.BOOK_TITLE, DATE_FORMAT(O.RENT_EXPIRATION_DATE, '%Y-%m-%d') AS RENT_EXPIRATION_DATE
+		  FROM BOOK B, OVERDUE O
+		 WHERE B.BOOK_NO = O.BOOK_NO
+		   AND O.MEMBER_ID = #{memberId}
+	</select>
+	
+
+	<!-- 사용자가 연체중인 책중 반납하기 위해 선택한 책의 정보를 연체 테이블에서 가져오기 -->
+	<select id="selectOverdueBookByOverdueNo" parameterType="Long" resultType="OverdueDTO">
+		SELECT OVERDUE_NO, BOOK_NO, MEMBER_ID, RENT_EXPIRATION_DATE
+		  FROM OVERDUE
+		 WHERE OVERDUE_NO = #{overdueNo}
+	</select>
+	
+
+	<!-- 
+		연체된 책중에서 반납한 책들 반납 테이블로 삽입하기(오라클) 
+	<insert id="insertReturnedOverdue" parameterType="OverdueDTO">
+		INSERT INTO RETURNED
+			(RETURNED_NO, BOOK_NO, MEMBER_ID)
+		VALUES
+			(RETURNED_SEQ.NEXTVAL, #{bookNo}, #{memberId})
+	</insert>
+	-->
+	
+	<!-- 연체된 책중에서 반납한 책들 반납 테이블로 삽입하기(MySQL) -->
+	<insert id="insertReturnedOverdue" parameterType="OverdueDTO">
+		INSERT INTO RETURNED
+			(BOOK_NO, MEMBER_ID)
+		VALUES
+			(#{bookNo}, #{memberId})
+	</insert>
+	
+	<!-- 연체중인 책 중 반납한 책들 연체 테이블에서 삭제 처리 -->
+	<delete id="deleteOverdue" parameterType="Long">
+		DELETE
+		  FROM OVERDUE
+		 WHERE OVERDUE_NO = #{overdueNo}
+	</delete>
+
+	<!-- 매일 오전 12시 30분에 동작하는 스케쥴러로 대여만료일자가 지난 대여목록 확인 -->
+	<select id="selectRentExpirationDate" resultType="RentDTO">
+		SELECT RENT_NO, BOOK_NO, MEMBER_ID, RENT_DATE, RENT_EXPIRATION_DATE
+		  FROM RENT
+		 WHERE RENT_EXPIRATION_DATE <![CDATA[<]]> NOW()
+	</select>
+	
+	<!-- 
+		대여 만료일자가 지난 대여 테이블의 데이터를 연체 테이블에 삽입(오라클) 
+	<insert id="insertOverdue" parameterType="RentDTO">
+		INSERT INTO OVERDUE
+			(OVERDUE_NO, BOOK_NO, MEMBER_ID, RENT_EXPIRATION_DATE)
+		VALUES
+			(OVERDUE_SEQ.NEXTVAL, #{bookNo}, #{memberId}, #{rentExpirationDate})
+	</insert>
+	-->
+	
+	<!-- 대여 만료일자가 지난 대여 테이블의 데이터를 연체 테이블에 삽입(MySQL) -->
+	<insert id="insertOverdue" parameterType="RentDTO">
+		INSERT INTO OVERDUE
+			(BOOK_NO, MEMBER_ID, RENT_EXPIRATION_DATE)
+		VALUES
+			(#{bookNo}, #{memberId}, #{rentExpirationDate})
+	</insert>
+
+	
+
+</mapper>

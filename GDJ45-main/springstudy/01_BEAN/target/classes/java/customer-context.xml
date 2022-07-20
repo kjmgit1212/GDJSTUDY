@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<bean class="com.goodee.ex01.java06.BankAccount" id="bank2">
+		<constructor-arg value="010-3214-6987" />
+		<constructor-arg value="100000" />
+	</bean>
+	
+	<bean class="com.goodee.ex01.java06.Customer" id="customer2">
+		<property name="name" value="철수" />
+		<property name="info">
+			<map>
+				<entry key="tel" value="02-111-2222" />
+				<entry key="grade" value="vvip" />
+			</map>
+		</property>
+		<property name="bankAccount" ref="bank2" />
+	</bean>
+
+</beans>

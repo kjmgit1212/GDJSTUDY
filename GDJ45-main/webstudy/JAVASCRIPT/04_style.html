@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+    <div id="box">
+        box
+    </div>
+    <script>
+        /*
+            CSS 처리
+            1. style 속성을 이용한다.
+            2. inline style로 처리되기 때문에(태그에 style 속성이 부여됨)
+               언제나 적용된다.
+            3. 작성방법
+                1) 선택요소.style.fontSize = '12px'     : 하이픈(-) 제거 후 camel case로 수정
+                2) 선택요소.style['font-size'] = '12px' : CSS 속성을 그대로 사용
+        */
+
+        var div = document.getElementById('box');
+
+        div.style.fontSize = '12px';
+        div.style['font-size'] = '12px';
+        
+    </script>
+
+</body>
+</html>

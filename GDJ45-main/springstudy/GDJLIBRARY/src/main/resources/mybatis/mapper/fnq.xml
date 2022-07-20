@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.goodee.gdlibrary.mapper.FnqMapper">
+
+
+	<!-- fnq 테이블에 있는 총 행의 갯수 가져오기 -->
+	<select id="selectFnqCount" resultType="Long">
+		SELECT COUNT(*)
+		  FROM FNQ
+	</select>
+	
+	<!-- 
+		fnq 테이블의 전체 데이터 목록 가져오기(오라클) 
+	<select id="selectFnqList" parameterType="Map" resultType="FnqDTO">
+		SELECT F.FNQ_NO, F.FNQ_TITLE, F.FNQ_CONTENT
+		  FROM (SELECT ROW_NUMBER() OVER(ORDER BY FNQ_NO DESC) AS ROW_NUM, FNQ_NO, FNQ_TITLE, FNQ_CONTENT
+		          FROM FNQ) F
+		 WHERE F.ROW_NUM BETWEEN #{beginRecord} AND #{endRecord} 
+	</select>
+	-->
+	
+	<!-- fnq 테이블의 전체 데이터 목록 가져오기(MySQL) -->
+	<select id="selectFnqList" parameterType="Map" resultType="FnqDTO">
+		SELECT FNQ_NO, FNQ_TITLE, FNQ_CONTENT
+		  FROM FNQ
+		 ORDER BY FNQ_NO DESC
+		 LIMIT #{beginRecord}, #{recordPerPage}
+	</select>
+
+
+	<!-- 
+		검색된 레코드 갯수(오라클) 
+	<select id="selectFindCount" parameterType="Map" resultType="Long">
+		SELECT COUNT(*)
+		  FROM FNQ
+		 WHERE ${column} LIKE '%' || #{query} || '%'
+	</select>
+	-->
+	
+	<!-- 검색된 레코드 갯수(MySQL) -->
+	<select id="selectFindCount" parameterType="Map" resultType="Long">
+		SELECT COUNT(*)
+		  FROM FNQ
+		 WHERE ${column} LIKE CONCAT('%', #{query}, '%')
+	</select>
+	
+	
+	<!-- 
+		검색(오라클) 
+	<select id="selectFindList" parameterType="Map" resultType="FnqDTO">
+		SELECT F.FNQ_NO, F.FNQ_TITLE, F.FNQ_CONTENT
+		  FROM (SELECT ROW_NUMBER() OVER(ORDER BY FNQ_NO DESC) AS ROW_NUM, FNQ_NO, FNQ_TITLE, FNQ_CONTENT
+		          FROM FNQ
+		         WHERE ${column} LIKE '%' || #{query} || '%') F
+		 WHERE F.ROW_NUM BETWEEN #{beginRecord} AND #{endRecord}  
+	</select>
+	-->
+	
+	<!-- 검색(MySQL) -->
+	<select id="selectFindList" parameterType="Map" resultType="FnqDTO">
+		SELECT FNQ_NO, FNQ_TITLE, FNQ_CONTENT
+		  FROM FNQ
+		 WHERE ${column} LIKE CONCAT('%', #{query}, '%')
+	     ORDER BY FNQ_NO DESC
+		 LIMIT #{beginRecord}, #{recordPerPage}
+	</select>
+
+
+
+</mapper>

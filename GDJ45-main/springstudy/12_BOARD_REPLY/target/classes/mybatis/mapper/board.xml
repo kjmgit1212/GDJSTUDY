@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.goodee.ex12.mapper.BoardMapper">
+
+	<!-- 목록(beginRecord - endRecord) -->
+	<select id="selectBoardList" parameterType="Map" resultType="BoardDTO">
+		SELECT A.RN, A.BOARD_NO, A.WRITER, A.TITLE, A.CONTENT, A.HIT, A.IP, A.CREATED, A.MODIFIED
+		  FROM (SELECT ROW_NUMBER() OVER(ORDER BY CREATED DESC) AS RN, BOARD_NO, WRITER, TITLE, CONTENT, HIT, IP, CREATED, MODIFIED
+		          FROM BOARD) A
+		 WHERE A.RN BETWEEN #{beginRecord} AND #{endRecord}
+	</select>
+	
+	<!-- 전체 레코드 갯수 -->
+	<select id="selectBoardCount" resultType="Integer">
+		SELECT COUNT(BOARD_NO)
+		  FROM BOARD
+	</select>
+	
+	<!-- 상세보기 -->
+	<select id="selectBoardByNo" parameterType="Long" resultType="BoardDTO">
+		SELECT BOARD_NO, WRITER, TITLE, CONTENT, HIT, IP, CREATED, MODIFIED
+		  FROM BOARD
+		 WHERE BOARD_NO = #{boardNo}
+	</select>
+	
+	<!-- 조회수 증가 -->
+	<update id="updateBoardHit" parameterType="Long">
+		UPDATE BOARD
+		   SET HIT = HIT + 1
+		 WHERE BOARD_NO = #{boardNo}
+	</update>
+	
+	<!-- 삽입 -->
+	<insert id="insertBoard" parameterType="BoardDTO">
+		INSERT INTO BOARD
+			(BOARD_NO, WRITER, TITLE, CONTENT, HIT, IP, CREATED, MODIFIED)
+		VALUES
+			(BOARD_SEQ.NEXTVAL, #{writer}, #{title}, #{content}, 0, #{ip}, SYSDATE, SYSDATE)
+	</insert>
+	
+	<!-- 수정 -->
+	<update id="updateBoard" parameterType="BoardDTO">
+		UPDATE BOARD
+		   SET TITLE = #{title}, CONTENT = #{content}, MODIFIED = SYSDATE
+		 WHERE BOARD_NO = #{boardNo}
+	</update>
+	
+	<!-- 삭제 -->
+	<delete id="deleteBoard" parameterType="Long">
+		DELETE
+		  FROM BOARD
+		 WHERE BOARD_NO = #{boardNo}
+	</delete>
+	
+	<!-- 검색 -->
+	
+
+</mapper>

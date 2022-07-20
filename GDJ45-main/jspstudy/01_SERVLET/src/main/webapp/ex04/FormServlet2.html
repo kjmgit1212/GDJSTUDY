@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script src="../js/jquery-3.6.0.js"></script>
+<script>
+	
+	// 디폴트 처리
+	// name="아무개" age=0
+	
+	$(document).ready(function(){
+		
+		$('#f').submit(function(){
+			
+			var name = $('#name');
+			var age = $('#age');
+			
+			if(name.val() == '') {
+				name.val('아무개');
+			}
+			if(age.val() == '') {
+				age.val(0);
+			}
+			
+		});
+		
+	});
+	
+</script>
+</head>
+<body>
+
+	<form id="f" action="/SERVLET/FormServlet2" method="get">
+		<label for="name">
+			이름
+			<input type="text" id="name" name="name">
+		</label>
+		<label for="age">
+			나이
+			<input type="text" id="age" name="age">
+		</label>
+		<button>전송</button>
+	</form>
+	
+</body>
+</html>

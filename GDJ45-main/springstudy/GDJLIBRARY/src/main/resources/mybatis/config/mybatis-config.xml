@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration 
+PUBLIC "-//mybatis.org//DTD Config 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-config.dtd" >
+
+<configuration>
+
+	<settings>
+		<setting name="mapUnderscoreToCamelCase" value="true"/>
+	</settings>
+	
+	<typeAliases>
+		<typeAlias type="com.goodee.gdlibrary.domain.BookDTO" alias="BookDTO" />
+		<typeAlias type="com.goodee.gdlibrary.domain.BookReplyDTO" alias="BookReplyDTO" />
+		<typeAlias type="com.goodee.gdlibrary.domain.DormantMemberDTO" alias="DormantMemberDTO" />
+		<typeAlias type="com.goodee.gdlibrary.domain.FnqDTO" alias="FnqDTO" />
+		<typeAlias type="com.goodee.gdlibrary.domain.MemberDTO" alias="MemberDTO" />
+		<typeAlias type="com.goodee.gdlibrary.domain.MemberLogDTO" alias="MemberLogDTO" />
+		<typeAlias type="com.goodee.gdlibrary.domain.NoticeDTO" alias="NoticeDTO" />
+		<typeAlias type="com.goodee.gdlibrary.domain.NoticeFileAttachDTO" alias="NoticeFileAttachDTO" />
+		<typeAlias type="com.goodee.gdlibrary.domain.OverdueDTO" alias="OverdueDTO" />
+		<typeAlias type="com.goodee.gdlibrary.domain.QaaDTO" alias="QaaDTO" />
+		<typeAlias type="com.goodee.gdlibrary.domain.RentDTO" alias="RentDTO" />
+		<typeAlias type="com.goodee.gdlibrary.domain.ReturnedDTO" alias="ReturnedDTO" />
+		<typeAlias type="com.goodee.gdlibrary.domain.SeatDTO" alias="SeatDTO" />
+		<typeAlias type="com.goodee.gdlibrary.domain.SignOutMemberDTO" alias="SignOutMemberDTO" />
+		
+	</typeAliases>
+	
+</configuration>

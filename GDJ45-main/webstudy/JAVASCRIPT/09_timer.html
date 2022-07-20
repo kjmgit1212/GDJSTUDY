@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+    <script>
+        /*
+            타이머 함수
+
+            1. 지정된 시간이 되면 한 번만 동작하는 함수
+                1) 동작
+                    var id = setTimeout(동작할함수, 시간(밀리초));
+                2) 동작 취소
+                    clearTimeout(id);
+            2. 지정된 시간마다 반복해서 동작하는 함수
+                1) 동작
+                    var id = setInterval(동작할함수, 시간(밀리초));
+                2) 동작 취소
+                    clearInterval(id);
+        */
+    </script>
+    <script>
+        /*
+        var id = setTimeout(function(){
+            console.log('setTimeout');
+        }, 3000);  // 3초(3000밀리초) 후 익명 함수 실행
+        clearTimeout(id);
+        */
+        /*
+        var id = setInterval(function(){
+            console.log('setInterval');
+        }, 2000);  // 2초(2000밀리초)마다 익명 함수 실행
+        clearInterval(id);
+        */
+    </script>
+
+    <div id="boom"></div>
+    <script>
+        
+        // 연습1. 5초 후에 div 요소에 '펑' 출력하기
+        /*
+        var id = setTimeout(function(){
+            document.getElementById('boom').textContent = '펑';
+        }, 5000);
+        clearTimeout(id);
+        */
+
+        // 연습2. 1초마다 5 -> 4 -> 3 -> 2 -> 1 -> 펑 출력하기
+        // setInterval
+        /*
+        var countDown = 5;
+        var id = setInterval(function(){
+            if(countDown == 0) {
+                document.getElementById('boom').textContent = '펑';
+                // clearInterval(id);
+                return;  // setInterval 실행 막기
+            }
+            document.getElementById('boom').textContent = countDown--;
+        }, 1000);
+        */
+
+        // 연습3. 1초마다 5 -> 4 -> 3 -> 2 -> 1 -> 펑 출력하기
+        // setTimeout (재귀호출을 이용)
+        var countDown = 5;
+        function boom() {
+            setTimeout(function(){
+                if(countDown == 0) {
+                    document.getElementById('boom').textContent = '펑';
+                    return;
+                }
+                document.getElementById('boom').textContent = countDown--;
+                boom();  // 재귀호출
+            }, 1000);  // 1초 후에 익명 함수 실행
+        }
+        boom();
+
+
+
+
+
+
+    </script>
+
+
+</body>
+</html>

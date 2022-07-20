@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        /*
+            transition
+
+            1. 특정 속성이 이행되는 과정을 설정
+            2. 주요 적용 가능 속성
+                all(디폴트), width, height, padding, margin
+                background-color, border
+                font-size, font-weight, color
+                opacity, visibility
+                transform
+        */
+        .box1 {
+            width: 100px;
+            border: 1px solid black;
+            transition-property: width;        /* width 속성의 변화를 볼 수 있음 */
+            transition-duration: 2s;           /* 2초동안 속성의 변화를 볼 수 있음 */
+            transition-timing-function: ease;  /* 속성의 변화 타이밍 */
+            transition-delay: 1s;              /* 1초후에 transition이 동작함 */
+            /* transition 단축 속성 */
+            /* transition: width 2s ease 1s; */
+        }
+        .box1:hover {  /* 마우스 대고 있는 동안 */
+            width: 200px;
+        }
+        .box1:active {  /* 누르는 동안 */
+            width: 50px;
+        }
+
+        .box2 > input {
+            padding: 3px 6px;
+            border: 1px solid black;
+            outline: none;
+            transition-property: border, background-color;
+            transition-duration: 2s, 5s;
+            transition-timing-function: linear, ease;
+            transition-delay: 1s, 0.5s;
+            /* transition 단축 속성 */
+            /* transition: border 2s linear 1s, background-color 5s ease 0.5s; */
+        }
+        .box2 > input:focus {
+            border: 1px solid red;
+            background-color: lightcoral;
+        }
+
+        .box3 {
+            margin: 50px;
+            width: 50px;
+            height: 50px;
+            border: 1px solid black;
+            transition-property: transform;
+            transition-duration: 3s;
+            /* transition 단축 속성 */
+            /* transition: transform 3s; */
+        }
+        .box3:active {
+            /*
+            10도 회전하기
+            transform: rotate(10deg);
+    
+            가로 2배, 세로 0.5배 크기 바꾸기
+            transform: scale(2, 0.5);
+    
+            x방향 100px, y방향 50px 이동하기
+            transform: translate(100px, 50px);
+            */
+            transform: translate(100px, 50px);
+        }
+
+        .wrap {
+            position: relative;
+        }
+        .image, .cover {
+            width: 640px;
+            height: 480px;
+        }
+        .image {
+            background-image: url(../images/frog.jpg);
+            background-size: 640px 480px;
+        }
+        .cover {
+            position: absolute;
+            top: 0;
+            background-color: red;
+            transition-property: transform, opacity;
+            transition-duration: 2s;
+        }
+        .cover:active {
+            transform: translateY(480px);
+            opacity: 0;  /* 투명 */
+        }
+
+    </style>
+</head>
+<body>
+    
+    <div class="box1">
+        box1
+    </div>
+    
+    <div class="box2">
+        <input type="text">
+    </div>
+
+    <div class="box3">
+        box3
+    </div>
+
+    <!-- 연습 -->
+    <div class="wrap">
+        <div class="image">
+            <!-- 이미지 -->
+        </div>
+        <div class="cover">
+            <!-- 배경색 -->
+        </div>
+    </div>
+
+</body>
+</html>

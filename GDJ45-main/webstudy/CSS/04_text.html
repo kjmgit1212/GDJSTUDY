@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        div {
+            font-size: 24px;    /* 글자 크기, 디폴트 16px */
+            font-weight: 900;   /* 굵게, 100~900 */
+            font-style: italic; /* 기울임, none(기울임취소), italic/oblique(기울임) */
+            font-family: '궁서', '바탕', serif;              /* serif : 명조 계열 폰트 */
+            font-family: '맑은 고딕', '견고딕', sans-serif;  /* sans-serif : 고딕 계열 폰트 */
+
+            color: rgb(0, 0, 0);
+            color: rgb(255, 255, 255);
+            color: rgba(0, 0, 0, 0.5);  /* alpha : 투명도(0은 투명, 1은 불투명) */
+            color: #000000;  /* #000, rgb(0, 0, 0)와 동일 */
+            color: #FFFFFF;  /* #FFF, rgb(255, 255, 255)와 동일 */
+            color: teal;
+
+            text-align: center;     /* 정렬(left, right, justify, center) */
+                                    /* 정렬은 블록레벨에만 적용되고, 인라인레벨에는 적용되지 않는다. */
+            text-decoration: none;  /* 밑줄(none, underline 등) */
+            line-height: 50px;      /* 행높이, 실무에선 세로 가운데 정렬에서 많이 사용 */
+            text-shadow: 3px 3px 1px gray;  /* 그림자 : x y blur color */
+
+            letter-spacing: 10px;   /* 자간(글자간격) */
+            word-spacing: 20px;     /* 단어간격 */
+
+            /* -webkit- : 크롬 */
+            -webkit-text-stroke-color: black;  /* 글자테두리색상 */
+            -webkit-text-stroke-width: 1px;       /* 글자테두리두께 */
+        }
+    </style>
+</head>
+<body>
+    <div>
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum massa mi, euismod at urna eget, egestas rhoncus dui. Morbi vehicula lorem pulvinar risus gravida, posuere feugiat dui vulputate. Praesent eget auctor ante. Fusce neque metus, pellentesque ut laoreet a, sagittis vitae neque. Donec id enim mattis, bibendum nunc ac, venenatis turpis. Proin dolor metus, auctor in iaculis id, vulputate ut diam. Duis feugiat placerat posuere. Sed pulvinar ante sed purus sollicitudin tincidunt at sit amet ipsum. Integer imperdiet, nibh eu hendrerit mollis, elit nisi elementum tellus, tristique dignissim eros ipsum sed odio. Donec mattis, urna sit amet cursus placerat, augue ligula dignissim neque, quis vulputate lacus sem eget eros.
+    </div>
+
+    <!-- 인라인레벨의 정렬 확인 -->
+    <span style="text-align: center;">
+        Lorem ipsum dolor sit amet
+    </span>
+</body>
+</html>

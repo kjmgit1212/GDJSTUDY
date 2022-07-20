@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="selector.css">
+</head>
+<body>
+    
+    <!-- 1. 클래스 선택자 -->
+    <h1 class="a">Hello CSS</h1>
+    <h1 class="a aa">Nice To Meet You</h1>
+
+    <!-- 2. 아이디 선택자 -->
+    <h1 id="b">How are you today?</h1>
+
+    <!-- 3. 자식 선택자 -->
+    <ul>
+        <li>
+            <a href="#">메일</a>
+        </li>
+        <li>
+            <a href="#">카페</a>
+        </li>
+        <li>
+            <a href="#">블로그</a>
+        </li>
+    </ul>
+    <table border="1">
+        <tr>
+            <td>1열</td>
+            <td>2열</td>
+            <td>3열</td>
+        </tr>
+    </table>
+
+    <!-- 4. 후손 선택자 -->
+    <dl>
+        <dt>
+            <strong>항목</strong>
+        </dt>
+        <dd>
+            라면
+        </dd>
+        <dt>
+            <strong>조리법</strong>
+        </dt>
+        <dd>
+            4분간 끓인다
+        </dd>
+    </dl>
+
+    <!-- 5. 모든 형제 선택자 -->
+    <div class="c">
+        <h1>아시아</h1>
+        <h3>대한민국</h3>
+        <h3>일본</h3>
+        <h3>중국</h3>
+    </div>
+
+    <!-- 6. 인접 형제 선택자 -->
+    <dl class="d">
+        <dt>제목</dt>
+        <dd>어린왕자</dd>
+        <dt>저자</dt>
+        <dd>생텍쥐베리</dd>
+    </dl>
+
+    <!-- 7. 구조 선택자 -->
+    <ol>
+        <li>JAVA</li>
+        <li>C</li>
+        <li>PYTHON</li>
+        <li>PHP</li>
+    </ol>
+
+    <!-- 8. 속성 선택자 -->
+    <form>
+        <input type="text" placeholder="아이디"><br>
+        <input type="password">
+    </form>
+
+    <!-- 9. 반응 선택자 -->
+    <a href="#">클릭</a>
+
+    <!-- 10. 상태 선택자 -->
+    <form>
+        <input type="text"><br>
+        <input type="radio" name="gender" value="m" id="male">
+        <label for="male">남자</label>
+        <input type="radio" name="gender" value="f" id="female">
+        <label for="female">여자</label>
+    </form>
+    
+</body>
+</html>

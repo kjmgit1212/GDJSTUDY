@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .box1 > img {
+            width: 200px;
+        }
+        .box1 > img:nth-of-type(1) {
+            float: left;
+        }
+        .box1 > img:nth-of-type(2) {
+            float: right;
+        }
+
+        .box2 > div {
+            width: 100px;
+            height: 100px;
+            border: 1px solid black;
+        }
+        .box2 > div:nth-of-type(1) {
+            overflow: scroll;
+        }
+        .box2 > div:nth-of-type(2) {
+            overflow-x: scroll;
+            overflow-y: scroll;
+        }
+        .box2 > div:nth-of-type(3) {
+            overflow: hidden;
+        }
+
+        /*
+            one true layout
+            1. 수평 레이아웃 배치 방법
+            2. 방식
+                부모요소 : overflow: hidden;
+                자식요소 : float: left;
+        */
+        .box3 {
+            width: 500px;
+            height: 120px;
+            border: 3px solid red;
+            /* 부모요소 */  overflow: hidden;
+        }
+        .box3 > div {
+            width: 100px;
+            height: 100px;
+            border: 1px solid black;
+            /* 자식요소 */  float: left;
+        }
+        .box3 > div:last-of-type {
+            /* 자식요소 */  float: right;
+        }
+    </style>
+</head>
+<body>
+    
+    <div class="box1">
+        <img alt="사자" src="../images/lion.jpg">
+        <img alt="호랑이" src="../images/tiger.jpg">
+        HTML문서의 기본 흐름은 왼쪽에서 오른쪽으로 그리고
+        위에서 아래 방향으로 배치하는 것이다. 
+        float 속성을 사용한 요소는 문서의 기본 흐름에서 벗어나서
+        HTML문서의 왼쪽이나 오른쪽에 배치할 수 있다.
+        float 속성을 사용한 요소는 문서에서 뜯어내서
+        새로 배치한다.
+        HTML문서의 기본 흐름은 왼쪽에서 오른쪽으로 그리고
+        위에서 아래 방향으로 배치하는 것이다. 
+        float 속성을 사용한 요소는 문서의 기본 흐름에서 벗어나서
+        HTML문서의 왼쪽이나 오른쪽에 배치할 수 있다.
+        float 속성을 사용한 요소는 문서에서 뜯어내서
+        새로 배치한다.
+    </div>
+
+    <div class="box2">
+        <div>HTML문서의 기본 흐름은 왼쪽에서 오른쪽으로 그리고 위에서 아래 방향으로 배치하는 것이다.</div>
+        <div>HTML문서의 기본 흐름은 왼쪽에서 오른쪽으로 그리고 위에서 아래 방향으로 배치하는 것이다.</div>
+        <div>HTML문서의 기본 흐름은 왼쪽에서 오른쪽으로 그리고 위에서 아래 방향으로 배치하는 것이다.</div>
+    </div>
+
+    <div class="box3">
+        <div>area1</div>
+        <div>area2</div>
+        <div>area3</div>
+    </div>
+
+</body>
+</html>

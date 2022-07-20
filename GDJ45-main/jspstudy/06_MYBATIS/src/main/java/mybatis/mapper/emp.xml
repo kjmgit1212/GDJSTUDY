@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 1. mapper : SQL을 작성해 두는 곳 -->
+
+<!-- 2. mapper namespace에는 mapper의 전체 경로(패키지 포함)를 작성해 둔다. -->
+<!-- namespace="mybatis.mapper.emp"  mybatis.mapper 패키지에 저장된 emp.xml -->
+<mapper namespace="mybatis.mapper.emp">
+
+	<!-- 모든 쿼리문에 세미콜론(;) 넣지 말 것! -->
+	
+	<!--
+		1. 전체사원목록가져오기
+			1) 파라미터 : 없음
+			2) 반환타입 : Emp (사원수와 상관 없이 Emp라고 지정해야 함)
+	-->
+	<select id="selectEmpList" resultType="domain.Emp">
+		SELECT NO, NAME, DEPT, SALARY, HIRED
+		  FROM EMP
+		 ORDER BY NO DESC
+	</select>
+	
+	<!-- 
+		2. 개별사원정보가져오기
+			1) 파라미터 : Long no, long no
+			2) 반환타입 : Emp
+	-->
+	<select id="selectEmpByNo" parameterType="Long" resultType="domain.Emp">
+		SELECT NO, NAME, DEPT, SALARY, HIRED
+		  FROM EMP
+		 WHERE NO = #{no}
+	</select>
+	
+	<!--
+		3. 사원등록하기
+			1) 파라미터 : Emp emp, Map
+			2) 반환타입 : 0 또는 1, Integer, int
+			3) 주의사항
+				<insert>, <update>, <delete> 태그는 반환 타입이 모두 Integer이다.
+				resultType 속성을 작성하지 않는다. 생략해야 한다.
+	-->
+	<insert id="insertEmp" parameterType="domain.Emp">
+		INSERT INTO
+			EMP(NO, NAME, DEPT, SALARY, HIRED)
+		VALUES
+			(EMP_SEQ.NEXTVAL, #{name}, #{dept}, #{salary}, TO_CHAR(SYSDATE, 'YYYY-MM-DD'))
+	</insert>
+	
+	<!--
+		4. 사원수정하기
+			1) 파라미터 : Emp emp, Map
+			2) 반환타입 : 0 또는 1, 작성은 하지 않는다.
+	-->
+	<update id="updateEmp" parameterType="Map">
+		UPDATE EMP
+		   SET NAME = #{name}
+		     , DEPT = #{dept}
+		     , SALARY = #{salary}
+		 WHERE NO = #{no}
+	</update>
+	
+	<!--
+		5. 사원삭제하기
+			1) 파라미터 : Long no, long no
+			2) 반환타입 : 0 또는 1, 작성은 하지 않는다.
+	-->
+	<delete id="deleteEmp" parameterType="Long">
+		DELETE
+		  FROM EMP
+		 WHERE NO = #{no}
+	</delete>
+	
+</mapper>

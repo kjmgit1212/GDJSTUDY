@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .yellow_area {
+            background: yellow;
+        }
+        #box1 {
+            width: 1000px;
+        }
+        #box2 {
+            width: 500px;
+        }
+    </style>
+</head>
+<body>
+    
+    <!--
+        global 속성
+
+        1. 모든 태그가 가질 수 있는 속성
+        2. 주요 global 속성
+            1) class
+                (1) 같은 종류의 요소들은 동일한 class 속성을 가질 수 있다.
+                (2) 하나의 태그는 여러 개의 class 속성을 가질 수 있다.
+            2) id
+                (1) 중복되지 않는 고유의 id 속성을 가질 수 있다.
+                (2) 하나의 태그는 하나의 id 속성을 가질 수 있다.
+    -->
+
+    <!--
+        1. <div>
+            1) 블록레벨
+            2) 구역 나누기, 구역 만들기
+    -->
+    <div class="yellow_area" id="box1">제1구역</div>
+    <div class="yellow_area" id="box2">제2구역</div>
+
+    <!--
+        2. <span>
+            1) 인라인레벨
+            2) 구역 나누기, 구역 만들기
+    -->
+    <span>제3구역</span>
+    <span>제4구역</span>
+
+</body>
+</html>

@@ -1,0 +1,461 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.goodee.gdlibrary.mapper.ManageMapper">
+	
+	<resultMap type="MemberDTO" id="MemberMap">
+		<result column="MEMBER_ID" property="memberId" />
+		<result column="MEMBER_PW" property="memberPw" />
+		<result column="MEMBER_NAME" property="memberName" />
+		<result column="MEMBER_PHONE" property="memberPhone" />
+		<result column="MEMBER_EMAIL" property="memberEmail" />
+		<result column="MEMBER_POSTCODE" property="memberPostcode" />
+		<result column="MEMBER_ROAD_ADDRESS" property="memberRoadAddress" />
+		<result column="MEMBER_DETAIL_ADDRESS" property="memberDetailAddress" />
+	</resultMap>
+	
+	
+	
+	<resultMap type="BookDTO" id="BookMap">
+		<result column="BOOK_ISBN" property="bookIsbn" />
+		<result column="BOOK_TITLE" property="bookTitle" />
+		<result column="BOOK_AUTHOR" property="bookAuthor" />
+		<result column="BOOK_PUBLISHER" property="bookPublisher" />
+		<result column="BOOK_PUBDATE" property="bookPubdate" />
+		<result column="BOOK_DESCRIPTION" property="bookDescription" />
+		<result column="BOOK_IMAGE" property="bookImage" />
+		<result column="BOOK_FIELD" property="bookField" />
+	</resultMap>
+	
+	
+	
+	<!-- 활동회원 -->
+	
+	<!-- 회원ID체크 -->
+	<select id="selectMemberById" parameterType="String" resultType="MemberDTO">
+		SELECT MEMBER_NO, MEMBER_ID, MEMBER_PW, MEMBER_NAME, MEMBER_PHONE, MEMBER_EMAIL, MEMBER_POSTCODE, MEMBER_ROAD_ADDRESS, MEMBER_DETAIL_ADDRESS, MEMBER_AGREE_STATE, MEMBER_SIGN_UP, MEMBER_SNS_TYPE, MEMBER_PW_MODIFIED, MEMBER_INFO_MODIFIED, MEMBER_SESSION_ID, MEMBER_SESSION_LIMIT
+		  FROM MEMBER
+		 WHERE MEMBER_ID = #{id}
+	</select>
+	
+	<!-- 회원 EMAIL체크 -->
+	<select id="selectMemberByEmail" parameterType="String" resultType="MemberDTO">
+		SELECT MEMBER_NO, MEMBER_ID, MEMBER_PW, MEMBER_NAME, MEMBER_PHONE, MEMBER_EMAIL, MEMBER_POSTCODE, MEMBER_ROAD_ADDRESS, MEMBER_DETAIL_ADDRESS, MEMBER_AGREE_STATE, MEMBER_SIGN_UP, MEMBER_SNS_TYPE, MEMBER_PW_MODIFIED, MEMBER_INFO_MODIFIED, MEMBER_SESSION_ID, MEMBER_SESSION_LIMIT
+		  FROM MEMBER
+		 WHERE MEMBER_EMAIL = #{email}
+	</select>
+	
+	
+	
+	<!-- 전체 회원 수 -->
+	<select id="selectMemberCount" resultType="Integer">
+		SELECT COUNT(MEMBER_NO)
+		  FROM MEMBER
+	</select>
+	
+	<!-- 회원 목록 -->
+	<select id="selectMemberList" parameterType="Map" resultType="MemberDTO">
+	  SELECT A.MEMBER_NO, A.MEMBER_ID, A.MEMBER_PW, A.MEMBER_NAME, A.MEMBER_PHONE, A.MEMBER_EMAIL, A.MEMBER_POSTCODE, A.MEMBER_ROAD_ADDRESS, A.MEMBER_DETAIL_ADDRESS, A.MEMBER_AGREE_STATE, A.MEMBER_SIGN_UP, A.MEMBER_SNS_TYPE, A.MEMBER_PW_MODIFIED, A.MEMBER_INFO_MODIFIED, A.MEMBER_SESSION_ID, A.MEMBER_SESSION_LIMIT
+		FROM (SELECT MEMBER_NO, MEMBER_ID, MEMBER_PW, MEMBER_NAME, MEMBER_PHONE, MEMBER_EMAIL, MEMBER_POSTCODE, MEMBER_ROAD_ADDRESS, MEMBER_DETAIL_ADDRESS, MEMBER_AGREE_STATE, MEMBER_SIGN_UP, MEMBER_SNS_TYPE, MEMBER_PW_MODIFIED, MEMBER_INFO_MODIFIED, MEMBER_SESSION_ID, MEMBER_SESSION_LIMIT
+		        FROM MEMBER
+		       ORDER BY MEMBER_NO DESC) A
+	   LIMIT #{beginRecord}, #{recordPerPage}
+	</select>
+	
+	<!-- 회원 상세 보기 -->
+	<select id="selectMemberByNo" parameterType="Long" resultType="MemberDTO">
+		SELECT MEMBER_NO, MEMBER_ID, MEMBER_PW, MEMBER_NAME, MEMBER_PHONE, MEMBER_EMAIL, MEMBER_POSTCODE, MEMBER_ROAD_ADDRESS, MEMBER_DETAIL_ADDRESS, MEMBER_AGREE_STATE, MEMBER_SIGN_UP, MEMBER_SNS_TYPE, MEMBER_PW_MODIFIED, MEMBER_INFO_MODIFIED, MEMBER_SESSION_ID, MEMBER_SESSION_LIMIT
+		  FROM MEMBER
+		 WHERE MEMBER_NO = #{memberNo}
+	</select>
+	
+	<!-- 회원 수정 -->
+	<update id="updateMember" parameterType="MemberDTO">
+		UPDATE MEMBER
+		   SET MEMBER_NO = #{memberNo}, MEMBER_ID = #{memberId}, MEMBER_PW = #{memberPw}, MEMBER_NAME = #{memberName}, MEMBER_PHONE = #{memberPhone}, MEMBER_EMAIL = #{memberEmail}, MEMBER_POSTCODE = #{memberPostcode}, MEMBER_ROAD_ADDRESS = #{memberRoadAddress}, MEMBER_DETAIL_ADDRESS = #{memberDetailAddress}, MEMBER_INFO_MODIFIED = SYSDATE()
+		 WHERE MEMBER_NO = #{memberNo}
+	</update>
+	
+	<!-- 회원 추가 -->
+	<insert id="insertMember" parameterType="MemberDTO">
+		INSERT INTO MEMBER
+			(MEMBER_ID, MEMBER_PW, MEMBER_NAME, MEMBER_PHONE, MEMBER_EMAIL, MEMBER_POSTCODE, MEMBER_ROAD_ADDRESS, MEMBER_DETAIL_ADDRESS, MEMBER_AGREE_STATE, MEMBER_SIGN_UP)
+		VALUES
+			(#{memberId}, #{memberPw}, #{memberName}, #{memberPhone}, #{memberEmail}, #{memberPostcode}, #{memberRoadAddress}, #{memberDetailAddress}, 1, SYSDATE())
+	</insert>
+
+	
+	<!-- 회원 삭제 -->
+	<delete id="deleteMember" parameterType="Long">
+		DELETE
+		  FROM MEMBER
+		 WHERE MEMBER_NO = #{memberNo}
+	</delete>
+
+	<!-- 회원 선택 삭제 -->
+	<delete id="deleteCheckMember" parameterType="java.util.List">
+		DELETE
+		  FROM MEMBER
+		<where> 
+			MEMBER_NO IN
+			<foreach collection="list" item="item" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</where> 
+	</delete>
+	
+	<!-- 회원 검색된 레코드 갯수 -->
+	<select id="selectFindMemberCount" parameterType="Map" resultType="Integer">
+		SELECT COUNT(*)
+		  FROM MEMBER
+		<where>
+			<choose>
+		 		<when test="column == 'MEMBER_NAME'">${column} LIKE CONCAT('%', LOWER(IFNULL(#{query}, '')), '%')</when>
+		 		<when test="column == 'MEMBER_PHONE'">${column} LIKE CONCAT('%', LOWER(IFNULL(#{query}, '')), '%')</when>
+		 		<when test="column == 'MEMBER_ROAD_ADDRESS'">${column} LIKE CONCAT('%', LOWER(IFNULL(#{query}, '')), '%')</when>
+		 		<when test="column == 'MEMBER_SIGN_UP'">${column} BETWEEN STR_TO_DATE(#{begin}, '%Y-%m-%d') AND STR_TO_DATE(#{end}, '%Y-%m-%d')</when>
+		 	</choose>
+		</where>
+	</select>
+	
+	<!-- 회원검색 -->
+	<select id="selectFindMemberList" parameterType="Map" resultMap="MemberMap">
+		SELECT A.*
+		  FROM (SELECT MEMBER_ID, MEMBER_NO, MEMBER_PW, MEMBER_NAME, MEMBER_PHONE, MEMBER_EMAIL, MEMBER_POSTCODE, MEMBER_ROAD_ADDRESS, MEMBER_DETAIL_ADDRESS, MEMBER_SIGN_UP, MEMBER_SNS_TYPE 
+		          FROM MEMBER
+				<where>  
+					<choose>
+				 		<when test="column == 'MEMBER_NAME'">${column} LIKE CONCAT('%', LOWER(IFNULL(#{query}, '')), '%')</when>
+				 		<when test="column == 'MEMBER_PHONE'">${column} LIKE CONCAT('%', LOWER(IFNULL(#{query}, '')), '%')</when>
+				 		<when test="column == 'MEMBER_ROAD_ADDRESS'">${column} LIKE CONCAT('%', LOWER(IFNULL(#{query}, '')), '%')</when>
+				 		<when test="column == 'MEMBER_SIGN_UP'">${column} BETWEEN STR_TO_DATE(#{begin}, '%Y-%m-%d') AND STR_TO_DATE(#{end}, '%Y-%m-%d')</when>
+				 	</choose>
+				</where>
+				ORDER BY MEMBER_SIGN_UP
+			   ) A
+         LIMIT #{beginRecord}, #{recordPerPage}
+	</select>	
+	
+	<!-- 회원검색 자동완성 -->
+	<select id="autoCompleteMember" parameterType="Map" resultType="MemberDTO">
+		SELECT DISTINCT ${column}
+		  FROM MEMBER
+		 WHERE ${column} LIKE CONCAT(#{query}, '%')
+	</select>										
+	
+	
+	<!-- 휴면회원 -->
+	
+	<!-- 휴면회원ID체크 -->
+	<select id="selectDormantMemberById" parameterType="String" resultType="DormantMemberDTO">
+		SELECT DORMANT_NO, MEMBER_NO, MEMBER_ID, MEMBER_PW, MEMBER_NAME, MEMBER_PHONE, MEMBER_EMAIL, MEMBER_POSTCODE, MEMBER_ROAD_ADDRESS, MEMBER_DETAIL_ADDRESS, MEMBER_AGREE_STATE, MEMBER_SIGN_UP, MEMBER_SNS_TYPE, MEMBER_PW_MODIFIED, MEMBER_INFO_MODIFIED, DORMANT_DATE
+		  FROM DORMANT_MEMBER
+		 WHERE MEMBER_ID = #{id}
+	</select>
+	
+	<!-- 휴면회원 EMAIL체크 -->
+	<select id="selectDormantMemberByEmail" parameterType="String" resultType="DormantMemberDTO">
+		SELECT DORMANT_NO, MEMBER_NO, MEMBER_ID, MEMBER_PW, MEMBER_NAME, MEMBER_PHONE, MEMBER_EMAIL, MEMBER_POSTCODE, MEMBER_ROAD_ADDRESS, MEMBER_DETAIL_ADDRESS, MEMBER_AGREE_STATE, MEMBER_SIGN_UP, MEMBER_SNS_TYPE, MEMBER_PW_MODIFIED, MEMBER_INFO_MODIFIED, DORMANT_DATE
+		  FROM DORMANT_MEMBER
+		 WHERE MEMBER_EMAIL = #{email}
+	</select>
+	
+	
+	
+	<!-- 전체 휴면회원 수 -->
+	<select id="selectDormantMemberCount" resultType="Integer">
+		SELECT COUNT(MEMBER_NO)
+		  FROM DORMANT_MEMBER
+	</select>
+	
+	<!-- 휴면회원 목록 -->
+	<select id="selectDormantMemberList" parameterType="Map" resultType="DormantMemberDTO">
+	  SELECT A.DORMANT_NO, A.MEMBER_NO, A.MEMBER_ID, A.MEMBER_PW, A.MEMBER_NAME, A.MEMBER_PHONE, A.MEMBER_EMAIL, A.MEMBER_POSTCODE, A.MEMBER_ROAD_ADDRESS, A.MEMBER_DETAIL_ADDRESS, A.MEMBER_AGREE_STATE, A.MEMBER_SIGN_UP, A.MEMBER_SNS_TYPE, A.MEMBER_PW_MODIFIED, A.MEMBER_INFO_MODIFIED, A.DORMANT_DATE
+		FROM (SELECT DORMANT_NO, MEMBER_NO, MEMBER_ID, MEMBER_PW, MEMBER_NAME, MEMBER_PHONE, MEMBER_EMAIL, MEMBER_POSTCODE, MEMBER_ROAD_ADDRESS, MEMBER_DETAIL_ADDRESS, MEMBER_AGREE_STATE, MEMBER_SIGN_UP, MEMBER_SNS_TYPE, MEMBER_PW_MODIFIED, MEMBER_INFO_MODIFIED, DORMANT_DATE
+		        FROM DORMANT_MEMBER
+		       ORDER BY MEMBER_NO DESC) A
+	   LIMIT #{beginRecord}, #{recordPerPage}
+	</select>
+	
+	<!-- 휴면회원 상세 보기 -->
+	<select id="selectDormantMemberByNo" parameterType="Long" resultType="DormantMemberDTO">
+		SELECT DORMANT_NO, MEMBER_NO, MEMBER_ID, MEMBER_PW, MEMBER_NAME, MEMBER_PHONE, MEMBER_EMAIL, MEMBER_POSTCODE, MEMBER_ROAD_ADDRESS, MEMBER_DETAIL_ADDRESS, MEMBER_AGREE_STATE, MEMBER_SIGN_UP, MEMBER_SNS_TYPE, MEMBER_PW_MODIFIED, MEMBER_INFO_MODIFIED, DORMANT_DATE
+		  FROM DORMANT_MEMBER
+		 WHERE MEMBER_NO = #{memberNo}
+	</select>
+	
+	
+	<!-- 휴면회원 등록 -->
+	<insert id="insertDormantMember" parameterType="DormantMemberDTO">
+		INSERT INTO DORMANT_MEMBER
+			(MEMBER_NO, MEMBER_ID, MEMBER_PW, MEMBER_NAME, MEMBER_PHONE, MEMBER_EMAIL, MEMBER_POSTCODE, MEMBER_ROAD_ADDRESS, MEMBER_DETAIL_ADDRESS, MEMBER_AGREE_STATE, MEMBER_SIGN_UP, MEMBER_SNS_TYPE, MEMBER_PW_MODIFIED, MEMBER_INFO_MODIFIED)
+		VALUES
+			(#{memberNo}, #{memberId}, #{memberPw}, #{memberName}, #{memberPhone}, #{memberEmail}, #{memberPostcode}, #{memberRoadAddress}, #{memberDetailAddress}, #{memberAgreeState}, #{memberSignUp}, #{memberSnsType}, #{memberPwModified, jdbcType = DATE}, #{memberInfoModified, jdbcType = DATE})
+	</insert>
+	
+	
+	<!-- 휴면 -> 활동회원 전환  -->
+	<insert id="insertDormantToMember" parameterType="MemberDTO">
+		INSERT INTO MEMBER
+			(MEMBER_NO, MEMBER_ID, MEMBER_PW, MEMBER_NAME, MEMBER_PHONE, MEMBER_EMAIL, MEMBER_POSTCODE, MEMBER_ROAD_ADDRESS, MEMBER_DETAIL_ADDRESS, MEMBER_AGREE_STATE, MEMBER_SIGN_UP, MEMBER_SNS_TYPE, MEMBER_PW_MODIFIED, MEMBER_INFO_MODIFIED)
+		VALUES
+			(#{memberNo}, #{memberId}, #{memberPw}, #{memberName}, #{memberPhone}, #{memberEmail}, #{memberPostcode}, #{memberRoadAddress}, #{memberDetailAddress}, #{memberAgreeState}, #{memberSignUp}, #{memberSnsType}, #{memberPwModified, jdbcType = DATE}, #{memberInfoModified, jdbcType = DATE})
+	</insert>
+	
+	<!-- 휴면회원 삭제 -->
+	<delete id="deleteDormantMember" parameterType="Long">
+		DELETE
+		  FROM DORMANT_MEMBER
+		 WHERE MEMBER_NO = #{memberNo}
+	</delete>
+
+	<!-- 휴면회원 선택 삭제 -->
+	<delete id="deleteCheckDormantMember" parameterType="java.util.List">
+		DELETE
+		  FROM DORMANT_MEMBER
+		<where> 
+			MEMBER_NO IN
+			<foreach collection="list" item="item" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</where> 
+	</delete>
+	
+	<!-- 휴면회원 검색된 레코드 갯수 -->
+	<select id="selectFindDormantMemberCount" parameterType="Map" resultType="Integer">
+		SELECT COUNT(*)
+		  FROM DORMANT_MEMBER
+		<where>
+			<choose>
+		 		<when test="column == 'MEMBER_NAME'">${column} LIKE CONCAT('%', LOWER(IFNULL(#{query}, '')), '%')</when>
+		 		<when test="column == 'MEMBER_PHONE'">${column} LIKE CONCAT('%', LOWER(IFNULL(#{query}, '')), '%')</when>
+		 		<when test="column == 'MEMBER_ROAD_ADDRESS'">${column} LIKE CONCAT('%', LOWER(IFNULL(#{query}, '')), '%')</when>
+		 		<when test="column == 'MEMBER_SIGN_UP'">${column} BETWEEN STR_TO_DATE(#{begin}, '%Y-%m-%d') AND STR_TO_DATE(#{end}, '%Y-%m-%d')</when>
+		 	</choose>
+		</where>
+	</select>
+	
+	<!-- 휴면회원검색 -->
+	<select id="selectFindDormantMemberList" parameterType="Map" resultMap="MemberMap">
+		SELECT A.*
+		  FROM (SELECT DORMANT_NO, MEMBER_ID, MEMBER_NO, MEMBER_PW, MEMBER_NAME, MEMBER_PHONE, MEMBER_EMAIL, MEMBER_POSTCODE, MEMBER_ROAD_ADDRESS, MEMBER_DETAIL_ADDRESS, MEMBER_SIGN_UP, MEMBER_SNS_TYPE 
+		          FROM DORMANT_MEMBER
+				<where>  
+					<choose>
+				 		<when test="column == 'MEMBER_NAME'">${column} LIKE CONCAT('%', LOWER(IFNULL(#{query}, '')), '%')</when>
+				 		<when test="column == 'MEMBER_PHONE'">${column} LIKE CONCAT('%', LOWER(IFNULL(#{query}, '')), '%')</when>
+				 		<when test="column == 'MEMBER_ROAD_ADDRESS'">${column} LIKE CONCAT('%', LOWER(IFNULL(#{query}, '')), '%')</when>
+				 		<when test="column == 'MEMBER_SIGN_UP'">${column} BETWEEN STR_TO_DATE(#{begin}, '%Y-%m-%d') AND STR_TO_DATE(#{end}, '%Y-%m-%d')</when>
+				 	</choose>
+				</where>
+				ORDER BY MEMBER_SIGN_UP) A
+         LIMIT #{beginRecord}, #{recordPerPage}
+	</select>	
+	
+	<!-- 휴면 회원 검색 자동완성 -->
+	<select id="autoCompleteDormantMember" parameterType="Map" resultType="DormantMemberDTO">
+		SELECT DISTINCT ${column}
+		  FROM DORMANT_MEMBER
+		 WHERE ${column} LIKE CONCAT(#{query}, '%')
+	</select>				
+	
+	
+	
+	<!-- 전체 탈퇴 회원 수 -->
+	<select id="selectSignOutMemberCount" resultType="Integer">
+		SELECT COUNT(MEMBER_NO)
+		  FROM SIGN_OUT_MEMBER
+	</select>
+	
+	<!-- 탈퇴 회원 목록 -->
+	<select id="selectSignOutMemberList" parameterType="Map" resultType="SignOutMemberDTO">
+	  SELECT A.MEMBER_NO, A.MEMBER_ID, A.MEMBER_NAME, A.MEMBER_PHONE, A.MEMBER_EMAIL, A.MEMBER_POSTCODE, A.MEMBER_ROAD_ADDRESS, A.MEMBER_DETAIL_ADDRESS, A.MEMBER_AGREE_STATE, A.MEMBER_SIGN_UP, A.SIGN_OUT 
+		FROM (SELECT MEMBER_NO, MEMBER_ID, MEMBER_NAME, MEMBER_PHONE, MEMBER_EMAIL, MEMBER_POSTCODE, MEMBER_ROAD_ADDRESS, MEMBER_DETAIL_ADDRESS, MEMBER_AGREE_STATE, MEMBER_SIGN_UP, SIGN_OUT 
+		        FROM SIGN_OUT_MEMBER
+		       ORDER BY MEMBER_NO DESC) A
+	   LIMIT #{beginRecord}, #{recordPerPage}
+	</select>
+	
+	<!-- 탈퇴 회원 상세 보기 -->
+	<select id="selectSignOutMemberByNo" parameterType="Long" resultType="SignOutMemberDTO">
+		SELECT MEMBER_NO, MEMBER_ID, MEMBER_NAME, MEMBER_PHONE, MEMBER_EMAIL, MEMBER_POSTCODE, MEMBER_ROAD_ADDRESS, MEMBER_DETAIL_ADDRESS, MEMBER_AGREE_STATE, MEMBER_SIGN_UP, SIGN_OUT
+		  FROM SIGN_OUT_MEMBER
+		 WHERE MEMBER_NO = #{memberNo}
+	</select>
+	
+	
+	<!-- 탈퇴 회원 추가 -->
+	<insert id="insertSignOutMember" parameterType="SignOutMemberDTO">
+		INSERT INTO SIGN_OUT_MEMBER
+			(MEMBER_NO, MEMBER_ID, MEMBER_NAME, MEMBER_PHONE, MEMBER_EMAIL, MEMBER_POSTCODE, MEMBER_ROAD_ADDRESS, MEMBER_DETAIL_ADDRESS, MEMBER_AGREE_STATE, MEMBER_SIGN_UP)
+		VALUES
+			(#{memberNo}, #{memberId}, #{memberName}, #{memberPhone}, #{memberEmail}, #{memberPostcode, jdbcType = VARCHAR}, #{memberRoadAddress, jdbcType = VARCHAR}, #{memberDetailAddress, jdbcType = VARCHAR}, #{memberAgreeState, jdbcType = BIGINT}, #{memberSignUp})
+	</insert>
+	
+	<!-- 탈퇴 회원 삭제 -->
+	<delete id="deleteSignOutMember" parameterType="Long">
+		DELETE
+		  FROM SIGN_OUT_MEMBER
+		 WHERE MEMBER_NO = #{memberNo}
+	</delete>
+
+	<!-- 탈퇴 회원 선택 삭제 -->
+	<delete id="deleteCheckSignOutMember" parameterType="java.util.List">
+		DELETE
+		  FROM SIGN_OUT_MEMBER
+		<where> 
+			MEMBER_NO IN
+			<foreach collection="list" item="item" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</where> 
+	</delete>
+	
+	<!-- 탈퇴 회원 검색된 레코드 갯수 -->
+	<select id="selectFindSignOutMemberCount" parameterType="Map" resultType="Integer">
+		SELECT COUNT(*)
+		  FROM SIGN_OUT_MEMBER
+		<where>
+			<choose>
+		 		<when test="column == 'MEMBER_NAME'">${column} LIKE CONCAT('%', LOWER(IFNULL(#{query}, '')), '%')</when>
+		 		<when test="column == 'MEMBER_PHONE'">${column} LIKE CONCAT('%', LOWER(IFNULL(#{query}, '')), '%')</when>
+		 		<when test="column == 'MEMBER_ROAD_ADDRESS'">${column} LIKE CONCAT('%', LOWER(IFNULL(#{query}, '')), '%')</when>
+		 		<when test="column == 'MEMBER_SIGN_UP'">${column} BETWEEN STR_TO_DATE(#{begin}, '%Y-%m-%d') AND STR_TO_DATE(#{end}, '%Y-%m-%d')</when>
+		 	</choose>
+		</where>
+	</select>
+	
+	<!-- 탈퇴 회원검색 -->
+	<select id="selectFindSignOutMemberList" parameterType="Map" resultMap="MemberMap">
+		SELECT A.*
+		  FROM (SELECT MEMBER_ID, MEMBER_NO, MEMBER_NAME, MEMBER_PHONE, MEMBER_EMAIL, MEMBER_POSTCODE, MEMBER_ROAD_ADDRESS, MEMBER_DETAIL_ADDRESS, MEMBER_SIGN_UP, SIGN_OUT 
+		          FROM SIGN_OUT_MEMBER
+				<where>  
+					<choose>
+				 		<when test="column == 'MEMBER_NAME'">${column} LIKE CONCAT('%', LOWER(IFNULL(#{query}, '')), '%')</when>
+				 		<when test="column == 'MEMBER_PHONE'">${column} LIKE CONCAT('%', LOWER(IFNULL(#{query}, '')), '%')</when>
+				 		<when test="column == 'MEMBER_ROAD_ADDRESS'">${column} LIKE CONCAT('%', LOWER(IFNULL(#{query}, '')), '%')</when>
+				 		<when test="column == 'MEMBER_SIGN_UP'">${column} BETWEEN STR_TO_DATE(#{begin}, '%Y-%m-%d') AND STR_TO_DATE(#{end}, '%Y-%m-%d')</when>
+				 	</choose>
+				</where>
+				ORDER BY MEMBER_SIGN_UP) A
+         LIMIT #{beginRecord}, #{recordPerPage}
+	</select>	
+	
+	<!-- 탈퇴 회원 검색 자동완성 -->
+	<select id="autoCompleteSignOutMember" parameterType="Map" resultType="SignOutMemberDTO">
+		SELECT DISTINCT ${column}
+		  FROM SIGN_OUT_MEMBER
+		 WHERE ${column} LIKE CONCAT(#{query}, '%')
+	</select>										
+	
+	
+	<!-- 책 -->
+
+	<!-- 전체 책 수 -->
+	<select id="selectBookCount" resultType="Integer">
+		SELECT COUNT(BOOK_NO)
+		  FROM BOOK
+	</select>
+	
+	<!-- 책 목록 -->
+	<select id="selectBookList" parameterType="Map" resultType="BookDTO">
+	  SELECT A.BOOK_NO, A.BOOK_ISBN, A.BOOK_TITLE, A.BOOK_AUTHOR, A.BOOK_PUBLISHER, A.BOOK_PUBDATETIME, A.BOOK_DESCRIPTION, A.BOOK_IMAGE, A.BOOK_TYPE
+		FROM (SELECT BOOK_NO, BOOK_ISBN, BOOK_TITLE, BOOK_AUTHOR, BOOK_PUBLISHER, BOOK_PUBDATETIME, BOOK_DESCRIPTION, BOOK_IMAGE, BOOK_TYPE
+		        FROM BOOK
+		       ORDER BY BOOK_NO DESC) A
+	   LIMIT #{beginRecord}, #{recordPerPage}
+	</select>
+	
+	<!-- 책 상세 보기 -->
+	<select id="selectBookByNo" parameterType="Long" resultType="BookDTO">
+		SELECT BOOK_NO, BOOK_ISBN, BOOK_TITLE, BOOK_AUTHOR, BOOK_PUBLISHER, BOOK_PUBDATETIME, BOOK_DESCRIPTION, BOOK_IMAGE, BOOK_TYPE
+		  FROM BOOK
+		 WHERE BOOK_NO = #{bookNo}
+	</select>
+	
+	<!-- 책 수정 -->
+	<update id="updateBook" parameterType="BookDTO">
+		UPDATE BOOK
+		   SET BOOK_ISBN = #{bookIsbn}, BOOK_TITLE = #{bookTitle}, BOOK_AUTHOR = #{bookAuthor}, BOOK_PUBLISHER = #{bookPublisher}, BOOK_PUBDATETIME = #{bookPubdateTime}, BOOK_DESCRIPTION = #{bookDescription}, BOOK_IMAGE = #{bookImage}, BOOK_TYPE = #{bookType}
+		 WHERE BOOK_NO = #{bookNo}
+	</update>
+	
+	<!-- 책 추가 -->
+	<insert id="insertBook" parameterType="BookDTO">
+		INSERT INTO BOOK
+			(BOOK_ISBN, BOOK_TITLE, BOOK_AUTHOR, BOOK_PUBLISHER, BOOK_PUBDATETIME, BOOK_DESCRIPTION, BOOK_IMAGE, BOOK_TYPE)
+		VALUES
+			(#{bookIsbn}, #{bookTitle}, #{bookAuthor}, #{bookPublisher}, #{bookPubdateTime}, #{bookDescription}, #{bookImage}, #{bookType})
+	</insert>
+	
+	
+	<!-- 책 삭제 -->
+	<delete id="deleteBook" parameterType="Long">
+		DELETE
+		  FROM BOOK
+		 WHERE BOOK_NO = #{bookNo}
+	</delete>
+
+	<!-- 책 선택 삭제 -->
+	<delete id="deleteCheckBook" parameterType="java.util.List">
+		DELETE
+		  FROM BOOK
+		<where> 
+			BOOK_NO IN
+			<foreach collection="list" item="item" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</where> 
+	</delete>
+	
+	<!-- 책 검색된 레코드 갯수 -->
+	<select id="selectFindBookCount" parameterType="Map" resultType="Integer">
+		SELECT COUNT(*)
+		  FROM BOOK
+		<where>
+			<choose>
+		 		<when test="column == 'BOOK_ISBN'">${column} LIKE CONCAT('%', LOWER(IFNULL(#{query}, '')), '%')</when>
+		 		<when test="column == 'BOOK_TITLE'">${column} LIKE CONCAT('%', LOWER(IFNULL(#{query}, '')), '%')</when>
+		 		<when test="column == 'BOOK_AUTHOR'">${column} LIKE CONCAT('%', LOWER(IFNULL(#{query}, '')), '%')</when>
+		 		<when test="column == 'BOOK_PUBLISHER'">${column} LIKE CONCAT('%', LOWER(IFNULL(#{query}, '')), '%')</when>
+		 	</choose>
+		</where>
+	</select>
+	
+	<!-- 책검색 -->
+	<select id="selectFindBookList" parameterType="Map" resultMap="BookMap">
+		SELECT A.*
+		  FROM (SELECT BOOK_NO, BOOK_ISBN, BOOK_TITLE, BOOK_AUTHOR, BOOK_PUBLISHER, BOOK_PUBDATETIME, BOOK_DESCRIPTION, BOOK_IMAGE, BOOK_TYPE
+		          FROM BOOK
+				<where>  
+					<choose>
+				 		<when test="column == 'BOOK_ISBN'">${column} LIKE CONCAT('%', LOWER(IFNULL(#{query}, '')), '%')</when>
+				 		<when test="column == 'BOOK_TITLE'">${column} LIKE CONCAT('%', LOWER(IFNULL(#{query}, '')), '%')</when>
+		 				<when test="column == 'BOOK_AUTHOR'">${column} LIKE CONCAT('%', LOWER(IFNULL(#{query}, '')), '%')</when>
+				 		<when test="column == 'BOOK_PUBLISHER'">${column} LIKE CONCAT('%', LOWER(IFNULL(#{query}, '')), '%')</when>
+				 	</choose>
+				</where>
+			    ORDER BY BOOK_PUBDATETIME) A
+         LIMIT #{beginRecord}, #{recordPerPage}
+	</select>	
+	
+	<!-- 책검색 자동완성 -->
+	<select id="autoCompleteBook" parameterType="Map" resultType="BookDTO">
+		SELECT DISTINCT ${column}
+		  FROM BOOK
+		 WHERE ${column} LIKE CONCAT(#{query}, '%')
+	</select>			
+	
+	<!-- FNQ 추가 -->
+	<insert id="insertFnq" parameterType="FnqDTO">
+		INSERT INTO FNQ
+			(FNQ_TITLE, FNQ_CONTENT)
+		VALUES
+			(#{fnqTitle}, #{fnqContent})
+	</insert>
+	
+												
+</mapper>

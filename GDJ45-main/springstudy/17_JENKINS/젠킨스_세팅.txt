@@ -1,0 +1,305 @@
+빌드와 배포
+1. 빌드 : war를 만드는 것
+2. 배포 : war를 톰캣에 두는 것
+
+* 최근엔 war 대신 jar를 배포
+
+-------------------------
+수동 작업
+
+1. 빌드
+   프로젝트 우클릭 - Export - 17_JENKINS.war (Export source files 체크 필수)
+2. 배포
+   1) 톰캣 아래 conf 디렉터리 아래 server.xml을 열고, 포트번호를 수정한다.
+      메모장으로 열고, Ctrl + F 눌러서 8080 검색함.
+      <Connector port="9090" protocol="HTTP/1.1"
+               connectionTimeout="20000"
+               redirectPort="8443" />
+   2) 톰캣 아래 webapps 디렉터리에 war를 가져다 둔다.
+   3) 톰캣 아래 bin 디렉터리에서 톰캣을 구동한다.
+      (1) Windows : startup.bat 파일 (더블 클릭)
+      (2) Linux   : startup.sh  파일
+3. 확인
+   http://localhost:9090/17_JENKINS
+4. 재배포
+   1) 빌드가 잘못된 경우
+      (1) 17_JENKINS.war 파일과 17_JENKINS 디렉터리를 모두 지운다.
+      (2) 톰캣 아래 bin 디렉터리에서 톰캣을 끈다.
+          ① Windows : shutdown.bat 파일 (더블 클릭)
+          ② Linux   : shutdown.sh  파일
+      (3) 톰캣 아래 bin 디렉터리에서 톰캣을 구동한다.
+          ① Windows : startup.bat 파일 (더블 클릭)
+          ② Linux   : startup.sh  파일
+-------------------------
+자동 빌드 및 배포
+준비물
+ 1. Tomcat
+ 2. Git
+ 3. Maven
+    다운로드 링크 : maven.apache.org/download.cgi => Previous Release => archives 링크
+    잘 찾아왔다면 https://archive.apache.org/dist/maven/maven-3/ 여기로 연결됨.
+    3.8.1 => binaries => apache-maven-3.8.1-bin.zip 다운로드(Windows 버전)
+    3.8.1 => binaries => apache-maven-3.8.1-bin.tar.gz 다운로드(Linux 버전)  
+ 4. jenkins.war
+    다운로드 링크 : jenkins.io/download => LTS / Generic Java Package(.war)
+    LTS란 Long Term Service의 약자로 오랫동안 지원할 안정된 버전을 의미함.
+-------------------------
+Java 설치 및 세팅
+ 1. 설치 경로 : C:\Program Files\Java\jdk-11.0.13
+ 2. 환경 변수
+    1) 이름 : JAVA_HOME
+    2) 값 :   C:\Program Files\Java\jdk-11.0.13
+ 3. 패스추가
+    %JAVA_HOME%\bin
+-------------------------
+Tomcat 설치 및 세팅
+ 1. C:\Program Files\apache-tomcat-9.0.62 경로에 압축 풀기
+    이 경로에 들어가면 bin, conf, lib 등 디렉터리가 바로 보여야 함.
+ 2. 환경변수
+    1) 이름 : CATALINA_HOME
+    2) 값 :   C:\Program Files\apache-tomcat-9.0.62
+ 3. 패스추가
+    %CATALINA_HOME%\bin
+ 4. 톰캣 아래 conf 디렉터리 아래 server.xml을 열고, 포트번호를 수정한다.
+    메모장으로 열고, Ctrl + F 눌러서 8080 검색함.
+    <Connector port="9090" protocol="HTTP/1.1"
+               connectionTimeout="20000"
+               redirectPort="8443" />
+ 5. 톰캣 아래 conf 디렉터리 아래 tomcat-users.xml을 열고, tomcat-manager를 추가한다.
+    이름이 tomcat-manager이고, 비밀번호는 1111로 저장해 두었다. 기억할 것.
+    <role rolename="manager-gui" />
+    <role rolename="manager-script" />
+    <role rolename="manager-jmx" />
+    <role rolename="manager-status" />
+    <user username="tomcat-manager" password="1111" roles="manager-gui,manager-script,manager-jmx,manager-status" />
+ 6. 톰캣 아래 lib 디렉터리 아래 ojdbc6.jar를 가져다 둔다.
+-------------------------
+MAVEN 설치 및 세팅
+ 1. C:\Program Files\apache-maven-3.8.1 경로에 압축 풀기
+    이 경로에 들어가면 bin, boot, conf, lib 디렉터리가 바로 보여야 함.
+ 2. 환경변수
+    1) 이름 : MAVEN_HOME
+    2) 값 :   C:\Program Files\apache-maven-3.8.1
+ 3. 패스추가
+    %MAVEN_HOME%\bin
+-------------------------
+프로젝트 세팅
+pom.xml
+<modelVersion>4.0.0</modelVersion>
+<groupId>com.goodee</groupId>
+<artifactId>ex17</artifactId>   ** 자동으로 빌드되는 war 파일의 이름
+<name>17_JENKINS</name>
+<packaging>war</packaging>
+<version>1.0.0</version>   ** war 파일 이름 뒤에 붙는 버전
+	
+<properties>
+	<java-version>11</java-version>
+	<org.springframework-version>5.3.3</org.springframework-version>
+	<org.aspectj-version>1.9.6</org.aspectj-version>
+	<org.slf4j-version>1.7.30</org.slf4j-version>
+	<maven-version>3.8.1</maven-version>    ** maven 버전 추가
+	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>          ** 빌드할 때 필요한 인코딩
+	<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>  ** 빌드할 때 필요한 인코딩
+</properties>
+
+<build>
+	<finalName>${artifactId}</finalName>  ** war 파일명에서 버전 빼려고 추가
+	<plugins>
+		<plugin>
+			<groupId>org.apache.maven.plugins</groupId>
+			<artifactId>maven-compiler-plugin</artifactId>
+			<version>${maven-version}</version>   ** maven 버전으로 수정
+			<configuration>
+				<source>${java-version}</source>
+				<target>${java-version}</target>
+				<compilerArgument>-Xlint:all</compilerArgument>
+				<showWarnings>true</showWarnings>
+				<showDeprecation>true</showDeprecation>
+			</configuration>
+		</plugin>
+	</plugins>
+</build>
+-------------------------
+github에 프로젝트 올리기
+
+* github 세팅
+
+ 1. new Repository => 17_JENKINS
+ 2. personal access token 준비
+    1) [계정 아이콘] - [Settings] - [Developer settings] - [Personal access token]
+    2) generate new token
+        (1) Expiration    => No expiration(유효기간 제한 없음)
+        (2) Select scopes => repo(필수)
+                             admin:repo_hook(github에 push를 하면 자동 빌드를 원하는 경우에 선택)
+
+* git 로컬 세팅
+ 1. C:\17_JENKINS 경로에 프로젝트 배치
+ 2. C:\17_JENKINS 폴더에서 우클릭 - [Git Bash Here]
+
+ GDJ45@DESKTOP-5O7J493 MINGW64 /c/17_JENKINS
+ $ git init  ## 로컬저장소로 만들기
+ Initialized empty Git repository in C:/17_JENKINS/.git/
+
+ GDJ45@DESKTOP-5O7J493 MINGW64 /c/17_JENKINS (main)
+ $ git config user.name  ## 사용자 확인
+ goodeeit
+
+ GDJ45@DESKTOP-5O7J493 MINGW64 /c/17_JENKINS (main)
+ $ git config user.email  ## 사용자 이메일 확인
+ gt_min@naver.com
+
+ GDJ45@DESKTOP-5O7J493 MINGW64 /c/17_JENKINS (main)
+ $ git config --global user.name '이름'  ## 사용자 등록이 안 되어 있으면 할 것.
+
+ GDJ45@DESKTOP-5O7J493 MINGW64 /c/17_JENKINS (main)
+ $ git config --global user.email '이메일'  ## 이메일 등록이 안 되어 있으면 할 것.
+
+ GDJ45@DESKTOP-5O7J493 MINGW64 /c/17_JENKINS (main)
+ $ git add .  ## 추적 시작(스태이징, 임시 저장의 개념)
+
+ GDJ45@DESKTOP-5O7J493 MINGW64 /c/17_JENKINS (main)
+ $ git commit -m '커밋메시지'  ## 커밋(저장 완료)
+
+ GDJ45@DESKTOP-5O7J493 MINGW64 /c/17_JENKINS (main)
+ $ git remote add origin https://github.com/goodeeit/17_JENKINS.git  ## 원격저장소 등록
+
+ GDJ45@DESKTOP-5O7J493 MINGW64 /c/17_JENKINS (main)
+ $ git pull origin main --allow-unrelated-histories  ## 내려 받기
+
+ vim editor에 진입하면 :wq 누르고 빠져 나오기
+
+ GDJ45@DESKTOP-5O7J493 MINGW64 /c/17_JENKINS (main)
+ $ git push origin main  ## 올리기
+-------------------------
+jenkins 설치
+ 1. 톰캣 아래 webapps 디렉터리에 jenkins.war를 가져다 둔다.
+    C:\Program Files\apache-tomcat-9.0.62\webapps\jenkins.war
+ 2. 톰캣 아래 bin 디렉터리에서 톰캣을 구동한다.
+    (1) Windows : startup.bat 파일 (더블 클릭)
+    (2) Linux   : startup.sh  파일
+ 3. http://localhost:9090/jenkins 접속하면 젠킨스가 실행된다.
+ 4. 초기 젠킨스 관리자 계정
+    (1) 이름 : admin
+    (2) 비밀번호 : C:\Users\GDJ45\.jenkins\secrets\initialAdminPassword 열어서 확인
+ 5. 플러그 인 설치
+    Install suggested plugins 선택
+ 6. 젠킨스 관리자 계정 등록
+    아이디 / 비밀번호 / 이름 / 이메일 등 입력하고 등록하고 앞으로 사용하면 됨.
+    건너뛰고, 초기 젠킨스 관리자 계정을 써도 됨.
+ 7. Jenkins URL
+    http://localhost:9090/jenkins 입력
+-------------------------
+jenkins 세팅
+
+ - [좌측] - [Jenkins 관리]
+
+ 1. System Configuration - 시스템 설정
+    Jenkins URL을 
+    http://localhost:9090/jenkins/ 에서
+    http://127.0.0.1:9090/jenkins/ 로 수정하기 (젠킨스에서는 localhost 사용이 안 됨.)
+
+ 2. System Configuration - Global Tool Configuration
+    1) Maven Configuration
+        (1) Default settings provider
+            => Settings file in filesystem
+            => File path
+            => C:\Program Files\apache-maven-3.8.1\conf\settings.xml
+        (2) Default global settings provider
+            => Global settings file on filesystem
+            => File path
+            => C:\Program Files\apache-maven-3.8.1\conf\settings.xml
+    2) Git
+        (1) Name
+            => MyGit (아무거나 정하면 됨)
+        (2) Path to Git executable
+            => C:\Program Files\Git\bin\git.exe
+    3) Maven
+        (1) Add Maven
+            * Name
+              => Maven3.8.1 (아무거나 정하면 되지만 버전으로 정했음)
+            * Install automatically 선택 해제
+              => MAVEN_HOME
+              => C:\Program Files\apache-maven-3.8.1
+
+ 3. System Configuration - 플러그인 관리
+    [설치 가능] 탭으로 이동해서 "Deploy to container" 검색 후 설치 (향후 시스템 재시작이 필요함)
+    재시작 없이 Install without restart 선택 가능
+    * Deploy to container
+      Jenkins가 war를 만드는데 이걸 Tomcat에 두지는 않는다.
+      Deploy to container 플러그인을 설치하면 Jenkins가 war를 만들어서 Tomcat에 두는 것까지 한다.
+
+ 4. Security - Manage Credentials
+
+    1) Domains 아래 (global) 선택하면 목록(▼) 나오면 그거 클릭 - [Add Credentials] 선택
+
+        * Tomcat 접속용 사용자 등록하기(톰캣의 conf 폴더 아래 tomcat-users.xml에 적어둔 사용자임.)
+        (1) Username
+            => tomcat-manager (ID에 적는 것이 아님)
+        (2) Password
+            => 1111
+
+        * Github 접속용 사용자 등록하기
+        (1) Username
+            => 자신의 github 아이디 (ID에 적는 것이 아님)
+        (2) Password
+            => 자신의 github Personal access token
+-------------------------
+ jenkins 프로젝트 생성
+
+  - [좌측] - [새로운 Item]
+
+  - Enter an item name => 17_JENKINS (github에 올린 프로젝트명), 종류 Freestyle project
+
+    1) 소스 코드 관리
+        => Git
+        => Repository URL => https://github.com/goodeeit/17_JENKINS.git
+        => Credentials    => github 접속용 Credentials 선택
+        => Branch Specifier (blank for 'any')
+           main   브랜치이면  */main
+           master 브랜치이면  */master
+    2) Build
+        => Invoke top-level Maven targets
+        => Maven Version  => Maven3.8.1
+        => Goals          => clean package 입력
+    3) 빌드 후 조치
+       * Deploy to container 플러그인이 있는 경우에만 할 수 있음. 없으면 넘어가도 됨.
+        => Deploy war/ear to a container
+        => WAR/EAR files  => **/*.war
+        => Context path   => 비워둠.
+        => Containers
+           => Tomcat 9.x Remote
+           => Credentials => tomcat-manager/****** (tomcat 접속용 Credentials)
+           => Tomcat URL  => http://localhost:9090 (https 안 됨)
+-------------------------
+ jenkins 프로젝트 빌드
+
+ 1. Deploy to container 플러그인이 없어서 빌드 후 조치를 못한 경우
+    Build Now 클릭
+    => C:\Users\사용자계정\.jenkins\jobs\17_JENKINS\workspace\target\ex17-1.0.0.war 생김.
+    => 이걸 톰캣으로 직접 옮기면 됨.
+
+ 2. Deploy to container 플러그인 사용
+    Build Now 클릭
+    => C:\Users\사용자계정\.jenkins\jobs\17_JENKINS\workspace\target\ex17-1.0.0.war 생김.
+    => 빌드 후 조치로 인해서 최종적으로 톰캣\webapp\ex17-1.0.0.war 생김.
+
+ 3. 빌드 성공하면
+    http://localhost:9090/ex17-1.0.0  입력 후 동작 확인하면 끝.
+    만약, pom.xml에 다음 태그를 추가해 두었다면, war 이름이 ex17.war 로 버전 없이 생성되므로
+    http://localhost:9090/ex17  입력 후 동작 확인하면 끝.
+    <build>
+        <finalName>${artifactId}</finalName>
+    </build>
+
+ 4. 빌드 실패하면
+    console output 통해서 오류 확인 후 수정하고 다시 빌드해야 함.
+
+ 5. 톰캣에 배포된 ex17-1.0.0.war 이름을 임의로(예를 들어) myapp.war로 변경하면
+    myapp 폴더가 새로 생기게 됨. 그럼 이제부터는 http://localhost:9090/myapp 으로 접속해야 함.
+    즉 war 파일명으로 접속하면 된다는 이야기.
+-------------------------
+반복연습하기
+ 1. Tomcat 지움 : C:\Program Files\apache-tomcat-9.0.62 폴더 삭제
+ 2. Maven  지움 : C:\Program Files\apache-maven-3.8.1 폴더 삭제
+ 3. Tomcat 설치 및 세팅부터 다시 연습하면 됨.
+    많이 연습하세요!

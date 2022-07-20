@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.goodee.gdlibrary.mapper.MemberMapper">
+
+	<!-- 아이디 중복 검사 (일반 회원)-->
+	<select id="selectMemberById" parameterType="String" resultType="MemberDTO">
+		SELECT MEMBER_NO, MEMBER_ID, MEMBER_PW, MEMBER_NAME, MEMBER_PHONE, MEMBER_EMAIL, MEMBER_POSTCODE, MEMBER_ROAD_ADDRESS, MEMBER_DETAIL_ADDRESS, MEMBER_AGREE_STATE, MEMBER_SIGN_UP, MEMBER_SNS_TYPE, MEMBER_PW_MODIFIED, MEMBER_INFO_MODIFIED, MEMBER_SESSION_ID, MEMBER_SESSION_LIMIT
+		  FROM MEMBER
+		 WHERE MEMBER_ID = #{memberId}
+	</select>
+	<!-- 아이디 중복 검사 (휴면 회원)-->
+	<select id="selectDormantMemberById" parameterType="String" resultType="DormantMemberDTO">
+		SELECT DORMANT_NO, MEMBER_NO, MEMBER_ID, MEMBER_PW, MEMBER_NAME, MEMBER_PHONE, MEMBER_EMAIL, MEMBER_POSTCODE, MEMBER_ROAD_ADDRESS, MEMBER_DETAIL_ADDRESS, MEMBER_AGREE_STATE, MEMBER_SIGN_UP, MEMBER_SNS_TYPE, MEMBER_PW_MODIFIED, MEMBER_INFO_MODIFIED, DORMANT_DATE
+		  FROM DORMANT_MEMBER
+		 WHERE MEMBER_ID = #{memberId}
+	</select>
+	
+	<!-- 이메일 중복 검사 (일반 회원)-->
+	<select id="selectMemberByEmail" parameterType="String" resultType="MemberDTO">
+		SELECT MEMBER_NO, MEMBER_ID, MEMBER_PW, MEMBER_NAME, MEMBER_PHONE, MEMBER_EMAIL, MEMBER_POSTCODE, MEMBER_ROAD_ADDRESS, MEMBER_DETAIL_ADDRESS, MEMBER_AGREE_STATE, MEMBER_SIGN_UP, MEMBER_SNS_TYPE, MEMBER_PW_MODIFIED, MEMBER_INFO_MODIFIED, MEMBER_SESSION_ID, MEMBER_SESSION_LIMIT
+		  FROM MEMBER
+		 WHERE MEMBER_EMAIL = #{memberEmail}
+	</select>
+	<!-- 이메일 중복 검사 (휴면 회원)-->
+	<select id="selectDormantMemberByEmail" parameterType="String" resultType="DormantMemberDTO">
+		SELECT DORMANT_NO, MEMBER_NO, MEMBER_ID, MEMBER_PW, MEMBER_NAME, MEMBER_PHONE, MEMBER_EMAIL, MEMBER_POSTCODE, MEMBER_ROAD_ADDRESS, MEMBER_DETAIL_ADDRESS, MEMBER_AGREE_STATE, MEMBER_SIGN_UP, MEMBER_SNS_TYPE, MEMBER_PW_MODIFIED, MEMBER_INFO_MODIFIED, DORMANT_DATE
+		  FROM DORMANT_MEMBER
+		 WHERE MEMBER_EMAIL = #{memberEmail}
+	</select>
+	
+	<!-- 회원가입 -->
+	<insert id="insertMemberSignIn" parameterType="MemberDTO">
+		<selectKey keyProperty="memberNo" order="AFTER" resultType="Long">
+			SELECT MEMBER_NO FROM MEMBER WHERE MEMBER_ID = #{memberId}
+		</selectKey>
+		INSERT INTO MEMBER
+			(MEMBER_ID, MEMBER_PW, MEMBER_NAME, MEMBER_PHONE, MEMBER_EMAIL, MEMBER_POSTCODE, MEMBER_ROAD_ADDRESS, MEMBER_DETAIL_ADDRESS, MEMBER_AGREE_STATE, MEMBER_SIGN_UP)
+		VALUES
+			(#{memberId}, #{memberPw}, #{memberName}, #{memberPhone}, #{memberEmail}, #{memberPostcode}, #{memberRoadAddress}, #{memberDetailAddress}, #{memberAgreeState}, NOW())
+	</insert>
+
+	<!-- 로그인 id/pw 검사 -->
+	<select id="selectMemberByIdPw" parameterType="MemberDTO" resultType="MemberDTO">
+		SELECT MEMBER_NO, MEMBER_ID, MEMBER_PW, MEMBER_NAME, MEMBER_PHONE, MEMBER_EMAIL, MEMBER_POSTCODE, MEMBER_ROAD_ADDRESS, MEMBER_DETAIL_ADDRESS, MEMBER_AGREE_STATE, MEMBER_SIGN_UP, MEMBER_SNS_TYPE, MEMBER_PW_MODIFIED, MEMBER_INFO_MODIFIED, MEMBER_SESSION_ID, MEMBER_SESSION_LIMIT
+		  FROM MEMBER
+		 WHERE MEMBER_ID = #{memberId}
+		   AND MEMBER_PW = #{memberPw}
+	</select>
+	
+	<!-- 로그인 기록 조회 -->
+	<select id="selectMemberLog" parameterType="String" resultType="MemberLogDTO">
+		SELECT MEMBER_LOG_NO, MEMBER_ID, MEMBER_LOG_SIGN_IN
+		  FROM MEMBER_LOG
+		 WHERE MEMBER_ID = #{memberId}
+	</select>
+	<!-- 로그인 기록 -->
+	<insert id="insertMemberLog" parameterType="String">
+		INSERT INTO MEMBER_LOG
+			(MEMBER_ID, MEMBER_LOG_SIGN_IN)
+		VALUES
+			(#{memberId}, NOW())
+	</insert>
+	<!-- 로그인 갱신 -->
+	<update id="updateMemberLog" parameterType="String">
+		UPDATE MEMBER_LOG
+		   SET MEMBER_LOG_SIGN_IN = NOW()
+		 WHERE MEMBER_ID = #{memberId}
+	</update>
+	
+	
+	<!-- 로그인 유지 회원 sesseion update -->
+	
+	<update id="updateSessionInfo" parameterType="MemberDTO">
+		UPDATE MEMBER
+		   SET MEMBER_SESSION_ID = #{memberSessionId}
+		     , MEMBER_SESSION_LIMIT = #{memberSessionLimit}
+		 WHERE MEMBER_ID = #{memberId}
+	</update>
+	
+	<!-- 자동 로그인 -->
+	<select id="selectMemberBySessionId" parameterType="String" resultType="MemberDTO">
+		SELECT MEMBER_NO, MEMBER_ID, MEMBER_PW, MEMBER_NAME, MEMBER_PHONE, MEMBER_EMAIL, MEMBER_POSTCODE, MEMBER_ROAD_ADDRESS, MEMBER_DETAIL_ADDRESS, MEMBER_AGREE_STATE, MEMBER_SIGN_UP, MEMBER_SNS_TYPE, MEMBER_PW_MODIFIED, MEMBER_INFO_MODIFIED, MEMBER_SESSION_ID, MEMBER_SESSION_LIMIT
+		  FROM MEMBER
+		 WHERE MEMBER_SESSION_ID = #{memberSessionId}
+	</select>
+	
+	<!-- 아이디 찾기(회원 테이블 이름, 이메일 조회) -->
+	<select id="selectMemberFindId" parameterType="MemberDTO" resultType="MemberDTO">
+		SELECT MEMBER_NO, MEMBER_ID, MEMBER_PW, MEMBER_NAME, MEMBER_PHONE, MEMBER_EMAIL, MEMBER_POSTCODE, MEMBER_ROAD_ADDRESS, MEMBER_DETAIL_ADDRESS, MEMBER_AGREE_STATE, MEMBER_SIGN_UP, MEMBER_SNS_TYPE, MEMBER_PW_MODIFIED, MEMBER_INFO_MODIFIED, MEMBER_SESSION_ID, MEMBER_SESSION_LIMIT
+		  FROM MEMBER
+		 WHERE MEMBER_NAME = #{memberName}
+		   AND MEMBER_EMAIL = #{memberEmail}
+	</select>
+	<!-- 아이디 찾기(휴면 회원 테이블 이름, 이메일 조회) -->
+	<select id="selectDormantMemberFindId" parameterType="MemberDTO" resultType="DormantMemberDTO">
+		SELECT DORMANT_NO, MEMBER_NO, MEMBER_ID, MEMBER_PW, MEMBER_NAME, MEMBER_PHONE, MEMBER_EMAIL, MEMBER_POSTCODE, MEMBER_ROAD_ADDRESS, MEMBER_DETAIL_ADDRESS, MEMBER_AGREE_STATE, MEMBER_SIGN_UP, MEMBER_SNS_TYPE, MEMBER_PW_MODIFIED, MEMBER_INFO_MODIFIED, DORMANT_DATE
+		  FROM DORMANT_MEMBER
+		 WHERE MEMBER_NAME = #{memberName}
+		   AND MEMBER_EMAIL = #{memberEmail}
+	</select>
+	
+	<!-- 비밀번호 찾기(회원 테이븧 아이디, 이메일 조회) -->
+	<select id="selectMemberFindPwCheckIdEmail" parameterType="MemberDTO" resultType="MemberDTO">
+		SELECT MEMBER_NO, MEMBER_ID, MEMBER_PW, MEMBER_NAME, MEMBER_PHONE, MEMBER_EMAIL, MEMBER_POSTCODE, MEMBER_ROAD_ADDRESS, MEMBER_DETAIL_ADDRESS, MEMBER_AGREE_STATE, MEMBER_SIGN_UP, MEMBER_SNS_TYPE, MEMBER_PW_MODIFIED, MEMBER_INFO_MODIFIED, MEMBER_SESSION_ID, MEMBER_SESSION_LIMIT
+		  FROM MEMBER
+		 WHERE MEMBER_ID = #{memberId}
+		   AND MEMBER_EMAIL = #{memberEmail}
+	</select>
+	<!-- 비밀번호 찾기(휴면 테이븧 아이디, 이메일 조회) -->
+	<select id="selectDormantMemberFindPwCheckIdEmail" parameterType="MemberDTO" resultType="DormantMemberDTO">
+		SELECT DORMANT_NO, MEMBER_NO, MEMBER_ID, MEMBER_PW, MEMBER_NAME, MEMBER_PHONE, MEMBER_EMAIL, MEMBER_POSTCODE, MEMBER_ROAD_ADDRESS, MEMBER_DETAIL_ADDRESS, MEMBER_AGREE_STATE, MEMBER_SIGN_UP, MEMBER_SNS_TYPE, MEMBER_PW_MODIFIED, MEMBER_INFO_MODIFIED, DORMANT_DATE
+		  FROM DORMANT_MEMBER
+		 WHERE MEMBER_ID = #{memberId}
+		   AND MEMBER_EMAIL = #{memberEmail}
+	</select>
+	
+	<!-- 비밀번호 변경(회원 테이블) -->
+	<update id="updateMemberChangePw" parameterType="MemberDTO">
+		UPDATE MEMBER
+		   SET MEMBER_PW = #{memberPw}
+		 	 , MEMBER_PW_MODIFIED = NOW()
+		 WHERE MEMBER_ID = #{memberId}
+	</update>
+	<!-- 비밀번호 변경(휴면 테이블) -->
+	<update id="updateDormantMemberChangePw" parameterType="MemberDTO">
+		UPDATE DORMANT_MEMBER
+		   SET MEMBER_PW = #{memberPw}
+		 WHERE MEMBER_ID = #{memberId}
+	</update>
+	
+	<!-- 회원 정보 수정 -->
+	<update id="updateMemberInfo" parameterType="MemberDTO">
+		UPDATE MEMBER
+		   SET MEMBER_NAME = #{memberName}
+		     , MEMBER_POSTCODE = #{memberPostcode}
+		     , MEMBER_ROAD_ADDRESS = #{memberRoadAddress}
+		     , MEMBER_DETAIL_ADDRESS = #{memberDetailAddress}
+		     , MEMBER_PHONE = #{memberPhone}
+		     , MEMBER_INFO_MODIFIED = NOW()
+		 WHERE MEMBER_ID = #{memberId}
+	</update>
+	
+	<!-- 탈퇴회원 탈퇴 테이블로 삽입 -->
+	<insert id="insertSignOut" parameterType="MemberDTO">
+		INSERT INTO SIGN_OUT_MEMBER
+			(MEMBER_NO, MEMBER_ID, MEMBER_NAME, MEMBER_PHONE, MEMBER_EMAIL, MEMBER_POSTCODE, MEMBER_ROAD_ADDRESS, MEMBER_DETAIL_ADDRESS, MEMBER_AGREE_STATE, MEMBER_SIGN_UP)
+		VALUES
+			(#{memberNo}, #{memberId}, #{memberName}, #{memberPhone}, #{memberEmail}, #{memberPostcode}, #{memberRoadAddress}, #{memberDetailAddress}, #{memberAgreeState}, #{memberSignUp})
+	</insert>
+	
+	
+	<!-- 회원 탈퇴 -->
+	<delete id="deleteMember" parameterType="String">
+		DELETE 
+		  FROM MEMBER
+		 WHERE MEMBER_ID = #{memberId}
+	</delete>
+	
+	<!-- 1년전이 마지막 로그인인지 조회 -->
+	<select id="selectMemberLogSignIn" resultType="MemberDTO">
+		<![CDATA[
+		SELECT M.MEMBER_NO, M.MEMBER_ID, M.MEMBER_PW, M.MEMBER_NAME, M.MEMBER_PHONE, M.MEMBER_EMAIL, M.MEMBER_POSTCODE, M.MEMBER_ROAD_ADDRESS, M.MEMBER_DETAIL_ADDRESS, M.MEMBER_AGREE_STATE, M.MEMBER_SIGN_UP, M.MEMBER_SNS_TYPE, M.MEMBER_PW_MODIFIED, M.MEMBER_INFO_MODIFIED, M.MEMBER_SESSION_ID, M.MEMBER_SESSION_LIMIT
+          FROM MEMBER M, MEMBER_LOG L
+         WHERE M.MEMBER_ID = L.MEMBER_ID
+         AND DATEDIFF(NOW(), L.MEMBER_LOG_SIGN_IN) > 365
+        ]]>
+	</select>
+	
+	<!-- 해당하는 회원 휴면테이블로 추가 -->
+	<insert id="insertDormant" parameterType="MemberDTO">
+		INSERT INTO DORMANT_MEMBER
+			(MEMBER_NO, MEMBER_ID, MEMBER_PW, MEMBER_NAME, MEMBER_PHONE, MEMBER_EMAIL, MEMBER_POSTCODE, MEMBER_ROAD_ADDRESS, MEMBER_DETAIL_ADDRESS, MEMBER_AGREE_STATE, MEMBER_SIGN_UP, MEMBER_SNS_TYPE, MEMBER_PW_MODIFIED, MEMBER_INFO_MODIFIED)
+		VALUES
+			(#{memberNo}, #{memberId}, #{memberPw}, #{memberName}, #{memberPhone}, #{memberEmail}, #{memberPostcode}, #{memberRoadAddress}, #{memberDetailAddress}, #{memberAgreeState}, #{memberSignUp}, #{memberSnsType}, #{memberPwModified}, #{memberInfoModified})
+	</insert>
+	
+	
+	<!-- 휴면 회원 회원 테이블에서 삭제 -->
+	<delete id="deleteMemberInDormant" parameterType="String">
+		DELETE
+		  FROM MEMBER
+		 WHERE MEMBER_ID = #{memberId}
+	</delete>
+	
+	<!-- 휴면해제 (회원 테이블로 삽입)-->
+	<insert id="insertMemberDormantCancle" parameterType="DormantMemberDTO">
+		INSERT INTO MEMBER
+			(MEMBER_NO, MEMBER_ID, MEMBER_PW, MEMBER_NAME, MEMBER_PHONE, MEMBER_EMAIL, MEMBER_POSTCODE, MEMBER_ROAD_ADDRESS, MEMBER_DETAIL_ADDRESS, MEMBER_AGREE_STATE, MEMBER_SIGN_UP, MEMBER_SNS_TYPE, MEMBER_PW_MODIFIED, MEMBER_INFO_MODIFIED)
+		VALUES
+			(#{memberNo}, #{memberId}, #{memberPw}, #{memberName}, #{memberPhone}, #{memberEmail}, #{memberPostcode}, #{memberRoadAddress}, #{memberDetailAddress}, #{memberAgreeState}, #{memberSignUp}, #{memberSnsType}, #{memberPwModified}, #{memberInfoModified})
+	</insert>
+	<!-- 휴면해제 (휴면 테이블에서 삭제)-->
+	<delete id="deleteDormant">
+		DELETE 
+		  FROM DORMANT_MEMBER
+		 WHERE MEMBER_ID = #{memberId}
+	</delete>
+	
+	<!-- 네아로 로그인 회원가입 -->
+	<insert id="insertNaverLogin" parameterType="MemberDTO">
+		INSERT INTO MEMBER
+			(MEMBER_ID, MEMBER_PW, MEMBER_NAME, MEMBER_PHONE, MEMBER_EMAIL, MEMBER_SIGN_UP, MEMBER_SNS_TYPE)
+		VALUES
+			(#{memberId}, 'null', #{memberName}, #{memberPhone}, #{memberEmail}, NOW(), 'naver')
+	</insert>
+	
+	<!-- 네아로로 회원가입한 회원인지 확인 -->
+	<select id="selectNaverLoginCheck" parameterType="String" resultType="MemberDTO">
+		SELECT MEMBER_NO, MEMBER_ID, MEMBER_PW, MEMBER_NAME, MEMBER_PHONE, MEMBER_EMAIL, MEMBER_POSTCODE, MEMBER_ROAD_ADDRESS, MEMBER_DETAIL_ADDRESS, MEMBER_AGREE_STATE, MEMBER_SIGN_UP, MEMBER_SNS_TYPE, MEMBER_PW_MODIFIED, MEMBER_INFO_MODIFIED, MEMBER_SESSION_ID, MEMBER_SESSION_LIMIT
+		  FROM MEMBER
+		 WHERE MEMBER_SNS_TYPE = 'naver'
+		   AND MEMBER_ID = #{memberId}
+	</select>
+	
+	<!-- 마이페이지를 위한 sql -->
+	<!-- 사용자가 대여중인 책 목록(조인) -->
+	<select id="selectRentBookList" parameterType="String" resultType="Map">
+		SELECT R.RENT_NO, B.BOOK_IMAGE, B.BOOK_TITLE, DATE_FORMAT(R.RENT_DATE, '%Y-%m-%d') AS RENT_DATE, DATE_FORMAT(R.RENT_EXPIRATION_DATE, '%Y-%m-%d') AS RENT_EXPIRATION_DATE
+          FROM BOOK B, RENT R
+         WHERE B.BOOK_NO = R.BOOK_NO
+           AND R.MEMBER_ID = #{memberId}
+   </select>
+	
+	<!-- 사용자가 연체중인 책 목록(조인) -->
+	<select id="selectOverdueBookList" parameterType="String" resultType="Map">
+		SELECT O.OVERDUE_NO, B.BOOK_IMAGE, B.BOOK_TITLE, DATE_FORMAT(O.RENT_EXPIRATION_DATE, '%Y-%m-%d') AS RENT_EXPIRATION_DATE
+          FROM BOOK B, OVERDUE O
+         WHERE B.BOOK_NO = O.BOOK_NO
+           AND O.MEMBER_ID = #{memberId}
+   </select>
+	
+	<!-- 예약한 좌석 -->
+	<select id="selectReservationSeatNo" parameterType="String"  resultType="SeatDTO">
+		SELECT S.SEAT_NO, S.MEMBER_NO, S.SEAT_STATUS, S.SEAT_DATE, S.SEAT_CODE
+  		  FROM MEMBER M, SEAT S
+	     WHERE M.MEMBER_NO = S.MEMBER_NO
+           AND MEMBER_ID = #{memberId}
+	</select>
+</mapper>

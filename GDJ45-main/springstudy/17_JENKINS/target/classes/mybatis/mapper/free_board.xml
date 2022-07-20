@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.goodee.ex17.mapper.FreeBoardMapper">
+
+	<!-- 전체 레코드 갯수 -->
+	<select id="selectFreeBoardCount" resultType="Integer">
+		SELECT COUNT(FREE_BOARD_NO)
+		  FROM FREE_BOARD
+	</select>
+
+	<!-- 목록 -->
+	<select id="selectFreeBoardList" parameterType="Map" resultType="FreeBoardDTO">
+		SELECT A.ROW_NUM, A.FREE_BOARD_NO, A.WRITER, A.CONTENT, A.IP, A.CREATED, A.STATE, A.DEPTH, A.GROUP_NO, A.GROUP_ORD
+		  FROM (SELECT ROW_NUMBER() OVER(ORDER BY GROUP_NO DESC, GROUP_ORD) AS ROW_NUM, FREE_BOARD_NO, WRITER, CONTENT, IP, CREATED, STATE, DEPTH, GROUP_NO, GROUP_ORD
+		          FROM FREE_BOARD) A
+		 WHERE A.ROW_NUM BETWEEN #{beginRecord} AND #{endRecord}
+	</select>
+	
+	<!-- 원글 삽입 -->
+	<insert id="insertFreeBoard" parameterType="FreeBoardDTO">
+		INSERT INTO FREE_BOARD
+			(FREE_BOARD_NO, WRITER, CONTENT, IP, CREATED, STATE, DEPTH, GROUP_NO, GROUP_ORD)
+		VALUES
+			(FREE_BOARD_SEQ.NEXTVAL, #{writer}, #{content}, #{ip}, SYSDATE, 1, 0, FREE_BOARD_SEQ.CURRVAL, 0)
+	</insert>
+	
+	
+	<!-- 댓글 삽입 전에 처리 -->
+	<!-- 같은 그룹의 기존 댓글의 GROUP_ORD 값 증가시키기 -->
+	<!-- parameterType="FreeBoardDTO" : 원글의 정보 -->
+	<update id="updatePreviousReply" parameterType="FreeBoardDTO">
+		UPDATE FREE_BOARD
+		   SET GROUP_ORD = GROUP_ORD + 1
+		 WHERE GROUP_NO = #{groupNo}    <!-- 원글과 같은 그룹이다 -->
+		   AND GROUP_ORD > #{groupOrd}  <!-- 다단 댓글용. 1단 댓글은 GROUP_ORD > 0 -->
+	</update>
+	
+	<!-- 댓글 삽입 -->
+	<insert id="insertReply" parameterType="FreeBoardDTO">
+		INSERT INTO FREE_BOARD
+			(FREE_BOARD_NO, WRITER, CONTENT, IP, CREATED, STATE, DEPTH, GROUP_NO, GROUP_ORD)
+		VALUES
+			(FREE_BOARD_SEQ.NEXTVAL, #{writer}, #{content}, #{ip}, SYSDATE, 1, #{depth}, #{groupNo}, #{groupOrd})
+	</insert>
+	
+	<!-- 삭제 -->
+	<update id="deleteFreeBoard" parameterType="Long">
+		UPDATE FREE_BOARD
+		   SET STATE = -1
+		 WHERE FREE_BOARD_NO = #{freeBoardNo}
+	</update>
+
+</mapper>

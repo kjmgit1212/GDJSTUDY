@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+
+	<!--
+		편지 쓰기
+		
+		Quiz3A 서블릿에서 Quiz3B 서블릿으로 forward하시오.
+		편지작성하기 버튼을 클릭하면 다음과 같은 형식을 갖춘 파일을 생성하시오.(Quiz3B 서블릿에서 작업하시오.)
+		
+		1. 파일명 : YYYY-MM-DD_보내는사람.txt
+		2. 보내는사람 : 디폴트 처리 - 자신의 이름
+		3. 받는사람   : 디폴트 처리 - 배수지
+		4. 파일내용
+	 	    작성일 : 2022-04-08
+		    보내는사람 : 민경태
+		    받는사람 : 배수지
+		    
+		    사랑해요 배수지
+		    아이러브유 배수지
+		    배수지 짱짱짱
+	-->
+
+	<form action="/SERVLET/Quiz3A" method="get">
+		<input type="text" name="from" placeholder="보내는사람"><br><br>
+		<input type="text" name="to" placeholder="받는사람"><br><br>
+		<textarea name="content" placeholder="내용"></textarea><br><br>
+		<button>편지작성하기</button>
+	</form>
+
+</body>
+</html>
